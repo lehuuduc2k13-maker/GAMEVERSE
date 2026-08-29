@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b12">
+<title>GAMEVERSE</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#">
+    <span>🎮</span> GAMEVERSE
+  </a>
+
+  <nav class="nav">
+    <button data-page="home">Home</button>
+    <button data-page="games">Games</button>
+    <button data-page="create">Create</button>
+    <button data-page="community">Community</button>
+  </nav>
+
+  <button class="menu" id="menuBtn">☰</button>
+</header>
+
+<main>
+
+<section id="home" class="page active">
+
+  <div class="hero">
+    <div class="hero-badge">🌎 THE GAME COMMUNITY</div>
+
+    <h1>Welcome to<br><span>GAMEVERSE</span></h1>
+
+    <p>
+      Play. Create. Share.<br>
+      Khám phá thế giới game do cộng đồng tạo ra.
+    </p>
+
+    <div class="hero-actions">
+      <button class="primary" data-page="games">
+        🎮 Explore Games
+      </button>
+
+      <button class="secondary" data-page="create">
+        🛠️ Create Game
+      </button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div>
+      <strong id="gameCount">0</strong>
+      <span>Games</span>
+    </div>
+    <div>
+      <strong>2D + 3D</strong>
+      <span>Game Engine</span>
+    </div>
+    <div>
+      <strong>AI</strong>
+      <span>Rating</span>
+    </div>
+  </div>
+
+  <h2>🔥 Featured Games</h2>
+
+  <div class="game-grid" id="featuredGames"></div>
+
+</section>
+
+
+<section id="games" class="page">
+
+  <div class="page-head">
+    <div>
+      <small>DISCOVER</small>
+      <h1>🎮 Games</h1>
+    </div>
+
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="🔎 Tìm game..."
+      maxlength="60">
+  </div>
+
+  <div class="filters">
+    <button class="filter active" data-filter="all">All</button>
+    <button class="filter" data-filter="2D">2D</button>
+    <button class="filter" data-filter="3D">3D</button>
+    <button class="filter" data-filter="S">S+</button>
+  </div>
+
+  <div class="game-grid" id="gameList"></div>
+
+</section>
+
+
+<section id="create" class="page">
+
+  <div class="create-box">
+    <div class="create-icon">🚀</div>
+
+    <h1>Create your game</h1>
+
+    <p>
+      Tạo game 2D hoặc 3D và đưa sản phẩm của mày
+      tới cộng đồng GAMEVERSE.
+    </p>
+
+    <div class="create-options">
+      <button class="create-card" id="create2d">
+        <b>🟦 2D</b>
+        <span>Platformer, shooter, puzzle...</span>
+      </button>
+
+      <button class="create-card" id="create3d">
+        <b>🧊 3D</b>
+        <span>Racing, RPG, exploration...</span>
+      </button>
+    </div>
+
+    <div id="createMessage" class="message"></div>
+  </div>
+
+</section>
+
+
+<section id="community" class="page">
+
+  <div class="page-head">
+    <div>
+      <small>COMMUNITY</small>
+      <h1>💡 Góp ý</h1>
+    </div>
+  </div>
+
+  <div class="feedback-box">
+
+    <label>Loại góp ý</label>
+
+    <select id="feedbackType">
+      <option>💡 Ý tưởng tính năng</option>
+      <option>🐛 Báo lỗi</option>
+      <option>🎮 Góp ý game</option>
+      <option>🎨 Góp ý giao diện</option>
+      <option>⚡ Hiệu suất</option>
+    </select>
+
+    <label>Tiêu đề</label>
+
+    <input
+      id="feedbackTitle"
+      maxlength="80"
+      placeholder="Ví dụ: Thêm chế độ dark mode">
+
+    <label>Nội dung</label>
+
+    <textarea
+      id="feedbackText"
+      maxlength="500"
+      placeholder="Viết góp ý của mày..."></textarea>
+
+    <button class="primary full" id="sendFeedback">
+      🚀 Gửi góp ý
+    </button>
+
+    <div id="feedbackMessage" class="message"></div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<div class="modal" id="gameModal">
+  <div class="modal-card">
+    <button class="close" id="closeModal">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+
+<footer>
+  <b>🎮 GAMEVERSE</b>
+  <span>Play · Create · Share</span>
+  <small>© 2026 GAMEVERSE</small>
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+  </html>
