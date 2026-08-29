@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GAMEVERSE — Discover. Create. Compete.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#" data-page="discover">
+    <span class="brand-mark">G</span>
+    <span>GAMEVERSE</span>
+  </a>
+
+  <nav class="desktop-nav">
+    <button data-page="discover" class="nav active">Khám phá</button>
+    <button data-page="games" class="nav">Games</button>
+    <button data-page="event" class="nav">Monthly Event</button>
+    <button data-page="studio" class="nav">Creator Studio</button>
+  </nav>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="themeBtn">☾</button>
+    <button class="profile-btn" data-page="profile">
+      <span class="avatar">G</span>
+      <span>Guest</span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<section id="discover" class="page active">
+
+  <div class="hero">
+
+    <div class="hero-copy">
+
+      <div class="pill">🚀 CREATOR PLATFORM</div>
+
+      <h1>
+        Game của bạn.<br>
+        <span>Khán giả của bạn.</span>
+      </h1>
+
+      <p>
+        GAMEVERSE là nơi creator đăng game,
+        xây cộng đồng và cạnh tranh trong sự kiện
+        hàng tháng để giành suất quảng bá.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn primary" data-page="studio">
+          + Đăng game
+        </button>
+
+        <button class="btn ghost" data-page="games">
+          Khám phá Games
+        </button>
+      </div>
+
+      <div class="hero-mini">
+
+        <div>
+          <b>1,000</b>
+          <small>Founding Game Slots</small>
+        </div>
+
+        <div>
+          <b>TOP 3</b>
+          <small>mỗi tháng nhận quảng bá</small>
+        </div>
+
+        <div>
+          <b>01</b>
+          <small>Monthly Event</small>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-art">
+
+      <div class="orbit o1"></div>
+      <div class="orbit o2"></div>
+
+      <div class="core">
+        GAME
+        <br>
+        <small>VERSE</small>
+      </div>
+
+      <div class="float-card fc1">
+        🏆 <b>MONTHLY</b>
+        <small>TOP 3 REWARDS</small>
+      </div>
+
+      <div class="float-card fc2">
+        🎮 <b>CREATE</b>
+        <small>YOUR GAME</small>
+      </div>
+
+    </div>
+
+  </div>
+
+  <section class="block">
+
+    <div class="section-head">
+      <div>
+        <label>DISCOVER</label>
+        <h2>Đang nổi bật</h2>
+      </div>
+
+      <button class="text-btn" data-page="games">
+        Xem tất cả →
+      </button>
+    </div>
+
+    <div class="game-grid" id="featuredGrid"></div>
+
+  </section>
+
+  <section class="promo">
+
+    <div>
+      <label>FOUNDING CREATOR PROGRAM</label>
+      <h2>1.000 game đầu tiên.</h2>
+      <p>
+        Tham gia sớm để trở thành một trong
+        những creator đầu tiên của GAMEVERSE.
+      </p>
+    </div>
+
+    <div class="slot">
+      <strong id="slotCount">0</strong>
+      <span>/ 1,000 slots</span>
+
+      <div class="bar">
+        <i id="slotBar"></i>
+      </div>
+
+      <small>
+        Demo UI — dữ liệu thật sẽ kết nối backend.
+      </small>
+    </div>
+
+    <button class="btn primary" data-page="studio">
+      Tham gia →
+    </button>
+
+  </section>
+
+  <section class="block">
+
+    <div class="section-head">
+      <div>
+        <label>NEW & RISING</label>
+        <h2>Game mới</h2>
+      </div>
+    </div>
+
+    <div class="game-grid" id="newGrid"></div>
+
+  </section>
+
+</section>
+
+
+<section id="games" class="page">
+
+  <div class="page-title">
+    <label>GAME LIBRARY</label>
+    <h1>Khám phá Games</h1>
+    <p>Tìm game từ cộng đồng GAMEVERSE.</p>
+  </div>
+
+  <div class="filters">
+
+    <input
+      id="search"
+      placeholder="🔎 Tìm tên game hoặc creator..."
+    >
+
+    <button class="filter active" data-filter="all">
+      Tất cả
+    </button>
+
+    <button class="filter" data-filter="action">
+      Action
+    </button>
+
+    <button class="filter" data-filter="simulation">
+      Simulation
+    </button>
+
+    <button class="filter" data-filter="sandbox">
+      Sandbox
+    </button>
+
+    <button class="filter" data-filter="arcade">
+      Arcade
+    </button>
+
+  </div>
+
+  <div class="game-grid large" id="allGrid"></div>
+
+</section>
+
+
+<section id="event" class="page">
+
+  <div class="event-hero">
+
+    <div>
+
+      <label>MONTHLY EVENT • SEASON 01</label>
+
+      <h1>
+        GAMEVERSE<br>
+        <span>MONTHLY RANK</span>
+      </h1>
+
+      <p>
+        Mỗi tháng, cộng đồng bình chọn và tích lũy
+        thành tích để đưa game lên BXH.
+        Top 3 nhận suất quảng bá.
+      </p>
+
+    </div>
+
+    <div class="countdown">
+
+      <small>KẾT THÚC TRONG</small>
+
+      <strong id="countdown">
+        30d 00:00:00
+      </strong>
+
+      <span>Season 01</span>
+
+    </div>
+
+  </div>
+
+
+  <div class="reward-row">
+
+    <article class="reward gold">
+      <b>🥇 TOP 1</b>
+      <strong>1 THÁNG</strong>
+      <span>Quảng bá GAMEVERSE</span>
+    </article>
+
+    <article class="reward silver">
+      <b>🥈 TOP 2</b>
+      <strong>2 TUẦN</strong>
+      <span>Quảng bá GAMEVERSE</span>
+    </article>
+
+    <article class="reward bronze">
+      <b>🥉 TOP 3</b>
+      <strong>1 TUẦN</strong>
+      <span>Quảng bá GAMEVERSE</span>
+    </article>
+
+  </div>
+
+
+  <div class="leader-card">
+
+    <div class="section-head">
+
+      <div>
+        <label>LIVE LEADERBOARD</label>
+        <h2>Bảng xếp hạng</h2>
+      </div>
+
+      <span class="live">● LIVE</span>
+
+    </div>
+
+    <div id="leaderboard"></div>
+
+  </div>
+
+
+  <div class="rules">
+
+    <h2>Luật sự kiện</h2>
+
+    <div class="rule-grid">
+
+      <p>
+        <b>01</b>
+        Mỗi season kéo dài một tháng.
+      </p>
+
+      <p>
+        <b>02</b>
+        BXH được reset khi season mới bắt đầu.
+      </p>
+
+      <p>
+        <b>03</b>
+        Chỉ Top 1, 2, 3 nhận suất quảng bá.
+      </p>
+
+      <p>
+        <b>04</b>
+        Quảng bá được cấp theo đúng thời lượng của hạng.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="studio" class="page">
+
+  <div class="page-title">
+
+    <label>CREATOR STUDIO</label>
+
+    <h1>Xây game. Đưa lên GAMEVERSE.</h1>
+
+    <p>
+      Trung tâm quản lý game và hồ sơ creator.
+    </p>
+
+  </div>
+
+
+  <div class="studio-grid">
+
+    <article class="studio-card main-card">
+
+      <div class="studio-icon">＋</div>
+
+      <h2>Đăng game mới</h2>
+
+      <p>
+        Tạo trang game, thêm thumbnail,
+        mô tả, thể loại và link game của bạn.
+      </p>
+
+      <button class="btn primary" id="uploadBtn">
+        Bắt đầu đăng game
+      </button>
+
+    </article>
+
+
+    <article class="studio-card">
+
+      <label>YOUR STATS</label>
+
+      <div class="big-number">0</div>
+
+      <p>Lượt chơi</p>
+
+      <div class="stat-line">
+        <span>Games</span>
+        <b id="myGames">0</b>
+      </div>
+
+      <div class="stat-line">
+        <span>Followers</span>
+        <b>0</b>
+      </div>
+
+    </article>
+
+  </div>
+
+
+  <div class="studio-card checklist">
+
+    <label>CREATOR CHECKLIST</label>
+
+    <div class="check">
+
+      <span>01</span>
+
+      <div>
+        <b>Tạo hồ sơ creator</b>
+        <small>
+          Giới thiệu bản thân và phong cách game.
+        </small>
+      </div>
+
+      <i>○</i>
+
+    </div>
+
+
+    <div class="check">
+
+      <span>02</span>
+
+      <div>
+        <b>Đăng game đầu tiên</b>
+        <small>
+          Game của bạn sẽ có một trang riêng.
+        </small>
+      </div>
+
+      <i>○</i>
+
+    </div>
+
+
+    <div class="check">
+
+      <span>03</span>
+
+      <div>
+        <b>Tham gia Monthly Event</b>
+        <small>
+          Cạnh tranh để giành suất quảng bá.
+        </small>
+      </div>
+
+      <i>○</i>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="profile" class="page">
+
+  <div class="profile-hero">
+
+    <div class="avatar xl">G</div>
+
+    <div>
+
+      <label>CREATOR PROFILE</label>
+
+      <h1>Guest Creator</h1>
+
+      <p>Thành viên GAMEVERSE</p>
+
+    </div>
+
+    <button class="btn ghost" id="editProfile">
+      Chỉnh sửa
+    </button>
+
+  </div>
+
+
+  <div class="profile-stats">
+
+    <div>
+      <b>0</b>
+      <span>Games</span>
+    </div>
+
+    <div>
+      <b>0</b>
+      <span>Followers</span>
+    </div>
+
+    <div>
+      <b>0</b>
+      <span>Plays</span>
+    </div>
+
+    <div>
+      <b>#—</b>
+      <span>Monthly Rank</span>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<div class="toast" id="toast"></div>
+
+
+<div class="modal hidden" id="uploadModal">
+
+  <div class="modal-box">
+
+    <button class="close" id="closeModal">×</button>
+
+    <label>NEW GAME</label>
+
+    <h2>Đăng game lên GAMEVERSE</h2>
+
+    <input
+      id="gameName"
+      placeholder="Tên game"
+    >
+
+    <select id="gameType">
+
+      <option>Action</option>
+      <option>Simulation</option>
+      <option>Sandbox</option>
+      <option>Arcade</option>
+
+    </select>
+
+    <textarea
+      id="gameDesc"
+      placeholder="Mô tả ngắn"
+    ></textarea>
+
+    <input
+      id="gameLink"
+      placeholder="Link game (không bắt buộc)"
+    >
+
+    <button class="btn primary" id="submitGame">
+      Tạo trang game
+    </button>
+
+  </div>
+
+</div>
+
+
+<footer>
+
+  <b>GAMEVERSE</b>
+
+  <span>
+    Discover • Create • Compete
+  </span>
+
+  <span>
+    © 2026 GAMEVERSE
+  </span>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+</body>
+                      </html>
