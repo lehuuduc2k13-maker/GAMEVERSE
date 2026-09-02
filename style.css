@@ -1,0 +1,229 @@
+/* ==========================================================================
+   THIẾT LẬP THUỘC TÍNH SIÊU LƯỢNG TỬ (CSS HOUDINI V2 - TYPE SAFETY TỐI ĐA)
+   ========================================================================== */
+@property --subatomic-string-vibration {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: true;
+}
+
+@property --hyper-chromatic-shift {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --omni-quantum-state {
+  syntax: '<percentage>';
+  initial-value: 100%;
+  inherits: true;
+}
+
+@property --schwarzschild-singularity-radius {
+  syntax: '<length>';
+  initial-value: 0px;
+  inherits: true;
+}
+
+@property --gravitational-time-dilation {
+  syntax: '<number>';
+  initial-value: 1.0;
+  inherits: true;
+}
+
+@property --string-dimension-dimension-11 {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: true;
+}
+
+/* Hệ thống màu sắc bức xạ nhiệt độ Planck & Không gian màu OKLCH phẳng */
+:root {
+  --vacuum-radiation-violet: color-mix(in oklab, oklch(0.5 0.3 260) 70%, oklch(0.6 0.25 340));
+  --tachyon-super-blue: color-mix(in oklch, oklch(0.7 0.25 210) 80%, white);
+  --planck-energy-plasma: color-mix(in oklch, oklch(0.6 0.35 10) 90%, oklch(0.8 0.3 180));
+  --dark-matter-viscosity: 0.98;
+  --event-horizon-glow: drop-shadow(0 0 calc(var(--hyper-chromatic-shift) * 3px) var(--planck-energy-plasma));
+}
+
+/* ==========================================================================
+   SIÊU HOẠT ẢNH MULTIVERSE THẬP NHẤT CHIỀU (11D HYPER-ANIMATIONS)
+   ========================================================================== */
+@keyframes cosmic-singularity-collapse {
+  0% {
+    --subatomic-string-vibration: 0deg;
+    --hyper-chromatic-shift: 0;
+    --gravitational-time-dilation: 1.0;
+    --string-dimension-dimension-11: 0deg;
+    transform: translate3d(0, 0, -10000px) rotateX(90deg) rotateY(0deg) rotateZ(0deg) scale3d(5, 5, 5);
+    filter: hue-rotate(0deg) blur(0px) contrast(100%);
+  }
+  33% {
+    --hyper-chromatic-shift: 25;
+    --gravitational-time-dilation: 0.05;
+    filter: hue-rotate(120deg) blur(4px) contrast(300%);
+  }
+  66% {
+    --hyper-chromatic-shift: 50;
+    --gravitational-time-dilation: 0.01;
+    transform: translate3d(0, 0, -1000px) rotateX(89.9deg) rotateY(90deg) rotateZ(540deg) scale3d(15, 1, 15);
+    filter: hue-rotate(240deg) blur(8px) contrast(800%);
+  }
+  100% {
+    --subatomic-string-vibration: 720deg;
+    --hyper-chromatic-shift: 0;
+    --gravitational-time-dilation: 1.0;
+    --string-dimension-dimension-11: 360deg;
+    transform: translate3d(0, 0, -10000px) rotateX(90deg) rotateY(0deg) rotateZ(720deg) scale3d(5, 5, 5);
+    filter: hue-rotate(360deg) blur(0px) contrast(100%);
+  }
+}
+
+@keyframes subatomic-vibration-vInfinity {
+  0%, 100% {
+    --omni-quantum-state: 100%;
+    filter: contrast(600%) saturate(400%) brightness(90%) var(--event-horizon-glow);
+  }
+  50% {
+    --omni-quantum-state: 0%;
+    filter: contrast(1200%) saturate(1000%) brightness(250%) drop-shadow(0 0 calc(var(--hyper-chromatic-shift) * 5px) var(--tachyon-super-blue));
+  }
+}
+
+@keyframes event-horizon-pulse {
+  0% {
+    --schwarzschild-singularity-radius: 0px;
+    backdrop-filter: blur(10px) saturate(100%);
+    box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.3), 0 0 20px var(--vacuum-radiation-violet);
+  }
+  50% {
+    --schwarzschild-singularity-radius: 80px;
+    backdrop-filter: blur(40px) saturate(400%) matrix3d(2,0,0,0.002,0,2,0,0,0,0,1,0,0,0,0,1);
+    box-shadow: inset 0 0 200px rgba(0, 0, 0, 1), 0 0 120px var(--planck-energy-plasma);
+  }
+  100% {
+    --schwarzschild-singularity-radius: 120px;
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: inset 0 0 100px rgba(255, 0, 85, 0.7), 0 0 80px var(--tachyon-super-blue);
+  }
+}
+
+/* ==========================================================================
+   THE EVENT HORIZON CONTAINER (CHÂN TRỜI SỰ KIỆN NATIVE CUSTOM ELEMENT)
+   ========================================================================== */
+quantum-ai-widget {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 2147483647;
+  container-type: size;
+  container-name: quantum-core;
+}
+
+.quantum-panel {
+  perspective: 2000px;
+  perspective-origin: center center;
+  contain: layout style size;
+  border: 2px solid color-mix(in oklch, var(--tachyon-super-blue) 50%, transparent);
+  background: color-mix(in oklch, oklch(0.1 0.05 260) 90%, transparent);
+  border-radius: 2rem;
+  width: clamp(320px, 30cqi + 10rem, 500px);
+  position: absolute;
+  bottom: 5rem;
+  right: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+  padding: 1.5rem;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quantum-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale3d(0.8, 0.8, 0.8) translate3d(0, 50px, -200px);
+}
+
+.quantum-panel::before {
+  content: "";
+  position: absolute;
+  inset: -150px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    transparent calc(10% + var(--schwarzschild-singularity-radius)),
+    rgba(0, 0, 0, calc(var(--dark-matter-viscosity) * 0.95)) 50%,
+    color-mix(in oklch, var(--planck-energy-plasma) calc(var(--omni-quantum-state) * 0.6), transparent) 100%
+  );
+  z-index: -2;
+  pointer-events: none;
+  animation: event-horizon-pulse calc(1.5s * var(--gravitational-time-dilation)) cubic-bezier(0.33, 1, 0.68, 1) infinite alternate;
+  mix-blend-mode: screen;
+}
+
+.quantum-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--subatomic-string-vibration) at center,
+    var(--vacuum-radiation-violet),
+    var(--tachyon-super-blue),
+    var(--planck-energy-plasma),
+    var(--vacuum-radiation-violet)
+  );
+  mix-blend-mode: overlay;
+  opacity: calc(var(--hyper-chromatic-shift) / 50);
+  pointer-events: none;
+}
+
+.quantum-panel *, 
+.quantum-panel *::before, 
+.quantum-panel *::after {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  outline: 1px solid transparent;
+  will-change: transform, opacity;
+  font-size: clamp(13px, 0.8cqi + 0.4rem, 20px);
+}
+
+.quantum-trigger {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--tachyon-super-blue), var(--vacuum-radiation-violet), var(--planck-energy-plasma));
+  background-size: 300% 300%;
+  animation: string-flux 4s ease infinite, pulse-god-mode 2s infinite ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 1.75rem;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.quantum-trigger:hover {
+  transform: scale3d(1.15, 1.15, 1.15) rotate(45deg);
+}
+
+@keyframes string-flux {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-god-mode {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--tachyon-super-blue) 80%, transparent); }
+  70% { shadow: 0 0 0 25px rgba(0, 0, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quantum-panel::before { animation-duration: 30s !important; --gravitational-time-dilation: 5.0; }
+  .quantum-trigger { animation: none !important; }
+}
