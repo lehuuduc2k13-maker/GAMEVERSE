@@ -1,266 +1,364 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark scroll-smooth">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GAMEVERSE ULTRA - Thiên Đường 1000+ Games HTML5</title>
-  <!-- Tailwind CSS & FontAwesome Icons -->
+  <title>AI Forge Pro v10.0 - Singularity Matrix</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap');
-    .font-gaming { font-family: 'Orbitron', sans-serif; }
-    .font-body { font-family: 'Rajdhani', sans-serif; }
-    .neon-glow { text-shadow: 0 0 10px rgba(0, 230, 118, 0.6), 0 0 20px rgba(0, 230, 118, 0.3); }
-    .vip-glow { box-shadow: 0 0 15px rgba(255, 215, 0, 0.25); border-color: #ffd700 !important; }
-    .neon-border-focus:focus { border-color: #00e676 !important; box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
-    
-    /* Custom Scrollbar Cyberpunk */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0f0f11; }
-    ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4ade80; }
-    
-    @keyframes pulse-soft {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.03); opacity: 0.9; }
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700;900&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'Fira Code', monospace; }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.05); }
     }
-    .animate-pulse-soft { animation: pulse-soft 3s infinite ease-in-out; }
+    .quantum-glow { animation: pulse-glow 8s infinite ease-in-out; }
   </style>
 </head>
-<body class="bg-[#0b0b0d] text-gray-200 font-body antialiased selection:bg-green-500 selection:text-black">
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/40 selection:text-cyan-200 overflow-x-hidden min-h-screen flex items-center justify-center p-2 sm:p-4">
 
-  <!-- HỆ THỐNG THÔNG BÁO TOAST -->
-  <div id="toast" class="fixed top-6 right-6 z-50 transform translate-x-full transition-all duration-300 bg-neutral-900/95 border-l-4 border-green-500 text-white px-5 py-3.5 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center space-x-3 hidden">
-    <i id="toast-icon" class="fas fa-check-circle text-green-400 text-xl"></i>
-    <span id="toast-msg" class="text-sm font-semibold tracking-wide">Thông báo thành công!</span>
-  </div>
-
-  <!-- THANH ĐIỀU HƯỚNG (NAVBAR) -->
-  <nav class="sticky top-0 z-40 bg-[#111114]/90 backdrop-blur-md border-b border-neutral-800/80 px-4 lg:px-8 py-4 flex items-center justify-between">
-    <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="resetFilters()">
-      <div class="bg-green-500/10 p-2 rounded-xl border border-green-500/20">
-        <i class="fas fa-gamepad text-green-400 text-2xl animate-pulse"></i>
-      </div>
-      <span class="font-gaming text-2xl font-black tracking-wider bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 bg-clip-text text-transparent neon-glow">GAMEVERSE</span>
-    </div>
-
-    <!-- Ô tìm kiếm thông minh trên PC -->
-    <div class="hidden md:flex items-center relative w-1/3">
-      <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Tìm tên game, thể loại..." class="w-full bg-[#16161c] border border-neutral-700/70 rounded-xl px-4 py-2.5 pl-10 text-sm focus:outline-none neon-border-focus transition-all text-white placeholder-neutral-500">
-      <i class="fas fa-search absolute left-3.5 text-neutral-500 text-sm"></i>
-    </div>
-
-    <!-- Cụm chức năng góc phải -->
-    <div class="flex items-center space-x-3">
-      <button onclick="toggleFavoritesFilter()" id="fav-toggle-btn" class="bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-red-400 w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative" title="Game đã thích">
-        <i class="fas fa-heart"></i>
-        <span id="fav-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
-      </button>
-      
-      <button onclick="fetchGames()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-neutral-950 font-gaming font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl shadow-lg shadow-green-500/10 transition-all active:scale-95 cursor-pointer flex items-center space-x-1.5">
-        <i class="fas fa-sync-alt text-[10px]"></i> <span>Làm mới</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Ô TÌM KIẾM CHO MOBILE -->
-  <div class="p-4 md:hidden block bg-[#0f0f11] border-b border-neutral-900">
-    <div class="relative w-full">
-      <input type="text" id="search-input-mobile" oninput="handleSearch(this.value)" placeholder="Tìm kiếm game..." class="w-full bg-[#16161c] border border-neutral-700 rounded-xl px-4 py-2.5 pl-10 text-sm focus:outline-none focus:border-green-500 text-white">
-      <i class="fas fa-search absolute left-3.5 top-3.5 text-neutral-500 text-sm"></i>
-    </div>
-  </div>
-
-  <!-- HERO SECTION -->
-  <header class="relative max-w-7xl mx-auto my-6 px-4">
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#17171f] to-[#0f0f14] border border-neutral-800/60 p-6 md:p-10 flex flex-col md:flex-row items-center justify-between shadow-2xl">
-      <div class="space-y-4 max-w-2xl text-center md:text-left z-10">
-        <div class="inline-flex items-center space-x-2 bg-green-500/10 text-green-400 border border-green-500/20 text-xs font-gaming font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-          <i class="fas fa-shield-alt text-[10px]"></i> <span>Hệ thống Bảo mật & Siêu Tốc</span>
-        </div>
-        <h2 class="font-gaming text-3xl md:text-5xl font-black leading-tight text-white tracking-wide">
-          KHÁM PHÁ <span class="text-green-400">1,000+</span> TRÒ CHƠI MIỄN PHÍ
-        </h2>
-        <p class="text-neutral-400 text-sm md:text-base max-w-xl font-normal leading-relaxed">
-          Trải nghiệm kho ứng dụng trò chơi giải trí đa nền tảng HTML5 chạy tức thì, không giật lag, tối ưu hóa toàn diện cho di động.
-        </p>
-        <div class="pt-2 flex flex-wrap gap-3 justify-center md:justify-start">
-          <button onclick="filterCategory('vip')" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-neutral-950 font-gaming font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center space-x-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer">
-            <i class="fas fa-crown"></i> <span>Kho Game Siêu VIP</span>
-          </button>
-          <a href="#main-content" class="bg-neutral-800/80 hover:bg-neutral-700 text-white font-gaming font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center space-x-2 transition-all border border-neutral-700/50">
-            <span>Cuộn Xuống Xem</span> <i class="fas fa-chevron-down text-[10px]"></i>
-          </a>
-        </div>
-      </div>
-      <div class="hidden lg:block w-1/4 text-center z-10 animate-pulse-soft">
-        <i class="fas fa-dice-d20 text-[100px] text-neutral-800 drop-shadow-[0_0_30px_rgba(0,230,118,0.2)]"></i>
-      </div>
-    </div>
-  </header>
-
-  <!-- PHẦN THÂN CHÍNH -->
-  <main id="main-content" class="max-w-7xl mx-auto px-4 py-4 grid grid-cols-1 lg:grid-cols-4 gap-8">
+  <!-- MAIN QUANTUM CONTAINER -->
+  <div class="relative w-full max-w-4xl bg-gradient-to-br from-black via-slate-950 to-neutral-950 border-2 border-cyan-500/30 rounded-[2rem] sm:rounded-[2.5rem] p-4 sm:p-8 shadow-[0_0_150px_rgba(6,182,212,0.15)] backdrop-blur-3xl overflow-hidden group">
     
-    <!-- SIDEBAR TRÁI -->
-    <aside class="space-y-6 lg:col-span-1">
-      <div class="bg-[#111114] border border-neutral-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
-        <h4 class="font-gaming text-xs font-bold tracking-widest uppercase text-neutral-400 flex items-center justify-between">
-          <span><i class="fas fa-th-list mr-2 text-green-400"></i> Danh mục game</span>
-          <button onclick="resetFilters()" class="text-[10px] text-neutral-500 hover:text-green-400 uppercase font-bold tracking-wide cursor-pointer hover:underline">Xóa lọc</button>
-        </h4>
-        <div class="flex flex-col space-y-1.5" id="category-filter">
-          <button onclick="filterCategory('all')" class="cat-btn w-full text-left px-4 py-2.5 rounded-xl bg-green-500 text-neutral-950 font-bold transition-all text-sm flex items-center justify-between cursor-pointer">
-            <span class="flex items-center"><i class="fas fa-th-large mr-2.5 w-4 text-center"></i> Tất cả game</span>
-          </button>
-          <button onclick="filterCategory('vip')" class="cat-btn w-full text-left px-4 py-2.5 rounded-xl text-neutral-400 hover:bg-[#181820] hover:text-white transition-all text-sm flex items-center justify-between cursor-pointer">
-            <span class="flex items-center"><i class="fas fa-crown mr-2.5 w-4 text-center text-amber-400"></i> Trò chơi VIP</span>
+    <!-- BACKGROUND GRID LAYER -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#334155_1px,transparent_1px),linear-gradient(to_bottom,#334155_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-10 pointer-events-none"></div>
+    
+    <!-- PLASMA GLOWS -->
+    <div class="absolute -top-40 -right-40 w-[500px] h-[500px] bg-gradient-to-br from-cyan-400/25 via-fuchsia-500/10 to-transparent rounded-full blur-[120px] pointer-events-none quantum-glow"></div>
+    <div class="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-gradient-to-tr from-emerald-400/25 via-indigo-500/10 to-transparent rounded-full blur-[120px] pointer-events-none quantum-glow" style="animation-delay: -4s;"></div>
+
+    <!-- HEADER / HUD COMPLEX -->
+    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4 sm:pb-6 sm:mb-6">
+      <div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1 class="text-2xl sm:text-3xl font-black tracking-widest uppercase font-mono bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-amber-300 bg-clip-text text-transparent filter drop-shadow-[0_2px_10px_rgba(6,182,212,0.3)]">
+            AI Forge Pro
+          </h1>
+          <span class="px-2 py-0.5 text-[9px] sm:text-[10px] font-black font-mono tracking-widest text-black bg-gradient-to-r from-fuchsia-500 to-cyan-400 rounded uppercase animate-pulse">
+            v10.0 Overdrive
+          </span>
+        </div>
+        <p class="text-[11px] sm:text-xs text-slate-400 mt-1 font-mono">
+          Core Link: <span class="text-cyan-400">🍎 Singularity Matrix (CORE-6D)</span>
+        </p>
+      </div>
+
+      <!-- METRICS HUD -->
+      <div class="grid grid-cols-3 gap-2 sm:gap-3 font-mono text-center w-full md:w-auto">
+        <div class="bg-slate-900/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-cyan-500/20">
+          <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-wider">Score</div>
+          <div id="scoreDisplay" class="text-cyan-400 font-black text-base sm:text-lg">0000</div>
+        </div>
+        <div class="bg-slate-900/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-fuchsia-500/20">
+          <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-wider">Combo</div>
+          <div id="comboDisplay" class="text-fuchsia-400 font-black text-base sm:text-lg">x1</div>
+        </div>
+        <div class="bg-slate-900/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-amber-500/20">
+          <div class="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-wider">Lives</div>
+          <div id="livesDisplay" class="text-amber-400 font-black text-base sm:text-lg">❤️❤️❤️</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME CANVAS INTERFACE -->
+    <div class="relative z-10 w-full flex flex-col items-center">
+      <div class="relative w-full aspect-[4/3] bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-inner group-hover:border-cyan-500/20 transition-colors">
+        <canvas id="gameCanvas" class="w-full h-full block bg-gradient-to-b from-slate-950 via-slate-900 to-neutral-950"></canvas>
+        
+        <!-- START / GAME OVER SCREENS -->
+        <div id="screenOverlay" class="absolute inset-0 bg-black/85 flex flex-col items-center justify-center p-4 sm:p-6 text-center transition-all duration-300 opacity-100 z-20">
+          <h2 id="overlayTitle" class="text-2xl sm:text-4xl font-black font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-amber-300 uppercase mb-2 tracking-wider filter drop-shadow-[0_5px_15px_rgba(6,182,212,0.4)]">
+            HỨNG TÁO GOLD X
+          </h2>
+          <p id="overlayDesc" class="text-xs sm:text-sm text-slate-400 max-w-md mb-6 leading-relaxed">
+            Di chuyển chuột, vuốt màn hình hoặc dùng phím <span class="text-cyan-400">← →</span> để điều khiển Thanh Hứng Lượng Tử. Hứng táo để tăng siêu combo, né tránh bom antimatter!
+          </p>
+          <button id="actionBtn" class="px-6 py-3 sm:px-8 sm:py-3.5 bg-gradient-to-r from-cyan-500 via-fuchsia-600 to-amber-500 font-mono text-xs sm:text-sm font-black tracking-widest text-white uppercase rounded-xl shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(217,70,239,0.6)] hover:scale-105 active:scale-95 transition-all cursor-pointer">
+            Khởi Động Lõi Engine
           </button>
         </div>
       </div>
 
-      <!-- BẢNG THỐNG KÊ -->
-      <div class="bg-gradient-to-br from-[#111114] to-[#16161f] border border-neutral-800/80 rounded-2xl p-5 text-center shadow-xl">
-        <p class="text-[11px] text-neutral-500 font-gaming uppercase tracking-widest mb-1">Tổng Lượt Chơi Cổng Game</p>
-        <h3 id="total-views" class="text-3xl font-black text-green-400 font-gaming neon-glow">0</h3>
+      <!-- INTERFACE CONTROLS INFO -->
+      <div class="w-full mt-3 sm:mt-4 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1">
+        <div>Điều khiển: <span class="text-slate-300">Touch / Mouse</span> hoặc phím <span class="text-slate-300">← → Keys</span></div>
+        <div>Hệ thống vật lý: <span class="text-emerald-400 font-bold" id="fpsDisplay">Quantum Stable (60FPS)</span></div>
       </div>
-    </aside>
+    </div>
 
-    <!-- GRID HIỂN THỊ GAME -->
-    <section class="lg:col-span-3 space-y-6">
-      <div id="game-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div class="col-span-full text-center py-16 text-neutral-500 font-gaming">Đang kết nối hệ thống Supabase...</div>
-      </div>
-    </section>
-  </main>
+  </div>
 
+  <!-- CORE JAVASCRIPT GAME ENGINE -->
   <script>
-    // === THAY MÃ PHẦN SUPABASE CỦA MÀY VÀO 2 DÒNG NÀY ===
-    const SUPABASE_URL = 'DÁN_PROJECT_URL_VÀO_ĐÂY';
-    const SUPABASE_KEY = 'DÁN_PUBLISHABLE_KEY_VÀO_ĐÂY';
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const comboDisplay = document.getElementById('comboDisplay');
+    const livesDisplay = document.getElementById('livesDisplay');
+    const screenOverlay = document.getElementById('screenOverlay');
+    const overlayTitle = document.getElementById('overlayTitle');
+    const overlayDesc = document.getElementById('overlayDesc');
+    const actionBtn = document.getElementById('actionBtn');
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    let allGames = [];
-    let favoriteIds = JSON.parse(localStorage.getItem('fav_games') || '[]');
-
-    async function fetchGames() {
-      showToast('Đang tải danh sách game mới nhất...', 'info');
-      const { data: games, error } = await supabaseClient
-        .from('games')
-        .select('*')
-        .order('is_vip', { ascending: false })
-        .order('views', { ascending: false });
-
-      if (error || !games) {
-        document.getElementById('game-grid').innerHTML = `<div class="col-span-full text-center py-16 text-red-500 font-gaming">Lỗi kết nối cơ sở dữ liệu! Vui lòng kiểm tra lại URL/Key API.</div>`;
-        return;
-      }
-
-      allGames = games;
-      renderGames(allGames);
-      calculateTotalViews(games);
-      updateFavBadge();
+    function resizeCanvas() {
+      canvas.width = 800;
+      canvas.height = 600;
     }
+    resizeCanvas();
 
-    function renderGames(games) {
-      const grid = document.getElementById('game-grid');
-      if (games.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-16 text-neutral-500 font-gaming">Không tìm thấy trò chơi phù hợp!</div>`;
-        return;
-      }
+    // Web Audio API Synth Engine
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
 
-      grid.innerHTML = games.map(game => {
-        const isFav = favoriteIds.includes(game.id);
-        return `
-          <div class="bg-[#111114] border ${game.is_vip ? 'border-yellow-500/50 vip-glow' : 'border-neutral-800/80'} rounded-2xl p-4 flex flex-col justify-between hover:border-green-500/80 transition-all duration-300 relative group">
-            <button onclick="toggleFav(${game.id})" class="absolute top-3 left-3 z-10 w-8 h-8 rounded-lg bg-neutral-900/80 backdrop-blur-md flex items-center justify-center text-xs ${isFav ? 'text-red-500' : 'text-neutral-500'} hover:text-red-500 transition-all cursor-pointer">
-              <i class="fas fa-heart"></i>
-            </button>
-            ${game.is_vip ? '<span class="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-amber-500 text-neutral-950 font-gaming text-[10px] font-black px-2.5 py-0.5 rounded-full z-10 shadow-lg"><i class="fas fa-crown"></i> VIP</span>' : ''}
-            
-            <div class="mt-7">
-              <h3 class="font-gaming text-base font-bold text-white group-hover:text-green-400 transition-colors mb-1 truncate">${game.title}</h3>
-              <p class="text-xs text-neutral-400 mb-4"><i class="fas fa-eye text-neutral-500 mr-1"></i> ${game.views || 0} lượt chơi</p>
-            </div>
-            
-            <button onclick="playGame(${game.id}, '${game.game_url}', ${game.views || 0})" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 text-neutral-950 font-gaming font-bold text-xs uppercase py-3 rounded-xl shadow-lg transition-all active:scale-95 cursor-pointer">
-              <i class="fas fa-play mr-1.5"></i> Chơi Ngay
-            </button>
-          </div>
-        `;
-      }).join('');
-    }
-
-    async function playGame(id, url, currentViews) {
-      await supabaseClient
-        .from('games')
-        .update({ views: currentViews + 1 })
-        .eq('id', id);
-      window.open(url, '_blank');
-      fetchGames();
-    }
-
-    function toggleFav(id) {
-      if (favoriteIds.includes(id)) {
-        favoriteIds = favoriteIds.filter(fId => fId !== id);
-        showToast('Đã xóa khỏi danh sách yêu thích!');
-      } else {
-        favoriteIds.push(id);
-        showToast('Đã thêm vào danh sách yêu thích!');
-      }
-      localStorage.setItem('fav_games', JSON.stringify(favoriteIds));
-      updateFavBadge();
-      renderGames(allGames);
-    }
-
-    function updateFavBadge() {
-      const badge = document.getElementById('fav-badge');
-      badge.innerText = favoriteIds.length;
-      badge.classList.toggle('hidden', favoriteIds.length === 0);
-    }
-
-    function toggleFavoritesFilter() {
-      const favGames = allGames.filter(g => favoriteIds.includes(g.id));
-      renderGames(favGames);
-    }
-
-    function calculateTotalViews(games) {
-      const total = games.reduce((acc, curr) => acc + (curr.views || 0), 0);
-      document.getElementById('total-views').innerText = total.toLocaleString();
-    }
-
-    function handleSearch(query) {
-      const filtered = allGames.filter(g => g.title.toLowerCase().includes(query.toLowerCase()));
-      renderGames(filtered);
-    }
-
-    function filterCategory(cat) {
-      if (cat === 'vip') {
-        renderGames(allGames.filter(g => g.is_vip));
-      } else {
-        renderGames(allGames);
+      if (type === 'catch') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+      } else if (type === 'catch_special') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+      } else if (type === 'bomb') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(60, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'gameover') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.8);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.8);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.8);
       }
     }
 
-    function resetFilters() {
-      renderGames(allGames);
+    // State Variables
+    let gameState = 'START'; 
+    let score = 0;
+    let combo = 1;
+    let lives = 3;
+    let gameLoopId = null;
+
+    const paddle = {
+      x: canvas.width / 2 - 75,
+      y: canvas.height - 50,
+      width: 150,
+      height: 16,
+      currentX: canvas.width / 2 - 75,
+      speed: 18
+    };
+
+    let items = [];
+    let particles = [];
+    let lastSpawnTime = 0;
+    let spawnInterval = 700;
+    let baseSpeed = 4;
+
+    let keys = { ArrowLeft: false, ArrowRight: false };
+    window.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = true; });
+    window.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
+    
+    // Mouse & Touch events
+    function updatePaddleFromInput(clientX) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const mouseX = (clientX - rect.left) * scaleX;
+      paddle.x = Math.max(0, Math.min(canvas.width - paddle.width, mouseX - paddle.width / 2));
     }
 
-    function showToast(msg, type = 'success') {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-msg').innerText = msg;
-      toast.classList.remove('hidden', 'translate-x-full');
-      setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => toast.classList.add('hidden'), 300);
-      }, 3000);
+    canvas.addEventListener('mousemove', (e) => updatePaddleFromInput(e.clientX));
+    canvas.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) updatePaddleFromInput(e.touches[0].clientX);
+    });
+
+    actionBtn.addEventListener('click', startGame);
+
+    function startGame() {
+      score = 0;
+      combo = 1;
+      lives = 3;
+      items = [];
+      particles = [];
+      paddle.x = canvas.width / 2 - paddle.width / 2;
+      updateHUD();
+      
+      gameState = 'PLAYING';
+      screenOverlay.classList.add('opacity-0', 'pointer-events-none');
+      
+      if (gameLoopId) cancelAnimationFrame(gameLoopId);
+      lastSpawnTime = performance.now();
+      gameLoop();
     }
 
-    fetchGames();
+    function updateHUD() {
+      scoreDisplay.innerText = String(score).padStart(4, '0');
+      comboDisplay.innerText = 'x' + combo;
+      livesDisplay.innerText = '❤️'.repeat(Math.max(0, lives));
+    }
+
+    function createParticles(x, y, color, count = 12) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x, y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          radius: Math.random() * 3 + 2,
+          color,
+          alpha: 1,
+          decay: Math.random() * 0.03 + 0.02
+        });
+      }
+    }
+
+    function spawnItem() {
+      const rand = Math.random();
+      let type = 'apple';
+      let symbol = '🍎';
+      let speed = baseSpeed + Math.random() * 2;
+
+      if (rand > 0.85) {
+        type = 'gold_apple';
+        symbol = '🌟';
+        speed += 2;
+      } else if (rand > 0.65) {
+        type = 'bomb';
+        symbol = '💣';
+        speed += 1;
+      }
+
+      items.push({
+        x: Math.random() * (canvas.width - 40) + 20,
+        y: -30,
+        radius: 20,
+        type,
+        symbol,
+        speed
+      });
+    }
+
+    function gameOver() {
+      gameState = 'GAMEOVER';
+      playSound('gameover');
+      overlayTitle.innerText = 'GAME OVER';
+      overlayDesc.innerText = `Lõi năng lượng bị phá hủy! Bạn đạt tổng điểm: ${score} (Super Combo x${combo})`;
+      actionBtn.innerText = 'Tái Khởi Động Engine';
+      screenOverlay.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function gameLoop(timestamp = performance.now()) {
+      if (gameState !== 'PLAYING') return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Keyboard Paddle Movement
+      if (keys.ArrowLeft) paddle.x = Math.max(0, paddle.x - paddle.speed);
+      if (keys.ArrowRight) paddle.x = Math.min(canvas.width - paddle.width, paddle.x + paddle.speed);
+
+      // Draw Paddle
+      ctx.fillStyle = '#06b6d4';
+      ctx.shadowColor = '#06b6d4';
+      ctx.shadowBlur = 15;
+      ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+      ctx.shadowBlur = 0;
+
+      // Spawn Items
+      if (timestamp - lastSpawnTime > spawnInterval) {
+        spawnItem();
+        lastSpawnTime = timestamp;
+      }
+
+      // Update & Draw Items
+      for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        item.y += item.speed;
+
+        // Render Symbol
+        ctx.font = '28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(item.symbol, item.x, item.y);
+
+        // Check Collision with Paddle
+        if (
+          item.y + item.radius >= paddle.y &&
+          item.y - item.radius <= paddle.y + paddle.height &&
+          item.x >= paddle.x - 10 &&
+          item.x <= paddle.x + paddle.width + 10
+        ) {
+          if (item.type === 'apple') {
+            score += 100 * combo;
+            playSound('catch');
+            createParticles(item.x, item.y, '#06b6d4');
+          } else if (item.type === 'gold_apple') {
+            score += 300 * combo;
+            combo++;
+            playSound('catch_special');
+            createParticles(item.x, item.y, '#f59e0b', 20);
+          } else if (item.type === 'bomb') {
+            lives--;
+            combo = 1;
+            playSound('bomb');
+            createParticles(item.x, item.y, '#ef4444', 25);
+            if (lives <= 0) {
+              updateHUD();
+              gameOver();
+              return;
+            }
+          }
+          updateHUD();
+          items.splice(i, 1);
+          continue;
+        }
+
+        // Missed Item
+        if (item.y > canvas.height + 30) {
+          if (item.type === 'apple' || item.type === 'gold_apple') {
+            combo = 1;
+            updateHUD();
+          }
+          items.splice(i, 1);
+        }
+      }
+
+      // Particles Loop
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= p.decay;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      gameLoopId = requestAnimationFrame(gameLoop);
+    }
   </script>
 </body>
 </html>
