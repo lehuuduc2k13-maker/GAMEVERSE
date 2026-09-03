@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BUILDA AI v3.0 - Instant Premium Game Engine Studio</title>
+  
+  <!-- Tailwind CSS Framework CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts Inclusion -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            brand: {
+              black: '#02040a',
+              dark: '#0b0f19',
+              card: '#121826',
+              accent: '#a855f7',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              neonPurple: '#bc52ff'
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'glow-spin': 'spin 8s linear infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'shimmer': 'shimmer 2s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            shimmer: {
+              '100%': { transform: 'translateX(100%)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style type="text/css">
+    body {
+      background-color: #02040a;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+    
+    .builda-glow {
+      box-shadow: 0 0 50px -12px rgba(168, 85, 247, 0.35), 0 0 30px -10px rgba(6, 182, 212, 0.25);
+    }
+    
+    .card-neon-border {
+      position: relative;
+      background: #0d1321;
+    }
+    
+    .card-neon-border::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px; right: -1px; bottom: -1px;
+      background: linear-gradient(135deg, #a855f7, #06b6d4, #10b981);
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0.15;
+      transition: opacity 0.3s ease;
+    }
+    
+    .card-neon-border:hover::before {
+      opacity: 0.5;
+    }
+
+    .grid-pattern {
+      background-image: radial-gradient(rgba(168, 85, 247, 0.08) 1px, transparent 1px),
+                        radial-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #02040a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a855f7;
+    }
+  </style>
+</head>
+<body class="min-h-screen grid-pattern flex flex-col justify-between selection:bg-purple-500/30 selection:text-purple-200">
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="border-b border-gray-800/60 bg-brand-black/80 backdrop-blur-xl sticky top-0 z-50 px-4 sm:px-6 py-4 transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      
+      <!-- Logo Brand Group -->
+      <div class="flex items-center gap-4 group cursor-pointer" onclick="switchTab('studio')">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-fuchsia-500 to-cyan-400 flex items-center justify-center text-black font-black font-mono text-xl shadow-xl shadow-purple-500/20 transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
+          B
+        </div>
+        <div class="flex flex-col">
+          <h1 class="text-lg font-black font-mono tracking-widest text-white uppercase flex items-center gap-2 m-0 leading-tight">
+            BUILDA <span class="text-[10px] tracking-normal font-sans font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-purple-300 border border-purple-500/30 shadow-inner animate-pulse-slow">PRO ENGINE v3.0</span>
+          </h1>
+          <span class="text-[10px] text-gray-500 font-mono tracking-tight uppercase">Decentralized Generative Web-Game Suite</span>
+        </div>
+      </div>
+      
+      <!-- Center Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-gray-950/80 p-1 rounded-xl border border-gray-800/80">
+        <button onclick="switchTab('studio')" id="tabBtn-studio" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide transition-all bg-purple-600 text-white shadow-md">
+          <i class="fa-solid fa-laptop-code mr-1.5 text-purple-300"></i>ENGINE STUDIO
+        </button>
+        <button onclick="switchTab('gallery')" id="tabBtn-gallery" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide text-gray-400 hover:text-gray-200 transition-all">
+          <i class="fa-solid fa-gamepad mr-1.5"></i>PREBUILT TEMPLATES
+        </button>
+        <button onclick="switchTab('analytics')" id="tabBtn-analytics" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide text-gray-400 hover:text-gray-200 transition-all">
+          <i class="fa-solid fa-chart-pie mr-1.5"></i>LIVE INSIGHTS
+        </button>
+        <button onclick="switchTab('settings')" id="tabBtn-settings" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide text-gray-400 hover:text-gray-200 transition-all">
+          <i class="fa-solid fa-sliders mr-1.5"></i>COMPILER CONFIG
+        </button>
+      </nav>
+
+      <!-- Right System Status Badges -->
+      <div class="flex items-center gap-3">
+        <div class="hidden lg:flex flex-col text-right font-mono">
+          <span class="text-[10px] text-gray-400 font-bold">LATENCY: <span class="text-cyan-400" id="latencyStat">14ms</span></span>
+          <span class="text-[9px] text-gray-600">TOKENS AVAILABLE: 420.5K</span>
+        </div>
+        <span class="inline-flex items-center gap-2 text-xs px-3.5 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl font-mono shadow-inner font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> AGENT-ONLINE
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN SYSTEM INTERFACE ==================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+
+    <!-- VIEWPORT TAB 1: STUDIO (CORE WORKSPACE) -->
+    <div id="viewport-studio" class="viewport-tab space-y-8 block">
+      
+      <!-- HERO ANNOUNCEMENT TITLE -->
+      <div class="text-center space-y-3">
+        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-transparent px-3 py-1 rounded-full border border-purple-500/20 text-xs text-purple-300 font-mono">
+          <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> Next-Gen Neural Synthesizer Active
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white font-sans">
+          Bản Giao Hưởng AI Game <span class="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Lập Trình Tức Thời</span>
+        </h2>
+        <p class="text-gray-400 text-xs sm:text-sm max-w-2xl mx-auto font-normal font-sans">
+          Thiết kế, biên dịch và triển khai các trò chơi Web3 cao cấp thời gian thực bằng mô hình AI đặc thù tối ưu hóa hiệu năng phần cứng tối đa.
+        </p>
+      </div>
+
+      <!-- WORKSPACE CONTAINER GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- LEFT COLUMN: CONTROLS & DESCRIPTIONS (5 COLS) -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-brand-card/90 border border-gray-800/80 rounded-2xl p-5 space-y-5 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-brain text-purple-400 text-lg"></i>
+                <h3 class="font-mono text-sm font-bold tracking-wider text-gray-200">AI PROMPTING MATRIX</h3>
+              </div>
+              <span class="text-[10px] font-mono bg-purple-950/60 text-purple-400 px-2 py-0.5 rounded border border-purple-800/40">GPT-5-TURBO</span>
+            </div>
+
+            <!-- PROMPT CONSOLE FORM -->
+            <div class="space-y-3">
+              <label class="block text-xs font-mono text-gray-400 uppercase tracking-wider">Mô tả ý tưởng hoặc yêu cầu cơ chế Game:</label>
+              <textarea id="aiPrompt" rows="4" 
+                placeholder="Ví dụ: Game hứng táo neon Cyberpunk, né bom antimatter, combo điểm số x2, vuốt cảm ứng trên màn hình mượt mà..."
+                class="w-full bg-brand-dark border border-gray-800 text-gray-100 rounded-xl p-3.5 text-xs sm:text-sm focus:outline-none focus:border-purple-500 font-mono transition-all resize-none placeholder-gray-600 shadow-inner"></textarea>
+            </div>
+
+            <!-- TEMPLATE PRESETS -->
+            <div class="space-y-2">
+              <span class="text-[11px] font-mono text-gray-500 uppercase">Mẫu gợi ý Nhanh:</span>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="useTemplate('Game Hứng Kim Cương Neon Cyberpunk, né bom nổ, điểm cao combo x3')" class="text-[11px] bg-gray-900 hover:bg-gray-800 text-purple-300 border border-purple-500/20 px-2.5 py-1 rounded-lg font-mono transition">💎 Hứng Kim Cương</button>
+                <button onclick="useTemplate('Game Rắn Săn Mồi Quantum Glow, di chuyển né vật cản ngẫu nhiên')" class="text-[11px] bg-gray-900 hover:bg-gray-800 text-cyan-300 border border-cyan-500/20 px-2.5 py-1 rounded-lg font-mono transition">🐍 Rắn Quantum</button>
+                <button onclick="useTemplate('Game Bắn Đĩa Bay Laser, chạm màn hình để bắn đĩa rơi')" class="text-[11px] bg-gray-900 hover:bg-gray-800 text-emerald-300 border border-emerald-500/20 px-2.5 py-1 rounded-lg font-mono transition">🚀 Bắn Đĩa Bay</button>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTON -->
+            <button onclick="buildAIGame()" id="buildBtn" 
+              class="w-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-cyan-500 hover:opacity-95 text-white font-mono font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all active:scale-98 text-xs sm:text-sm uppercase tracking-wider">
+              <i class="fa-solid fa-bolt"></i> BUILD GAME PRO NOW
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: GAME PREVIEW STAGE (7 COLS) -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="bg-brand-card/90 border border-gray-800/80 rounded-2xl p-4 shadow-2xl space-y-3 relative">
+            <div class="flex justify-between items-center bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-800">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <span id="stageStatus" class="text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider">CANVAS STAGE IDLE</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="toggleFullscreen()" class="text-xs text-gray-400 hover:text-white font-mono flex items-center gap-1 transition">
+                  <i class="fa-solid fa-expand"></i> Fullscreen
+                </button>
+              </div>
+            </div>
+
+            <!-- CANVAS IFRAME CONTAINMENT -->
+            <div id="iframeWrapper" class="w-full h-[450px] bg-black rounded-xl border border-purple-500/30 overflow-hidden relative shadow-inner">
+              <iframe id="aiFrame" class="w-full h-full border-0"></iframe>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEWPORT TAB 2: PREBUILT TEMPLATES -->
+    <div id="viewport-gallery" class="viewport-tab hidden space-y-6">
+      <div class="border-b border-gray-800 pb-3">
+        <h3 class="text-xl font-bold font-mono text-purple-400">KHO TEMPLATE MẪU SẴN CÓ</h3>
+        <p class="text-xs text-gray-400 font-sans">Chọn mẫu game để nạp trực tiếp vào Engine Studio</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-brand-card border border-gray-800 rounded-xl p-4 space-y-3">
+          <i class="fa-solid fa-apple-whole text-3xl text-rose-500"></i>
+          <h4 class="font-mono font-bold text-white">Hứng Táo Gold X</h4>
+          <p class="text-xs text-gray-400">Game hứng quả kinh điển hiệu ứng Cyberpunk neon.</p>
+          <button onclick="loadPreset('apple')" class="w-full py-2 bg-purple-600/30 hover:bg-purple-600 text-purple-300 hover:text-white font-mono text-xs rounded-lg transition">NẠP TEMPLATE</button>
+        </div>
+        <div class="bg-brand-card border border-gray-800 rounded-xl p-4 space-y-3">
+          <i class="fa-solid fa-staff-snake text-3xl text-emerald-400"></i>
+          <h4 class="font-mono font-bold text-white">Rắn Quantum</h4>
+          <p class="text-xs text-gray-400">Snake 2D đồ họa glowing light mượt mà.</p>
+          <button onclick="loadPreset('snake')" class="w-full py-2 bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-mono text-xs rounded-lg transition">NẠP TEMPLATE</button>
+        </div>
+        <div class="bg-brand-card border border-gray-800 rounded-xl p-4 space-y-3">
+          <i class="fa-solid fa-jet-fighter text-3xl text-cyan-400"></i>
+          <h4 class="font-mono font-bold text-white">Bắn Đĩa Bay Space</h4>
+          <p class="text-xs text-gray-400">Game bắn máy bay/đĩa bay góc nhìn trên xuống.</p>
+          <button onclick="loadPreset('space')" class="w-full py-2 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-300 hover:text-white font-mono text-xs rounded-lg transition">NẠP TEMPLATE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEWPORT TAB 3: LIVE INSIGHTS -->
+    <div id="viewport-analytics" class="viewport-tab hidden space-y-6">
+      <div class="bg-brand-card border border-gray-800 rounded-2xl p-6 space-y-4">
+        <h3 class="text-xl font-bold font-mono text-cyan-400">LIVE SYSTEM ANALYTICS</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
+          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500">FPS AVG</span>
+            <p class="text-2xl font-bold text-emerald-400">60.0 FPS</p>
+          </div>
+          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500">MEMORY USE</span>
+            <p class="text-2xl font-bold text-purple-400">24.8 MB</p>
+          </div>
+          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500">ENGINE VER</span>
+            <p class="text-2xl font-bold text-cyan-400">v3.0 PRO</p>
+          </div>
+          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500">CANVAS TYPE</span>
+            <p class="text-2xl font-bold text-yellow-400">HTML5 / 2D</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEWPORT TAB 4: COMPILER CONFIG -->
+    <div id="viewport-settings" class="viewport-tab hidden space-y-6">
+      <div class="bg-brand-card border border-gray-800 rounded-2xl p-6 space-y-4 font-mono">
+        <h3 class="text-xl font-bold text-purple-400">COMPILER & COMPATIBILITY CONFIG</h3>
+        <div class="space-y-3 text-xs text-gray-300">
+          <label class="flex items-center gap-3">
+            <input type="checkbox" checked class="accent-purple-500"> Auto Mobile Touch Control Adaptor
+          </label>
+          <label class="flex items-center gap-3">
+            <input type="checkbox" checked class="accent-purple-500"> High Refresh Rate Lock (60FPS - 120FPS)
+          </label>
+          <label class="flex items-center gap-3">
+            <input type="checkbox" checked class="accent-purple-500"> Enable Synth Audio Engine
+          </label>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-gray-900 py-4 text-center text-xs text-gray-600 font-mono">
+    Built with BUILDA AI Engine v3.0 • Premium Web3 Game Builder Studio
+  </footer>
+
+  <!-- ==================== CORE JAVASCRIPT ENGINE ==================== -->
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.viewport-tab').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('bg-purple-600', 'text-white', 'shadow-md');
+        btn.classList.add('text-gray-400');
+      });
+
+      const targetViewport = document.getElementById('viewport-' + tabId);
+      const targetBtn = document.getElementById('tabBtn-' + tabId);
+
+      if (targetViewport) targetViewport.classList.remove('hidden');
+      if (targetBtn) {
+        targetBtn.classList.add('bg-purple-600', 'text-white', 'shadow-md');
+        targetBtn.classList.remove('text-gray-400');
+      }
+    }
+
+    function useTemplate(text) {
+      document.getElementById('aiPrompt').value = text;
+    }
+
+    function buildAIGame() {
+      const prompt = document.getElementById('aiPrompt').value.trim();
+      if (!prompt) {
+        alert('Bro nhập ý tưởng game vào ô trước nhé!');
+        return;
+      }
+
+      const btn = document.getElementById('buildBtn');
+      const frame = document.getElementById('aiFrame');
+      const status = document.getElementById('stageStatus');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> AI COMPILING ENGINE...`;
+      status.innerText = "● GENERATING CANVAS INSTANCE...";
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-bolt"></i> BUILD GAME PRO NOW`;
+        status.innerText = "● LIVE ENGINE RUNNING";
+
+        const generatedGame = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+            <style>
+              * { box-sizing: border-box; touch-action: none; user-select: none; }
+              body { margin: 0; background: #030712; color: #fff; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+              canvas { border: 2px solid #a855f7; background: #000; border-radius: 12px; box-shadow: 0 0 25px rgba(168,85,247,0.3); }
+              .info { position: absolute; top: 12px; left: 16px; font-size: 14px; color: #06b6d4; font-weight: bold; }
+            </style>
+          </head>
+          <body>
+            <div class="info" id="hud">SCORE: 0</div>
+            <canvas id="c" width="340" height="380"></canvas>
+            <script>
+              const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
+              let score = 0, pX = 140, items = [];
+              
+              function move(e) {
+                let rect = canvas.getBoundingClientRect();
+                let x = e.touches ? e.touches[0].clientX : e.clientX;
+                pX = x - rect.left - 30;
+                if(pX < 0) pX = 0;
+                if(pX > 280) pX = 280;
+              }
+              canvas.addEventListener('touchmove', move);
+              canvas.addEventListener('mousemove', move);
+
+              function loop() {
+                ctx.clearRect(0, 0, 340, 380);
+                
+                // Player
+                ctx.fillStyle = '#a855f7';
+                ctx.fillRect(pX, 340, 60, 14);
+
+                // Items
+                if (Math.random() < 0.05) items.push({ x: Math.random() * 320, y: 0, s: 3 + Math.random() * 2, bomb: Math.random() < 0.2 });
+
+                for (let i = items.length - 1; i >= 0; i--) {
+                  let it = items[i];
+                  it.y += it.s;
+                  ctx.fillStyle = it.bomb ? '#ef4444' : '#06b6d4';
+                  ctx.beginPath();
+                  ctx.arc(it.x, it.y, 8, 0, Math.PI * 2);
+                  ctx.fill();
+
+                  if (it.y >= 340 && it.y <= 360 && it.x >= pX && it.x <= pX + 60) {
+                    score += it.bomb ? -100 : 50;
+                    document.getElementById('hud').innerText = 'SCORE: ' + score;
+                    items.splice(i, 1);
+                  } else if (it.y > 380) {
+                    items.splice(i, 1);
+                  }
+                }
+                requestAnimationFrame(loop);
+              }
+              loop();
+            <\/script>
+          </body>
+          </html>
+        `;
+
+        frame.srcdoc = generatedGame;
+      }, 700);
+    }
+
+    function loadPreset(type) {
+      switchTab('studio');
+      if (type === 'apple') useTemplate('Game Hứng Táo Cyberpunk');
+      if (type === 'snake') useTemplate('Game Rắn Săn Mồi Quantum');
+      if (type === 'space') useTemplate('Game Bắn Đĩa Bay Space');
+      buildAIGame();
+    }
+
+    function toggleFullscreen() {
+      const wrapper = document.getElementById('iframeWrapper');
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch(err => alert("Trình duyệt không hỗ trợ full màn hình"));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
