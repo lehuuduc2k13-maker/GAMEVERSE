@@ -1,452 +1,1508 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark scroll-smooth">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BUILDA AI v3.0 - Instant Premium Game Engine Studio</title>
-  
-  <!-- Tailwind CSS Framework CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts Inclusion -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
-          },
-          colors: {
-            brand: {
-              black: '#02040a',
-              dark: '#0b0f19',
-              card: '#121826',
-              accent: '#a855f7',
-              cyan: '#06b6d4',
-              emerald: '#10b981',
-              neonPurple: '#bc52ff'
-            }
-          },
-          animation: {
-            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'glow-spin': 'spin 8s linear infinite',
-            'float': 'float 3s ease-in-out infinite',
-            'shimmer': 'shimmer 2s linear infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            shimmer: {
-              '100%': { transform: 'translateX(100%)' }
-            }
-          }
+<title>GAMEVERSE • BUILDA 3D XIANXIA ENGINE</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily:{
+        sans:['Plus Jakarta Sans','sans-serif'],
+        mono:['Fira Code','monospace']
+      }
+    }
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#02040a;
+  color:#fff;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,input,textarea{
+  font:inherit;
+}
+
+.glow{
+  box-shadow:
+    0 0 35px rgba(168,85,247,.25),
+    inset 0 0 30px rgba(6,182,212,.03);
+}
+
+.grid-bg{
+  background-color:#02040a;
+  background-image:
+    radial-gradient(rgba(168,85,247,.08) 1px,transparent 1px),
+    radial-gradient(rgba(6,182,212,.05) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+
+.panel{
+  background:rgba(13,19,33,.94);
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:20px;
+}
+
+.neon{
+  background:linear-gradient(
+    90deg,
+    #9333ea,
+    #d946ef,
+    #06b6d4
+  );
+}
+
+#gameBox{
+  position:relative;
+  width:100%;
+  height:560px;
+  min-height:430px;
+  background:#02030a;
+  border:1px solid rgba(168,85,247,.45);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+#gameCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+#hud{
+  position:absolute;
+  left:12px;
+  top:12px;
+  z-index:10;
+  pointer-events:none;
+}
+
+.hud-card{
+  background:rgba(2,4,10,.78);
+  border:1px solid rgba(168,85,247,.35);
+  backdrop-filter:blur(10px);
+  border-radius:12px;
+  padding:9px 12px;
+  margin-bottom:6px;
+  min-width:190px;
+}
+
+.bar{
+  height:7px;
+  background:#111827;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:5px;
+}
+
+.bar > div{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  transition:width .2s;
+}
+
+#realmBar{
+  background:linear-gradient(90deg,#a855f7,#06b6d4);
+}
+
+#hpBar{
+  background:linear-gradient(90deg,#ef4444,#f97316);
+}
+
+#controls{
+  position:absolute;
+  left:15px;
+  bottom:15px;
+  z-index:20;
+  display:grid;
+  grid-template-columns:55px 55px 55px;
+  grid-template-rows:55px 55px;
+  gap:5px;
+  touch-action:none;
+}
+
+.ctrl{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(15,23,42,.82);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  backdrop-filter:blur(8px);
+  user-select:none;
+}
+
+.ctrl:active{
+  transform:scale(.92);
+  background:rgba(168,85,247,.7);
+}
+
+#up{grid-column:2;grid-row:1}
+#left{grid-column:1;grid-row:2}
+#down{grid-column:2;grid-row:2}
+#right{grid-column:3;grid-row:2}
+
+#actionControls{
+  position:absolute;
+  right:15px;
+  bottom:15px;
+  z-index:20;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.action{
+  width:75px;
+  height:55px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.15);
+  color:white;
+  font-weight:800;
+  font-size:11px;
+  background:rgba(15,23,42,.85);
+  backdrop-filter:blur(8px);
+}
+
+.action:active{
+  transform:scale(.94);
+}
+
+#meditateBtn{
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+}
+
+#absorbBtn{
+  background:linear-gradient(135deg,#0891b2,#2563eb);
+}
+
+#attackBtn{
+  background:linear-gradient(135deg,#dc2626,#9333ea);
+}
+
+#toast{
+  position:absolute;
+  left:50%;
+  top:45%;
+  transform:translate(-50%,-50%);
+  z-index:30;
+  background:rgba(2,4,10,.92);
+  border:1px solid rgba(6,182,212,.5);
+  border-radius:14px;
+  padding:12px 18px;
+  color:#67e8f9;
+  font-family:monospace;
+  font-weight:bold;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  text-align:center;
+  white-space:nowrap;
+}
+
+#crosshair{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:16px;
+  height:16px;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(255,255,255,.5);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.stat{
+  background:#080d18;
+  border:1px solid #1e293b;
+  border-radius:13px;
+  padding:12px;
+}
+
+input,textarea{
+  color:white;
+}
+
+@media(max-width:700px){
+  #gameBox{
+    height:68vh;
+    min-height:460px;
+  }
+
+  .hud-card{
+    min-width:165px;
+    font-size:11px;
+  }
+
+  .ctrl{
+    width:50px;
+    height:50px;
+  }
+
+  #controls{
+    grid-template-columns:50px 50px 50px;
+    grid-template-rows:50px 50px;
+  }
+
+  .action{
+    width:68px;
+    height:50px;
+    font-size:10px;
+  }
+}
+</style>
+</head>
+
+<body class="grid-bg">
+
+<header class="sticky top-0 z-50 border-b border-gray-800/70 bg-black/80 backdrop-blur-xl">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-2xl neon flex items-center justify-center text-black font-black text-xl">
+        G
+      </div>
+
+      <div>
+        <div class="font-mono font-black tracking-widest">
+          GAMEVERSE
+        </div>
+        <div class="text-[9px] text-purple-300 font-mono">
+          BUILDA 3D XIANXIA ENGINE V1
+        </div>
+      </div>
+    </div>
+
+    <div class="hidden sm:block text-right font-mono text-[10px]">
+      <div class="text-cyan-400">● 3D ENGINE ONLINE</div>
+      <div class="text-gray-500">WEBGL / MOBILE READY</div>
+    </div>
+
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 space-y-6">
+
+  <!-- AI -->
+  <section class="panel glow p-4 sm:p-6">
+
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <div>
+        <div class="text-purple-400 font-mono text-xs font-bold">
+          ✦ AI GAME ARCHITECT
+        </div>
+
+        <h1 class="text-2xl sm:text-4xl font-black mt-1">
+          Tạo Game <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">3D</span>
+        </h1>
+      </div>
+
+      <div class="hidden sm:block text-xs font-mono text-gray-500">
+        ENGINE: THREE.JS
+      </div>
+    </div>
+
+    <textarea
+      id="aiPrompt"
+      rows="3"
+      class="w-full bg-[#070b14] border border-gray-800 rounded-xl p-4 outline-none focus:border-purple-500 font-mono text-sm"
+      placeholder="Ví dụ: Game tu tiên 3D thế giới mở, nhân vật nhặt linh thạch, hấp thụ linh khí, ngồi thiền, đánh yêu thú, tăng cảnh giới..."
+    ></textarea>
+
+    <div class="flex flex-wrap gap-2 mt-3">
+
+      <button
+        onclick="setPrompt('Game tu tiên 3D thế giới mở: nhân vật nhặt linh thạch, hấp thụ linh khí, ngồi thiền, đánh yêu thú và đột phá cảnh giới.')"
+        class="px-3 py-2 rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs">
+        🧘 Tu Tiên 3D
+      </button>
+
+      <button
+        onclick="setPrompt('Game tiên hiệp 3D có kiếm, yêu thú, linh thạch, nhiệm vụ, boss và hệ thống cảnh giới.')"
+        class="px-3 py-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-xs">
+        ⚔️ Tiên Hiệp
+      </button>
+
+      <button
+        onclick="setPrompt('Game thế giới mở 3D fantasy với núi, rừng, quái vật, nhiệm vụ và khám phá.')"
+        class="px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs">
+        🌌 Open World
+      </button>
+
+    </div>
+
+    <button
+      onclick="buildGame()"
+      id="buildBtn"
+      class="w-full mt-4 py-4 rounded-xl neon font-mono font-black text-black shadow-lg shadow-purple-500/20 active:scale-[.99]">
+      ⚡ BUILD 3D GAME
+    </button>
+
+  </section>
+
+  <!-- GAME -->
+  <section class="panel glow p-3 sm:p-4">
+
+    <div class="flex items-center justify-between mb-3 px-1">
+
+      <div class="font-mono text-xs text-cyan-400 font-bold">
+        ● LIVE 3D WORLD
+      </div>
+
+      <div class="flex gap-2">
+
+        <button
+          onclick="saveGame()"
+          class="text-[10px] px-3 py-2 rounded-lg bg-gray-900 border border-gray-800">
+          💾 SAVE
+        </button>
+
+        <button
+          onclick="fullscreenGame()"
+          class="text-[10px] px-3 py-2 rounded-lg bg-gray-900 border border-gray-800">
+          ⛶ FULLSCREEN
+        </button>
+
+      </div>
+
+    </div>
+
+    <div id="gameBox">
+
+      <canvas id="gameCanvas"></canvas>
+
+      <div id="crosshair"></div>
+
+      <div id="hud">
+
+        <div class="hud-card">
+          <div class="flex justify-between">
+            <b id="realmName">Luyện Khí • Tầng 1</b>
+            <span id="levelText" class="text-cyan-400">LV 1</span>
+          </div>
+
+          <div class="text-[10px] text-gray-400 mt-1">
+            Tu vi:
+            <span id="xpText">0 / 100</span>
+          </div>
+
+          <div class="bar">
+            <div id="realmBar"></div>
+          </div>
+
+          <div class="text-[10px] text-gray-400 mt-2">
+            Sinh lực
+          </div>
+
+          <div class="bar">
+            <div id="hpBar"></div>
+          </div>
+        </div>
+
+        <div class="hud-card text-[10px] font-mono">
+          💎 Linh thạch:
+          <span id="stoneText" class="text-cyan-300">0</span>
+          <br>
+          ✨ Linh khí:
+          <span id="qiText" class="text-purple-300">0</span>
+          <br>
+          ⚔️ Yêu thú:
+          <span id="enemyText" class="text-red-300">0</span>
+        </div>
+
+      </div>
+
+      <div id="controls">
+
+        <button class="ctrl" id="up">▲</button>
+        <button class="ctrl" id="left">◀</button>
+        <button class="ctrl" id="down">▼</button>
+        <button class="ctrl" id="right">▶</button>
+
+      </div>
+
+      <div id="actionControls">
+
+        <button class="action" id="attackBtn">
+          ⚔️ ĐÁNH
+        </button>
+
+        <button class="action" id="absorbBtn">
+          ✨ HẤP THỤ
+        </button>
+
+        <button class="action" id="meditateBtn">
+          🧘 THIỀN
+        </button>
+
+      </div>
+
+      <div id="toast"></div>
+
+    </div>
+
+  </section>
+
+  <!-- STATS -->
+  <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+    <div class="stat">
+      <div class="text-[10px] text-gray-500">ENGINE</div>
+      <div class="text-xl font-black text-purple-400">3D</div>
+    </div>
+
+    <div class="stat">
+      <div class="text-[10px] text-gray-500">RENDER</div>
+      <div id="fps" class="text-xl font-black text-cyan-400">60 FPS</div>
+    </div>
+
+    <div class="stat">
+      <div class="text-[10px] text-gray-500">WORLD</div>
+      <div class="text-xl font-black text-emerald-400">OPEN</div>
+    </div>
+
+    <div class="stat">
+      <div class="text-[10px] text-gray-500">SAVE</div>
+      <div class="text-xl font-black text-yellow-400">LOCAL</div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="border-t border-gray-900 py-5 text-center text-[10px] text-gray-600 font-mono">
+  GAMEVERSE • BUILDA 3D XIANXIA ENGINE • V1
+</footer>
+
+<script>
+/* =========================================================
+   GAMEVERSE 3D XIANXIA ENGINE
+   ========================================================= */
+
+let scene;
+let camera;
+let renderer;
+let clock;
+
+let player;
+let playerCore;
+
+let stones = [];
+let enemies = [];
+
+let keys = {
+  up:false,
+  down:false,
+  left:false,
+  right:false
+};
+
+let state = {
+  level:1,
+  realm:0,
+  xp:0,
+  maxXp:100,
+  qi:0,
+  stones:0,
+  hp:100,
+  maxHp:100,
+  meditating:false,
+  attackCooldown:0,
+  lastSave:0
+};
+
+const realms = [
+  "Luyện Khí",
+  "Trúc Cơ",
+  "Kim Đan",
+  "Nguyên Anh",
+  "Hóa Thần",
+  "Luyện Hư",
+  "Hợp Thể",
+  "Đại Thừa",
+  "Độ Kiếp",
+  "Tiên Nhân"
+];
+
+function $(id){
+  return document.getElementById(id);
+}
+
+/* ===================== PROMPT ===================== */
+
+function setPrompt(text){
+  $("aiPrompt").value = text;
+}
+
+function buildGame(){
+
+  const prompt = $("aiPrompt").value.trim();
+
+  if(!prompt){
+    setPrompt(
+      "Game tu tiên 3D thế giới mở: nhân vật nhặt linh thạch, hấp thụ linh khí, ngồi thiền, đánh yêu thú và đột phá cảnh giới."
+    );
+  }
+
+  const btn = $("buildBtn");
+
+  btn.disabled = true;
+  btn.innerHTML = "⚙️ AI ĐANG DỰNG THẾ GIỚI 3D...";
+
+  showToast("🌌 AI đang khởi tạo thế giới tu tiên 3D...");
+
+  setTimeout(()=>{
+    btn.disabled = false;
+    btn.innerHTML = "⚡ BUILD 3D GAME";
+
+    initWorld();
+
+    showToast("✅ THẾ GIỚI 3D ĐÃ KHỞI TẠO");
+  },900);
+}
+
+/* ===================== THREE WORLD ===================== */
+
+function initWorld(){
+
+  if(renderer){
+    renderer.dispose();
+    $("gameCanvas").replaceWith(
+      Object.assign(document.createElement("canvas"),{
+        id:"gameCanvas"
+      })
+    );
+  }
+
+  const canvas = $("gameCanvas");
+
+  scene = new THREE.Scene();
+
+  scene.background = new THREE.Color(0x030712);
+
+  scene.fog = new THREE.FogExp2(0x030712,0.025);
+
+  clock = new THREE.Clock();
+
+  camera = new THREE.PerspectiveCamera(
+    65,
+    $("gameBox").clientWidth / $("gameBox").clientHeight,
+    .1,
+    1000
+  );
+
+  renderer = new THREE.WebGLRenderer({
+    canvas:canvas,
+    antialias:true,
+    powerPreference:"high-performance"
+  });
+
+  renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio || 1,1.5)
+  );
+
+  renderer.setSize(
+    $("gameBox").clientWidth,
+    $("gameBox").clientHeight,
+    false
+  );
+
+  renderer.shadowMap.enabled = true;
+
+  setupLights();
+  createWorld();
+  createPlayer();
+  createSpiritStones();
+  createEnemies();
+
+  camera.position.set(0,6,10);
+
+  animate();
+
+  updateHUD();
+}
+
+/* ===================== LIGHT ===================== */
+
+function setupLights(){
+
+  const ambient = new THREE.HemisphereLight(
+    0x8b5cf6,
+    0x020617,
+    1.3
+  );
+
+  scene.add(ambient);
+
+  const moon = new THREE.DirectionalLight(
+    0x8be9ff,
+    2
+  );
+
+  moon.position.set(10,20,10);
+
+  moon.castShadow = true;
+
+  scene.add(moon);
+
+  const glow = new THREE.PointLight(
+    0xa855f7,
+    15,
+    50
+  );
+
+  glow.position.set(0,5,0);
+
+  scene.add(glow);
+}
+
+/* ===================== WORLD ===================== */
+
+function createWorld(){
+
+  const groundGeo = new THREE.PlaneGeometry(
+    180,
+    180,
+    40,
+    40
+  );
+
+  const groundMat = new THREE.MeshStandardMaterial({
+    color:0x07111a,
+    roughness:1
+  });
+
+  const ground = new THREE.Mesh(
+    groundGeo,
+    groundMat
+  );
+
+  ground.rotation.x = -Math.PI/2;
+
+  ground.receiveShadow = true;
+
+  scene.add(ground);
+
+  /* mountains */
+
+  for(let i=0;i<25;i++){
+
+    const h = 8 + Math.random()*18;
+    const r = 4 + Math.random()*8;
+
+    const geo = new THREE.ConeGeometry(
+      r,
+      h,
+      7
+    );
+
+    const mat = new THREE.MeshStandardMaterial({
+      color:0x111827,
+      roughness:1
+    });
+
+    const m = new THREE.Mesh(geo,mat);
+
+    const angle = Math.random()*Math.PI*2;
+    const dist = 35 + Math.random()*35;
+
+    m.position.set(
+      Math.cos(angle)*dist,
+      h/2,
+      Math.sin(angle)*dist
+    );
+
+    m.rotation.y = Math.random()*Math.PI;
+
+    scene.add(m);
+  }
+
+  /* trees */
+
+  for(let i=0;i<100;i++){
+
+    const x = (Math.random()-.5)*150;
+    const z = (Math.random()-.5)*150;
+
+    if(Math.abs(x)<10 && Math.abs(z)<10) continue;
+
+    const trunk = new THREE.Mesh(
+      new THREE.CylinderGeometry(.25,.35,2,6),
+      new THREE.MeshStandardMaterial({color:0x422006})
+    );
+
+    trunk.position.set(x,1,z);
+
+    const crown = new THREE.Mesh(
+      new THREE.ConeGeometry(1.5,3.5,7),
+      new THREE.MeshStandardMaterial({color:0x064e3b})
+    );
+
+    crown.position.set(x,3,z);
+
+    scene.add(trunk);
+    scene.add(crown);
+  }
+
+  /* floating qi particles */
+
+  const particleGeo = new THREE.BufferGeometry();
+
+  const count = 800;
+  const positions = new Float32Array(count*3);
+
+  for(let i=0;i<count;i++){
+
+    positions[i*3] =
+      (Math.random()-.5)*100;
+
+    positions[i*3+1] =
+      Math.random()*25;
+
+    positions[i*3+2] =
+      (Math.random()-.5)*100;
+  }
+
+  particleGeo.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positions,3)
+  );
+
+  const particleMat = new THREE.PointsMaterial({
+    color:0x67e8f9,
+    size:.08,
+    transparent:true,
+    opacity:.55
+  });
+
+  scene.add(
+    new THREE.Points(
+      particleGeo,
+      particleMat
+    )
+  );
+}
+
+/* ===================== PLAYER ===================== */
+
+function createPlayer(){
+
+  player = new THREE.Group();
+
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(.45,.65,1.6,10),
+    new THREE.MeshStandardMaterial({
+      color:0x7c3aed,
+      emissive:0x2e1065,
+      emissiveIntensity:.5
+    })
+  );
+
+  body.position.y = 1;
+
+  body.castShadow = true;
+
+  player.add(body);
+
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(.43,16,16),
+    new THREE.MeshStandardMaterial({
+      color:0xf1c7a9
+    })
+  );
+
+  head.position.y = 2.15;
+
+  player.add(head);
+
+  const aura = new THREE.Mesh(
+    new THREE.TorusGeometry(
+      1.15,
+      .035,
+      8,
+      40
+    ),
+    new THREE.MeshBasicMaterial({
+      color:0x06b6d4
+    })
+  );
+
+  aura.rotation.x = Math.PI/2;
+
+  aura.position.y = .1;
+
+  player.add(aura);
+
+  playerCore = aura;
+
+  scene.add(player);
+
+  player.position.set(0,0,0);
+}
+
+/* ===================== SPIRIT STONES ===================== */
+
+function createSpiritStones(){
+
+  stones.forEach(s=>{
+    scene.remove(s.mesh);
+  });
+
+  stones = [];
+
+  for(let i=0;i<35;i++){
+
+    const geo = new THREE.OctahedronGeometry(.45);
+
+    const mat = new THREE.MeshStandardMaterial({
+      color:0x22d3ee,
+      emissive:0x0891b2,
+      emissiveIntensity:2
+    });
+
+    const mesh = new THREE.Mesh(
+      geo,
+      mat
+    );
+
+    mesh.position.set(
+      (Math.random()-.5)*70,
+      .7,
+      (Math.random()-.5)*70
+    );
+
+    scene.add(mesh);
+
+    stones.push({
+      mesh:mesh,
+      value:10+Math.floor(Math.random()*20)
+    });
+  }
+}
+
+/* ===================== ENEMIES ===================== */
+
+function createEnemies(){
+
+  enemies.forEach(e=>{
+    scene.remove(e.mesh);
+  });
+
+  enemies=[];
+
+  for(let i=0;i<10;i++){
+
+    const group = new THREE.Group();
+
+    const body = new THREE.Mesh(
+      new THREE.SphereGeometry(.8,12,12),
+      new THREE.MeshStandardMaterial({
+        color:0x991b1b,
+        emissive:0x450a0a,
+        emissiveIntensity:.8
+      })
+    );
+
+    body.position.y=.8;
+
+    group.add(body);
+
+    group.position.set(
+      (Math.random()-.5)*70,
+      0,
+      (Math.random()-.5)*70
+    );
+
+    scene.add(group);
+
+    enemies.push({
+      mesh:group,
+      hp:50,
+      alive:true
+    });
+  }
+}
+
+/* ===================== MOVEMENT ===================== */
+
+function movePlayer(dt){
+
+  if(state.meditating) return;
+
+  const speed = 7*dt;
+
+  if(keys.up) player.position.z -= speed;
+  if(keys.down) player.position.z += speed;
+  if(keys.left) player.position.x -= speed;
+  if(keys.right) player.position.x += speed;
+
+  player.position.x =
+    Math.max(-75,Math.min(75,player.position.x));
+
+  player.position.z =
+    Math.max(-75,Math.min(75,player.position.z));
+}
+
+/* ===================== CAMERA ===================== */
+
+function updateCamera(){
+
+  const targetX =
+    player.position.x;
+
+  const targetZ =
+    player.position.z+9;
+
+  camera.position.x +=
+    (targetX-camera.position.x)*.08;
+
+  camera.position.z +=
+    (targetZ-camera.position.z)*.08;
+
+  camera.position.y +=
+    (6-camera.position.y)*.08;
+
+  camera.lookAt(
+    player.position.x,
+    1,
+    player.position.z
+  );
+}
+
+/* ===================== COLLECT ===================== */
+
+function collectStones(){
+
+  for(let i=stones.length-1;i>=0;i--){
+
+    const s=stones[i];
+
+    const d =
+      player.position.distanceTo(
+        s.mesh.position
+      );
+
+    if(d<2.2){
+
+      const value=s.value;
+
+      state.stones++;
+      state.qi+=value;
+
+      gainXP(value);
+
+      scene.remove(s.mesh);
+
+      stones.splice(i,1);
+
+      showToast(
+        `💎 Nhặt linh thạch +${value} linh khí`
+      );
+    }
+  }
+}
+
+/* ===================== XP ===================== */
+
+function gainXP(amount){
+
+  state.xp += amount;
+
+  while(state.xp >= state.maxXp){
+
+    state.xp -= state.maxXp;
+
+    state.level++;
+
+    if(
+      state.level % 10 === 0 &&
+      state.realm < realms.length-1
+    ){
+      state.realm++;
+
+      showToast(
+        `🌟 ĐỘT PHÁ: ${realms[state.realm]}`
+      );
+    }else{
+      showToast(
+        `✨ Tu vi tăng! Tầng ${state.level}`
+      );
+    }
+
+    state.maxXp =
+      Math.floor(
+        state.maxXp*1.18
+      );
+  }
+
+  updateHUD();
+}
+
+/* ===================== MEDITATION ===================== */
+
+function toggleMeditation(){
+
+  state.meditating =
+    !state.meditating;
+
+  if(state.meditating){
+
+    showToast(
+      "🧘 Đã nhập định — bấm THIỀN lần nữa để đứng dậy"
+    );
+
+  }else{
+
+    showToast(
+      "🚶 Đã đứng dậy"
+    );
+  }
+
+  updateHUD();
+}
+
+/* ===================== ABSORB ===================== */
+
+function absorbQi(){
+
+  if(state.stones<=0){
+
+    showToast(
+      "💎 Hãy nhặt linh thạch trước!"
+    );
+
+    return;
+  }
+
+  const amount =
+    state.stones*5;
+
+  state.qi += amount;
+
+  gainXP(amount);
+
+  state.stones=0;
+
+  showToast(
+    `✨ Hấp thụ linh khí +${amount}`
+  );
+
+  updateHUD();
+}
+
+/* ===================== ATTACK ===================== */
+
+function attack(){
+
+  if(state.attackCooldown>0) return;
+
+  state.attackCooldown=.5;
+
+  let hit=false;
+
+  enemies.forEach(enemy=>{
+
+    if(!enemy.alive) return;
+
+    const d =
+      player.position.distanceTo(
+        enemy.mesh.position
+      );
+
+    if(d<4){
+
+      enemy.hp-=25;
+
+      hit=true;
+
+      if(enemy.hp<=0){
+
+        enemy.alive=false;
+
+        scene.remove(enemy.mesh);
+
+        gainXP(40);
+
+        showToast(
+          "⚔️ Yêu thú bị đánh bại +40 tu vi"
+        );
+      }
+    }
+  });
+
+  if(!hit){
+
+    showToast("⚔️ Không có yêu thú trong phạm vi");
+  }
+}
+
+/* ===================== ENEMY AI ===================== */
+
+function updateEnemies(dt){
+
+  enemies.forEach(enemy=>{
+
+    if(!enemy.alive) return;
+
+    const d =
+      enemy.mesh.position.distanceTo(
+        player.position
+      );
+
+    if(d<14){
+
+      const dir =
+        new THREE.Vector3()
+          .subVectors(
+            player.position,
+            enemy.mesh.position
+          )
+          .normalize();
+
+      enemy.mesh.position.add(
+        dir.multiplyScalar(dt*1.2)
+      );
+
+      if(d<2){
+
+        state.hp-=dt*7;
+
+        if(state.hp<=0){
+
+          state.hp=state.maxHp;
+
+          player.position.set(0,0,0);
+
+          showToast(
+            "💥 Nguyên thần bị đánh lui!"
+          );
         }
       }
     }
-  </script>
+  });
+}
 
-  <style type="text/css">
-    body {
-      background-color: #02040a;
-      color: #f3f4f6;
-      overflow-x: hidden;
-    }
-    
-    .builda-glow {
-      box-shadow: 0 0 50px -12px rgba(168, 85, 247, 0.35), 0 0 30px -10px rgba(6, 182, 212, 0.25);
-    }
-    
-    .card-neon-border {
-      position: relative;
-      background: #0d1321;
-    }
-    
-    .card-neon-border::before {
-      content: '';
-      position: absolute;
-      top: -1px; left: -1px; right: -1px; bottom: -1px;
-      background: linear-gradient(135deg, #a855f7, #06b6d4, #10b981);
-      border-radius: inherit;
-      z-index: -1;
-      opacity: 0.15;
-      transition: opacity 0.3s ease;
-    }
-    
-    .card-neon-border:hover::before {
-      opacity: 0.5;
-    }
+/* ===================== HUD ===================== */
 
-    .grid-pattern {
-      background-image: radial-gradient(rgba(168, 85, 247, 0.08) 1px, transparent 1px),
-                        radial-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px);
-      background-size: 32px 32px;
-      background-position: 0 0, 16px 16px;
-    }
+function updateHUD(){
 
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #02040a;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1f2937;
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #a855f7;
-    }
-  </style>
-</head>
-<body class="min-h-screen grid-pattern flex flex-col justify-between selection:bg-purple-500/30 selection:text-purple-200">
+  $("realmName").innerText =
+    `${realms[state.realm]} • Tầng ${state.level}`;
 
-  <!-- ==================== HEADER / NAVBAR ==================== -->
-  <header class="border-b border-gray-800/60 bg-brand-black/80 backdrop-blur-xl sticky top-0 z-50 px-4 sm:px-6 py-4 transition-all duration-300">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      
-      <!-- Logo Brand Group -->
-      <div class="flex items-center gap-4 group cursor-pointer" onclick="switchTab('studio')">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-fuchsia-500 to-cyan-400 flex items-center justify-center text-black font-black font-mono text-xl shadow-xl shadow-purple-500/20 transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
-          B
-        </div>
-        <div class="flex flex-col">
-          <h1 class="text-lg font-black font-mono tracking-widest text-white uppercase flex items-center gap-2 m-0 leading-tight">
-            BUILDA <span class="text-[10px] tracking-normal font-sans font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-purple-300 border border-purple-500/30 shadow-inner animate-pulse-slow">PRO ENGINE v3.0</span>
-          </h1>
-          <span class="text-[10px] text-gray-500 font-mono tracking-tight uppercase">Decentralized Generative Web-Game Suite</span>
-        </div>
-      </div>
-      
-      <!-- Center Navigation Tabs -->
-      <nav class="hidden md:flex items-center gap-1 bg-gray-950/80 p-1 rounded-xl border border-gray-800/80">
-        <button onclick="switchTab('studio')" id="tabBtn-studio" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide transition-all bg-purple-600 text-white shadow-md">
-          <i class="fa-solid fa-laptop-code mr-1.5 text-purple-300"></i>ENGINE STUDIO
-        </button>
-        <button onclick="switchTab('gallery')" id="tabBtn-gallery" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide text-gray-400 hover:text-gray-200 transition-all">
-          <i class="fa-solid fa-gamepad mr-1.5"></i>PREBUILT TEMPLATES
-        </button>
-        <button onclick="switchTab('analytics')" id="tabBtn-analytics" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide text-gray-400 hover:text-gray-200 transition-all">
-          <i class="fa-solid fa-chart-pie mr-1.5"></i>LIVE INSIGHTS
-        </button>
-        <button onclick="switchTab('settings')" id="tabBtn-settings" class="tab-button px-4 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wide text-gray-400 hover:text-gray-200 transition-all">
-          <i class="fa-solid fa-sliders mr-1.5"></i>COMPILER CONFIG
-        </button>
-      </nav>
+  $("levelText").innerText =
+    "LV "+state.level;
 
-      <!-- Right System Status Badges -->
-      <div class="flex items-center gap-3">
-        <div class="hidden lg:flex flex-col text-right font-mono">
-          <span class="text-[10px] text-gray-400 font-bold">LATENCY: <span class="text-cyan-400" id="latencyStat">14ms</span></span>
-          <span class="text-[9px] text-gray-600">TOKENS AVAILABLE: 420.5K</span>
-        </div>
-        <span class="inline-flex items-center gap-2 text-xs px-3.5 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl font-mono shadow-inner font-semibold">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> AGENT-ONLINE
-        </span>
-      </div>
-    </div>
-  </header>
+  $("xpText").innerText =
+    `${Math.floor(state.xp)} / ${state.maxXp}`;
 
-  <!-- ==================== MAIN SYSTEM INTERFACE ==================== -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+  $("realmBar").style.width =
+    Math.min(
+      100,
+      state.xp/state.maxXp*100
+    )+"%";
 
-    <!-- VIEWPORT TAB 1: STUDIO (CORE WORKSPACE) -->
-    <div id="viewport-studio" class="viewport-tab space-y-8 block">
-      
-      <!-- HERO ANNOUNCEMENT TITLE -->
-      <div class="text-center space-y-3">
-        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-transparent px-3 py-1 rounded-full border border-purple-500/20 text-xs text-purple-300 font-mono">
-          <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> Next-Gen Neural Synthesizer Active
-        </div>
-        <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white font-sans">
-          Bản Giao Hưởng AI Game <span class="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Lập Trình Tức Thời</span>
-        </h2>
-        <p class="text-gray-400 text-xs sm:text-sm max-w-2xl mx-auto font-normal font-sans">
-          Thiết kế, biên dịch và triển khai các trò chơi Web3 cao cấp thời gian thực bằng mô hình AI đặc thù tối ưu hóa hiệu năng phần cứng tối đa.
-        </p>
-      </div>
+  $("hpBar").style.width =
+    Math.max(
+      0,
+      state.hp/state.maxHp*100
+    )+"%";
 
-      <!-- WORKSPACE CONTAINER GRID -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- LEFT COLUMN: CONTROLS & DESCRIPTIONS (5 COLS) -->
-        <div class="lg:col-span-5 space-y-6">
-          <div class="bg-brand-card/90 border border-gray-800/80 rounded-2xl p-5 space-y-5 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-              <div class="flex items-center gap-2.5">
-                <i class="fa-solid fa-brain text-purple-400 text-lg"></i>
-                <h3 class="font-mono text-sm font-bold tracking-wider text-gray-200">AI PROMPTING MATRIX</h3>
-              </div>
-              <span class="text-[10px] font-mono bg-purple-950/60 text-purple-400 px-2 py-0.5 rounded border border-purple-800/40">GPT-5-TURBO</span>
-            </div>
+  $("stoneText").innerText =
+    state.stones;
 
-            <!-- PROMPT CONSOLE FORM -->
-            <div class="space-y-3">
-              <label class="block text-xs font-mono text-gray-400 uppercase tracking-wider">Mô tả ý tưởng hoặc yêu cầu cơ chế Game:</label>
-              <textarea id="aiPrompt" rows="4" 
-                placeholder="Ví dụ: Game hứng táo neon Cyberpunk, né bom antimatter, combo điểm số x2, vuốt cảm ứng trên màn hình mượt mà..."
-                class="w-full bg-brand-dark border border-gray-800 text-gray-100 rounded-xl p-3.5 text-xs sm:text-sm focus:outline-none focus:border-purple-500 font-mono transition-all resize-none placeholder-gray-600 shadow-inner"></textarea>
-            </div>
+  $("qiText").innerText =
+    Math.floor(state.qi);
 
-            <!-- TEMPLATE PRESETS -->
-            <div class="space-y-2">
-              <span class="text-[11px] font-mono text-gray-500 uppercase">Mẫu gợi ý Nhanh:</span>
-              <div class="flex flex-wrap gap-2">
-                <button onclick="useTemplate('Game Hứng Kim Cương Neon Cyberpunk, né bom nổ, điểm cao combo x3')" class="text-[11px] bg-gray-900 hover:bg-gray-800 text-purple-300 border border-purple-500/20 px-2.5 py-1 rounded-lg font-mono transition">💎 Hứng Kim Cương</button>
-                <button onclick="useTemplate('Game Rắn Săn Mồi Quantum Glow, di chuyển né vật cản ngẫu nhiên')" class="text-[11px] bg-gray-900 hover:bg-gray-800 text-cyan-300 border border-cyan-500/20 px-2.5 py-1 rounded-lg font-mono transition">🐍 Rắn Quantum</button>
-                <button onclick="useTemplate('Game Bắn Đĩa Bay Laser, chạm màn hình để bắn đĩa rơi')" class="text-[11px] bg-gray-900 hover:bg-gray-800 text-emerald-300 border border-emerald-500/20 px-2.5 py-1 rounded-lg font-mono transition">🚀 Bắn Đĩa Bay</button>
-              </div>
-            </div>
+  $("enemyText").innerText =
+    enemies.filter(e=>e.alive).length;
 
-            <!-- ACTION BUTTON -->
-            <button onclick="buildAIGame()" id="buildBtn" 
-              class="w-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-cyan-500 hover:opacity-95 text-white font-mono font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all active:scale-98 text-xs sm:text-sm uppercase tracking-wider">
-              <i class="fa-solid fa-bolt"></i> BUILD GAME PRO NOW
-            </button>
-          </div>
-        </div>
+  $("meditateBtn").innerText =
+    state.meditating
+      ? "🚶 ĐỨNG DẬY"
+      : "🧘 THIỀN";
+}
 
-        <!-- RIGHT COLUMN: GAME PREVIEW STAGE (7 COLS) -->
-        <div class="lg:col-span-7 space-y-4">
-          <div class="bg-brand-card/90 border border-gray-800/80 rounded-2xl p-4 shadow-2xl space-y-3 relative">
-            <div class="flex justify-between items-center bg-brand-dark px-4 py-2.5 rounded-xl border border-gray-800">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                <span id="stageStatus" class="text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider">CANVAS STAGE IDLE</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <button onclick="toggleFullscreen()" class="text-xs text-gray-400 hover:text-white font-mono flex items-center gap-1 transition">
-                  <i class="fa-solid fa-expand"></i> Fullscreen
-                </button>
-              </div>
-            </div>
+/* ===================== GAME LOOP ===================== */
 
-            <!-- CANVAS IFRAME CONTAINMENT -->
-            <div id="iframeWrapper" class="w-full h-[450px] bg-black rounded-xl border border-purple-500/30 overflow-hidden relative shadow-inner">
-              <iframe id="aiFrame" class="w-full h-full border-0"></iframe>
-            </div>
-          </div>
-        </div>
+let fpsFrames=0;
+let fpsTime=performance.now();
 
-      </div>
-    </div>
+function animate(){
 
-    <!-- VIEWPORT TAB 2: PREBUILT TEMPLATES -->
-    <div id="viewport-gallery" class="viewport-tab hidden space-y-6">
-      <div class="border-b border-gray-800 pb-3">
-        <h3 class="text-xl font-bold font-mono text-purple-400">KHO TEMPLATE MẪU SẴN CÓ</h3>
-        <p class="text-xs text-gray-400 font-sans">Chọn mẫu game để nạp trực tiếp vào Engine Studio</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-brand-card border border-gray-800 rounded-xl p-4 space-y-3">
-          <i class="fa-solid fa-apple-whole text-3xl text-rose-500"></i>
-          <h4 class="font-mono font-bold text-white">Hứng Táo Gold X</h4>
-          <p class="text-xs text-gray-400">Game hứng quả kinh điển hiệu ứng Cyberpunk neon.</p>
-          <button onclick="loadPreset('apple')" class="w-full py-2 bg-purple-600/30 hover:bg-purple-600 text-purple-300 hover:text-white font-mono text-xs rounded-lg transition">NẠP TEMPLATE</button>
-        </div>
-        <div class="bg-brand-card border border-gray-800 rounded-xl p-4 space-y-3">
-          <i class="fa-solid fa-staff-snake text-3xl text-emerald-400"></i>
-          <h4 class="font-mono font-bold text-white">Rắn Quantum</h4>
-          <p class="text-xs text-gray-400">Snake 2D đồ họa glowing light mượt mà.</p>
-          <button onclick="loadPreset('snake')" class="w-full py-2 bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-mono text-xs rounded-lg transition">NẠP TEMPLATE</button>
-        </div>
-        <div class="bg-brand-card border border-gray-800 rounded-xl p-4 space-y-3">
-          <i class="fa-solid fa-jet-fighter text-3xl text-cyan-400"></i>
-          <h4 class="font-mono font-bold text-white">Bắn Đĩa Bay Space</h4>
-          <p class="text-xs text-gray-400">Game bắn máy bay/đĩa bay góc nhìn trên xuống.</p>
-          <button onclick="loadPreset('space')" class="w-full py-2 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-300 hover:text-white font-mono text-xs rounded-lg transition">NẠP TEMPLATE</button>
-        </div>
-      </div>
-    </div>
+  requestAnimationFrame(animate);
 
-    <!-- VIEWPORT TAB 3: LIVE INSIGHTS -->
-    <div id="viewport-analytics" class="viewport-tab hidden space-y-6">
-      <div class="bg-brand-card border border-gray-800 rounded-2xl p-6 space-y-4">
-        <h3 class="text-xl font-bold font-mono text-cyan-400">LIVE SYSTEM ANALYTICS</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
-          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
-            <span class="text-xs text-gray-500">FPS AVG</span>
-            <p class="text-2xl font-bold text-emerald-400">60.0 FPS</p>
-          </div>
-          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
-            <span class="text-xs text-gray-500">MEMORY USE</span>
-            <p class="text-2xl font-bold text-purple-400">24.8 MB</p>
-          </div>
-          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
-            <span class="text-xs text-gray-500">ENGINE VER</span>
-            <p class="text-2xl font-bold text-cyan-400">v3.0 PRO</p>
-          </div>
-          <div class="bg-brand-dark p-4 rounded-xl border border-gray-800">
-            <span class="text-xs text-gray-500">CANVAS TYPE</span>
-            <p class="text-2xl font-bold text-yellow-400">HTML5 / 2D</p>
-          </div>
-        </div>
-      </div>
-    </div>
+  if(!renderer || !scene) return;
 
-    <!-- VIEWPORT TAB 4: COMPILER CONFIG -->
-    <div id="viewport-settings" class="viewport-tab hidden space-y-6">
-      <div class="bg-brand-card border border-gray-800 rounded-2xl p-6 space-y-4 font-mono">
-        <h3 class="text-xl font-bold text-purple-400">COMPILER & COMPATIBILITY CONFIG</h3>
-        <div class="space-y-3 text-xs text-gray-300">
-          <label class="flex items-center gap-3">
-            <input type="checkbox" checked class="accent-purple-500"> Auto Mobile Touch Control Adaptor
-          </label>
-          <label class="flex items-center gap-3">
-            <input type="checkbox" checked class="accent-purple-500"> High Refresh Rate Lock (60FPS - 120FPS)
-          </label>
-          <label class="flex items-center gap-3">
-            <input type="checkbox" checked class="accent-purple-500"> Enable Synth Audio Engine
-          </label>
-        </div>
-      </div>
-    </div>
+  const dt =
+    Math.min(clock.getDelta(),.05);
 
-  </main>
+  if(state.attackCooldown>0){
+    state.attackCooldown-=dt;
+  }
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="border-t border-gray-900 py-4 text-center text-xs text-gray-600 font-mono">
-    Built with BUILDA AI Engine v3.0 • Premium Web3 Game Builder Studio
-  </footer>
+  movePlayer(dt);
 
-  <!-- ==================== CORE JAVASCRIPT ENGINE ==================== -->
-  <script>
-    function switchTab(tabId) {
-      document.querySelectorAll('.viewport-tab').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.remove('bg-purple-600', 'text-white', 'shadow-md');
-        btn.classList.add('text-gray-400');
-      });
+  if(state.meditating){
 
-      const targetViewport = document.getElementById('viewport-' + tabId);
-      const targetBtn = document.getElementById('tabBtn-' + tabId);
+    state.qi+=dt*2;
+    gainXP(dt*2);
 
-      if (targetViewport) targetViewport.classList.remove('hidden');
-      if (targetBtn) {
-        targetBtn.classList.add('bg-purple-600', 'text-white', 'shadow-md');
-        targetBtn.classList.remove('text-gray-400');
-      }
+    player.position.y =
+      Math.sin(performance.now()*.003)*.05;
+  }else{
+    player.position.y=0;
+  }
+
+  player.rotation.y +=
+    (keys.left?-dt:
+     keys.right?dt:0);
+
+  playerCore.rotation.z +=
+    dt*2;
+
+  collectStones();
+
+  updateEnemies(dt);
+
+  updateCamera();
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+  fpsFrames++;
+
+  if(performance.now()-fpsTime>1000){
+
+    $("fps").innerText =
+      Math.round(fpsFrames/((
+        performance.now()-fpsTime
+      )/1000))+" FPS";
+
+    fpsFrames=0;
+    fpsTime=performance.now();
+  }
+
+  updateHUD();
+}
+
+/* ===================== MOBILE CONTROLS ===================== */
+
+function bindControl(id,key){
+
+  const el=$(id);
+
+  const down=e=>{
+    e.preventDefault();
+    keys[key]=true;
+  };
+
+  const up=e=>{
+    e.preventDefault();
+    keys[key]=false;
+  };
+
+  el.addEventListener("touchstart",down,{passive:false});
+  el.addEventListener("touchend",up,{passive:false});
+  el.addEventListener("touchcancel",up,{passive:false});
+
+  el.addEventListener("mousedown",down);
+  el.addEventListener("mouseup",up);
+  el.addEventListener("mouseleave",up);
+}
+
+bindControl("up","up");
+bindControl("down","down");
+bindControl("left","left");
+bindControl("right","right");
+
+$("attackBtn").addEventListener(
+  "click",
+  attack
+);
+
+$("absorbBtn").addEventListener(
+  "click",
+  absorbQi
+);
+
+$("meditateBtn").addEventListener(
+  "click",
+  toggleMeditation
+);
+
+/* ===================== KEYBOARD ===================== */
+
+window.addEventListener("keydown",e=>{
+
+  if(e.key==="w" || e.key==="ArrowUp")
+    keys.up=true;
+
+  if(e.key==="s" || e.key==="ArrowDown")
+    keys.down=true;
+
+  if(e.key==="a" || e.key==="ArrowLeft")
+    keys.left=true;
+
+  if(e.key==="d" || e.key==="ArrowRight")
+    keys.right=true;
+
+  if(e.key===" ")
+    attack();
+
+});
+
+window.addEventListener("keyup",e=>{
+
+  if(e.key==="w" || e.key==="ArrowUp")
+    keys.up=false;
+
+  if(e.key==="s" || e.key==="ArrowDown")
+    keys.down=false;
+
+  if(e.key==="a" || e.key==="ArrowLeft")
+    keys.left=false;
+
+  if(e.key==="d" || e.key==="ArrowRight")
+    keys.right=false;
+});
+
+/* ===================== SAVE ===================== */
+
+function saveGame(){
+
+  localStorage.setItem(
+    "gameverse_xianxia_save",
+    JSON.stringify(state)
+  );
+
+  showToast(
+    "💾 Đã lưu tiến trình"
+  );
+}
+
+function loadGame(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "gameverse_xianxia_save"
+      );
+
+    if(saved){
+
+      state={
+        ...state,
+        ...JSON.parse(saved)
+      };
+
     }
 
-    function useTemplate(text) {
-      document.getElementById('aiPrompt').value = text;
-    }
+  }catch(e){
+    console.log(e);
+  }
+}
 
-    function buildAIGame() {
-      const prompt = document.getElementById('aiPrompt').value.trim();
-      if (!prompt) {
-        alert('Bro nhập ý tưởng game vào ô trước nhé!');
-        return;
-      }
+/* ===================== FULLSCREEN ===================== */
 
-      const btn = document.getElementById('buildBtn');
-      const frame = document.getElementById('aiFrame');
-      const status = document.getElementById('stageStatus');
+function fullscreenGame(){
 
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> AI COMPILING ENGINE...`;
-      status.innerText = "● GENERATING CANVAS INSTANCE...";
+  const box=$("gameBox");
 
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-bolt"></i> BUILD GAME PRO NOW`;
-        status.innerText = "● LIVE ENGINE RUNNING";
+  if(!document.fullscreenElement){
 
-        const generatedGame = `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-            <style>
-              * { box-sizing: border-box; touch-action: none; user-select: none; }
-              body { margin: 0; background: #030712; color: #fff; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-              canvas { border: 2px solid #a855f7; background: #000; border-radius: 12px; box-shadow: 0 0 25px rgba(168,85,247,0.3); }
-              .info { position: absolute; top: 12px; left: 16px; font-size: 14px; color: #06b6d4; font-weight: bold; }
-            </style>
-          </head>
-          <body>
-            <div class="info" id="hud">SCORE: 0</div>
-            <canvas id="c" width="340" height="380"></canvas>
-            <script>
-              const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
-              let score = 0, pX = 140, items = [];
-              
-              function move(e) {
-                let rect = canvas.getBoundingClientRect();
-                let x = e.touches ? e.touches[0].clientX : e.clientX;
-                pX = x - rect.left - 30;
-                if(pX < 0) pX = 0;
-                if(pX > 280) pX = 280;
-              }
-              canvas.addEventListener('touchmove', move);
-              canvas.addEventListener('mousemove', move);
+    box.requestFullscreen?.();
 
-              function loop() {
-                ctx.clearRect(0, 0, 340, 380);
-                
-                // Player
-                ctx.fillStyle = '#a855f7';
-                ctx.fillRect(pX, 340, 60, 14);
+  }else{
 
-                // Items
-                if (Math.random() < 0.05) items.push({ x: Math.random() * 320, y: 0, s: 3 + Math.random() * 2, bomb: Math.random() < 0.2 });
+    document.exitFullscreen?.();
 
-                for (let i = items.length - 1; i >= 0; i--) {
-                  let it = items[i];
-                  it.y += it.s;
-                  ctx.fillStyle = it.bomb ? '#ef4444' : '#06b6d4';
-                  ctx.beginPath();
-                  ctx.arc(it.x, it.y, 8, 0, Math.PI * 2);
-                  ctx.fill();
+  }
+}
 
-                  if (it.y >= 340 && it.y <= 360 && it.x >= pX && it.x <= pX + 60) {
-                    score += it.bomb ? -100 : 50;
-                    document.getElementById('hud').innerText = 'SCORE: ' + score;
-                    items.splice(i, 1);
-                  } else if (it.y > 380) {
-                    items.splice(i, 1);
-                  }
-                }
-                requestAnimationFrame(loop);
-              }
-              loop();
-            <\/script>
-          </body>
-          </html>
-        `;
+/* ===================== TOAST ===================== */
 
-        frame.srcdoc = generatedGame;
-      }, 700);
-    }
+let toastTimer;
 
-    function loadPreset(type) {
-      switchTab('studio');
-      if (type === 'apple') useTemplate('Game Hứng Táo Cyberpunk');
-      if (type === 'snake') useTemplate('Game Rắn Săn Mồi Quantum');
-      if (type === 'space') useTemplate('Game Bắn Đĩa Bay Space');
-      buildAIGame();
-    }
+function showToast(text){
 
-    function toggleFullscreen() {
-      const wrapper = document.getElementById('iframeWrapper');
-      if (!document.fullscreenElement) {
-        wrapper.requestFullscreen().catch(err => alert("Trình duyệt không hỗ trợ full màn hình"));
-      } else {
-        document.exitFullscreen();
-      }
-    }
-  </script>
+  const toast=$("toast");
+
+  toast.innerText=text;
+
+  toast.style.opacity="1";
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    toast.style.opacity="0";
+  },1800);
+}
+
+/* ===================== RESIZE ===================== */
+
+window.addEventListener(
+  "resize",
+  ()=>{
+    if(!renderer || !camera) return;
+
+    const w=$("gameBox").clientWidth;
+    const h=$("gameBox").clientHeight;
+
+    camera.aspect=w/h;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(w,h,false);
+  }
+);
+
+/* ===================== START ===================== */
+
+loadGame();
+
+setTimeout(()=>{
+  initWorld();
+
+  showToast(
+    "🌌 Chào mừng đến thế giới tu tiên 3D"
+  );
+},300);
+
+</script>
+
 </body>
-</html>
+  </html>
