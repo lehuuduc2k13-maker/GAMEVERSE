@@ -2,4277 +2,2562 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GAMEVERSE — BUILDA V3</title>
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<title>GAMEVERSE — V3</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <style>
 *{box-sizing:border-box}
-html,body{
-  margin:0;width:100%;height:100%;overflow:hidden;
-  background:#030712;color:#e5e7eb;
-  font-family:Inter,system-ui,sans-serif
-}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-thumb{background:#26334d;border-radius:20px}
 
-#app{width:100%;height:100%;display:flex;flex-direction:column}
+html,body{
+    margin:0;
+    min-height:100%;
+    background:#060812;
+    color:#eaf0ff;
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+::-webkit-scrollbar{
+    width:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#080b15;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#26314d;
+    border-radius:10px;
+}
 
 .glass{
-  background:rgba(7,13,28,.84);
-  backdrop-filter:blur(18px);
-  border:1px solid rgba(100,116,139,.18)
+    background:rgba(13,18,34,.78);
+    border:1px solid rgba(120,150,255,.14);
+    backdrop-filter:blur(18px);
 }
-.card{
-  background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,12,27,.94));
-  border:1px solid rgba(100,116,139,.18);
-  border-radius:18px
+
+.glow{
+    box-shadow:
+        0 0 30px rgba(83,100,255,.10),
+        inset 0 1px 0 rgba(255,255,255,.025);
 }
-.neon{
-  box-shadow:0 0 30px rgba(59,130,246,.12),
-             inset 0 0 30px rgba(59,130,246,.025)
-}
+
 .btn{
-  transition:.16s;
-  border:1px solid rgba(148,163,184,.18)
-}
-.btn:hover{transform:translateY(-1px);filter:brightness(1.12)}
-.btn:active{transform:scale(.97)}
-
-.page{display:none;flex:1;min-height:0;overflow:auto}
-.page.active{display:block}
-
-#topbar{
-  height:62px;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:7px 12px;
-  z-index:80
+    transition:.18s;
 }
 
-.navbtn.active{
-  background:rgba(59,130,246,.15);
-  border-color:rgba(59,130,246,.45);
-  color:#60a5fa
+.btn:hover{
+    transform:translateY(-1px);
 }
 
-.statbar{
-  height:8px;
-  background:#111827;
-  border-radius:99px;
-  overflow:hidden
+.btn:active{
+    transform:scale(.97);
 }
-.statfill{
-  height:100%;
-  border-radius:99px;
-  transition:.25s
+
+.gradient-text{
+    background:linear-gradient(90deg,#7c8cff,#b36cff,#44d9ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.nav-active{
+    background:rgba(91,104,255,.16);
+    color:#aeb8ff;
+}
+
+.game-card{
+    transition:.2s;
+}
+
+.game-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(117,130,255,.42);
 }
 
 .badge{
-  display:inline-flex;
-  align-items:center;
-  padding:3px 8px;
-  border-radius:999px;
-  font-size:11px;
-  border:1px solid rgba(148,163,184,.2)
+    font-size:10px;
+    padding:3px 7px;
+    border-radius:999px;
+    background:#151c31;
 }
 
-.gamecard{
-  transition:.2s;
-  cursor:pointer
-}
-.gamecard:hover{
-  transform:translateY(-4px);
-  border-color:rgba(96,165,250,.5)
+#runtimeCanvas{
+    width:100%;
+    height:100%;
+    display:block;
 }
 
-.cover{
-  height:145px;
-  border-radius:14px;
-  background:
-    radial-gradient(circle at 20% 20%,rgba(96,165,250,.6),transparent 25%),
-    radial-gradient(circle at 75% 70%,rgba(168,85,247,.5),transparent 30%),
-    linear-gradient(135deg,#111827,#172554 45%,#312e81);
-  position:relative;
-  overflow:hidden
-}
-.cover:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(transparent 35%,rgba(0,0,0,.78))
+.runtime{
+    position:relative;
+    overflow:hidden;
+    background:#03050a;
 }
 
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:150;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.72);
-  padding:16px
+.hud{
+    position:absolute;
+    z-index:10;
 }
-.modal.show{display:flex}
+
+.mobile-btn{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:rgba(20,28,50,.8);
+    border:1px solid rgba(150,170,255,.22);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:20px;
+    user-select:none;
+}
+
+.market-up{
+    color:#4ade80;
+}
+
+.market-down{
+    color:#fb7185;
+}
+
+.input{
+    width:100%;
+    background:#080d1c;
+    border:1px solid #1d2944;
+    outline:none;
+    border-radius:10px;
+    padding:11px 13px;
+    color:#fff;
+}
+
+.input:focus{
+    border-color:#6575ff;
+}
+
+textarea.input{
+    min-height:130px;
+    resize:vertical;
+}
+
+.tab{
+    cursor:pointer;
+}
 
 .toast{
-  position:fixed;
-  right:16px;
-  bottom:16px;
-  z-index:300;
-  background:#0f172a;
-  border:1px solid #334155;
-  border-radius:14px;
-  padding:12px 16px;
-  box-shadow:0 10px 40px #0008;
-  transform:translateY(100px);
-  opacity:0;
-  transition:.25s
-}
-.toast.show{
-  transform:translateY(0);
-  opacity:1
+    animation:toastIn .25s ease;
 }
 
-#runtimePage{
-  position:relative;
-  overflow:hidden;
-  background:#020617
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-#runtimeContainer{
-  position:relative;
-  height:calc(100vh - 62px);
-  min-height:520px;
-  overflow:hidden
-}
+@media(max-width:800px){
+    .desktop-only{
+        display:none!important;
+    }
 
-#gameCanvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  display:block
-}
-
-.overlay{
-  position:absolute;
-  z-index:10;
-  pointer-events:none
-}
-.overlay>*{pointer-events:auto}
-
-.hudBox{
-  background:rgba(3,7,18,.72);
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(148,163,184,.18);
-  border-radius:13px
-}
-
-#minimap{
-  width:170px;
-  height:170px;
-  border-radius:18px;
-  background:rgba(2,6,23,.8);
-  border:1px solid rgba(148,163,184,.2);
-  overflow:hidden
-}
-
-#mapCanvas{
-  width:100%;
-  height:100%
-}
-
-#mobileControls{
-  position:absolute;
-  left:14px;
-  bottom:18px;
-  z-index:20;
-  display:none
-}
-
-.pad{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  background:rgba(15,23,42,.75);
-  border:1px solid rgba(148,163,184,.25);
-  color:white
-}
-
-.actionBtn{
-  min-width:58px;
-  height:48px;
-  border-radius:14px;
-  background:rgba(15,23,42,.82);
-  border:1px solid rgba(148,163,184,.25);
-  color:white
-}
-
-.actionBtn.skill{
-  background:rgba(37,99,235,.35)
-}
-
-#interactionPrompt{
-  position:absolute;
-  left:50%;
-  bottom:95px;
-  transform:translateX(-50%);
-  z-index:20;
-  display:none
-}
-
-#interactionPrompt.show{display:block}
-
-#damageText{
-  position:absolute;
-  z-index:30;
-  pointer-events:none;
-  font-weight:900;
-  color:#fca5a5;
-  text-shadow:0 2px 10px #000;
-  display:none
-}
-
-.tabBtn.active{
-  background:rgba(59,130,246,.16);
-  color:#60a5fa;
-  border-color:rgba(59,130,246,.4)
-}
-
-.inventoryGrid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px
-}
-.itemSlot{
-  aspect-ratio:1;
-  border-radius:12px;
-  border:1px solid rgba(148,163,184,.16);
-  background:#070d1c;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  font-size:25px
-}
-.itemSlot .count{
-  position:absolute;
-  right:5px;
-  bottom:3px;
-  font-size:10px;
-  color:#cbd5e1
-}
-
-.questRow{
-  border:1px solid rgba(148,163,184,.13);
-  border-radius:14px;
-  padding:12px;
-  background:rgba(2,6,23,.45)
-}
-
-.logLine{
-  font-size:11px;
-  color:#94a3b8;
-  padding:5px 0;
-  border-bottom:1px solid rgba(148,163,184,.08)
-}
-
-@media(max-width:900px){
-  .desktopOnly{display:none!important}
-  #topbar{height:58px}
-  #runtimeContainer{height:calc(100vh - 58px)}
-  #mobileControls{display:block}
-  #minimap{width:125px;height:125px}
-}
-
-@media(max-width:600px){
-  .inventoryGrid{grid-template-columns:repeat(4,1fr)}
+    .mobile-grid{
+        grid-template-columns:1fr!important;
+    }
 }
 </style>
 </head>
 
 <body>
-<div id="app">
 
-<header id="topbar" class="glass">
-  <div class="flex items-center gap-2 min-w-0">
-    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center font-black">
-      G
-    </div>
-    <div class="hidden sm:block">
-      <div class="font-black tracking-wide">GAMEVERSE</div>
-      <div class="text-[10px] text-blue-400">BUILDA V3</div>
-    </div>
-  </div>
+<div id="app"></div>
 
-  <nav class="flex gap-1 ml-2 overflow-x-auto">
-    <button class="navbtn btn px-3 py-2 rounded-xl text-sm" data-page="studio">⚡ Studio</button>
-    <button class="navbtn btn px-3 py-2 rounded-xl text-sm" data-page="discover">🌎 Discover</button>
-    <button class="navbtn btn px-3 py-2 rounded-xl text-sm" data-page="projects">📁 Projects</button>
-    <button class="navbtn btn px-3 py-2 rounded-xl text-sm" data-page="analytics">📊 Analytics</button>
-    <button class="navbtn btn px-3 py-2 rounded-xl text-sm desktopOnly" data-page="runtimePage">🎮 Runtime</button>
-  </nav>
+<div id="toastBox"
+     class="fixed right-4 bottom-4 z-[100] space-y-2"></div>
 
-  <div class="ml-auto flex items-center gap-2">
-    <div class="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900/70 border border-slate-700/50">
-      <span class="text-yellow-400">◈</span>
-      <span id="coinTop">1,000</span>
-      <span class="text-xs text-slate-500">TEST</span>
-    </div>
-    <button onclick="openCreator()" class="btn px-3 py-2 rounded-xl bg-slate-900">👤 Creator</button>
-  </div>
-</header>
-
-<!-- =====================================================
-     STUDIO
-===================================================== -->
-
-<section id="studio" class="page active">
-<div class="max-w-7xl mx-auto w-full p-4 md:p-6">
-
-<div class="grid xl:grid-cols-[1.15fr_.85fr] gap-5">
-
-<div class="card neon p-5">
-
-<div class="flex justify-between gap-3">
-<div>
-<div class="text-xs text-blue-400 font-bold">BUILDA V3 • AI GAME ARCHITECT</div>
-<h1 class="text-2xl md:text-4xl font-black mt-1">
-Build game từ một câu lệnh.
-</h1>
-<p class="text-slate-400 text-sm mt-2">
-V3 biến prompt thành GameSpec có gameplay, world, NPC, quest, inventory,
-combat, progression và runtime systems.
-</p>
-</div>
-
-<span class="badge text-emerald-400 border-emerald-500/30">
-V3 ENGINE
-</span>
-</div>
-
-<textarea id="prompt"
-class="w-full mt-5 h-36 rounded-2xl bg-slate-950/80 border border-slate-700 p-4 outline-none focus:border-blue-500 resize-none"
-placeholder="Ví dụ: Tạo game tiên hiệp 3D open world, 24 cảnh giới, NPC, nhiệm vụ, boss, kiếm pháp, inventory, loot, thời tiết và ngày đêm..."></textarea>
-
-<div class="flex flex-wrap gap-2 mt-3">
-
-<button class="btn px-3 py-2 rounded-xl bg-blue-500/10 text-blue-300"
-onclick="usePrompt('Tạo game tu tiên 3D open world, 24 cảnh giới, linh thạch, NPC, nhiệm vụ, quái vật, boss, combat, inventory, loot và hệ thống ngày đêm.')">
-☁️ Tiên Đạo V3
-</button>
-
-<button class="btn px-3 py-2 rounded-xl bg-violet-500/10 text-violet-300"
-onclick="usePrompt('Tạo game RPG 3D thế giới mở, có kiếm pháp, boss, NPC, quest, skill, inventory, item rarity và dungeon.')">
-⚔️ RPG
-</button>
-
-<button class="btn px-3 py-2 rounded-xl bg-cyan-500/10 text-cyan-300"
-onclick="usePrompt('Tạo game open world 3D khám phá, thu thập tài nguyên, crafting, combat, NPC, nhiệm vụ, weather và day night.')">
-🌎 Open World
-</button>
-
-</div>
-
-<div class="grid sm:grid-cols-3 gap-3 mt-4">
-
-<select id="gameType" class="bg-slate-950 border border-slate-700 rounded-xl p-3">
-<option value="3D">3D World</option>
-<option value="2D">2D Game</option>
-</select>
-
-<select id="quality" class="bg-slate-950 border border-slate-700 rounded-xl p-3">
-<option value="balanced">Balanced</option>
-<option value="high">High Quality</option>
-<option value="mobile">Mobile Optimized</option>
-</select>
-
-<select id="template" class="bg-slate-950 border border-slate-700 rounded-xl p-3">
-<option value="sandbox">Open World Sandbox</option>
-<option value="rpg">RPG</option>
-<option value="survival">Survival</option>
-<option value="adventure">Adventure</option>
-</select>
-
-</div>
-
-<button onclick="generateGame()"
-class="btn w-full mt-4 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 font-black text-lg">
-⚡ GENERATE V3 GAME
-</button>
-
-<div id="buildStatus" class="hidden mt-4 rounded-xl bg-slate-950 border border-slate-800 p-4">
-<div class="flex justify-between text-sm">
-<span id="statusText">Analyzing...</span>
-<span id="statusPercent">0%</span>
-</div>
-<div class="statbar mt-2">
-<div id="statusBar" class="statfill bg-gradient-to-r from-blue-500 to-violet-500" style="width:0%"></div>
-</div>
-</div>
-
-</div>
-
-<!-- GAME SPEC -->
-
-<div class="card p-5">
-
-<div class="flex justify-between">
-<div>
-<div class="text-xs text-violet-400 font-bold">GAME SPEC V3</div>
-<h2 id="specTitle" class="text-xl font-black mt-1">Chưa generate</h2>
-</div>
-
-<div class="text-right">
-<div class="text-xs text-slate-500">AI SCORE</div>
-<div id="aiScore" class="text-3xl font-black text-blue-400">--</div>
-</div>
-</div>
-
-<div class="grid grid-cols-3 gap-2 mt-5">
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-xs text-slate-500">INDEX</div>
-<div id="shareIndex" class="text-2xl font-black">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-xs text-slate-500">TIER</div>
-<div id="tier" class="text-2xl font-black">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-xs text-slate-500">SYSTEMS</div>
-<div id="systemCount" class="text-2xl font-black">0</div>
-</div>
-
-</div>
-
-<div class="mt-5">
-<div class="text-xs text-slate-500 mb-2">SYSTEMS DETECTED</div>
-<div id="systems" class="flex flex-wrap gap-2">
-<span class="badge">Chưa có</span>
-</div>
-</div>
-
-<div class="mt-5">
-<div class="text-xs text-slate-500 mb-2">GENERATED SPEC</div>
-<pre id="specPreview"
-class="text-xs text-slate-400 bg-slate-950 rounded-xl p-4 overflow-auto max-h-72">{
-  "status":"waiting"
-}</pre>
-</div>
-
-</div>
-</div>
-
-<!-- QUICK RUNTIME -->
-
-<div class="card mt-5 overflow-hidden">
-
-<div class="flex items-center justify-between p-4 border-b border-slate-800">
-<div>
-<div class="font-bold">🎮 V3 Runtime Preview</div>
-<div id="runtimeVersion" class="text-xs text-slate-500">Version 0.1.0</div>
-</div>
-
-<div class="flex gap-2">
-<button onclick="newVersion()" class="btn px-3 py-2 rounded-xl bg-slate-900">
-＋ Version
-</button>
-
-<button onclick="rollbackVersion()" class="btn px-3 py-2 rounded-xl bg-slate-900">
-↶ Rollback
-</button>
-
-<button onclick="openPage('runtimePage')"
-class="btn px-3 py-2 rounded-xl bg-blue-600/20 text-blue-300">
-🎮 Open Runtime
-</button>
-
-<button onclick="publishGame()"
-class="btn px-3 py-2 rounded-xl bg-emerald-600/20 text-emerald-300">
-🚀 Publish
-</button>
-</div>
-</div>
-
-<div class="p-4">
-<div class="grid grid-cols-2 md:grid-cols-6 gap-2">
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-[10px] text-slate-500">WORLD</div>
-<div id="miniWorld" class="font-bold">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-[10px] text-slate-500">NPC</div>
-<div id="miniNPC" class="font-bold">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-[10px] text-slate-500">QUEST</div>
-<div id="miniQuest" class="font-bold">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-[10px] text-slate-500">COMBAT</div>
-<div id="miniCombat" class="font-bold">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-[10px] text-slate-500">INVENTORY</div>
-<div id="miniInventory" class="font-bold">--</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-[10px] text-slate-500">DAY/NIGHT</div>
-<div id="miniDayNight" class="font-bold">--</div>
-</div>
-
-</div>
-</div>
-
-</div>
-
-</div>
-</section>
-
-<!-- =====================================================
-     DISCOVER
-===================================================== -->
-
-<section id="discover" class="page">
-<div class="max-w-7xl mx-auto p-4 md:p-6">
-
-<div class="flex flex-col md:flex-row gap-3 mb-5">
-<div>
-<h1 class="text-3xl font-black">Discover</h1>
-<p class="text-slate-500">Khám phá game trong Gameverse.</p>
-</div>
-
-<input id="searchGames"
-oninput="renderGames()"
-class="md:ml-auto md:w-80 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none"
-placeholder="🔎 Tìm game...">
-</div>
-
-<div class="flex gap-2 mb-5 overflow-auto">
-<button class="filter btn px-3 py-2 rounded-xl bg-blue-500/15" data-cat="all">Tất cả</button>
-<button class="filter btn px-3 py-2 rounded-xl" data-cat="3D">3D</button>
-<button class="filter btn px-3 py-2 rounded-xl" data-cat="RPG">RPG</button>
-<button class="filter btn px-3 py-2 rounded-xl" data-cat="Open World">Open World</button>
-<button class="filter btn px-3 py-2 rounded-xl" data-cat="Adventure">Adventure</button>
-<button class="filter btn px-3 py-2 rounded-xl" data-cat="Survival">Survival</button>
-</div>
-
-<div id="gameGrid"
-class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-</div>
-
-</div>
-</section>
-
-<!-- =====================================================
-     PROJECTS
-===================================================== -->
-
-<section id="projects" class="page">
-<div class="max-w-6xl mx-auto p-4 md:p-6">
-
-<div class="flex justify-between items-center mb-5">
-<div>
-<h1 class="text-3xl font-black">Projects</h1>
-<p class="text-slate-500">
-GameSpec, versions, publishing và rollback.
-</p>
-</div>
-
-<button onclick="newProject()"
-class="btn px-4 py-3 rounded-xl bg-blue-600">
-＋ New Project
-</button>
-</div>
-
-<div id="projectList"
-class="grid md:grid-cols-2 gap-4"></div>
-
-</div>
-</section>
-
-<!-- =====================================================
-     ANALYTICS
-===================================================== -->
-
-<section id="analytics" class="page">
-<div class="max-w-7xl mx-auto p-4 md:p-6">
-
-<h1 class="text-3xl font-black">Analytics</h1>
-<p class="text-slate-500 mb-5">
-Game quality, engagement và Game Share Index.
-</p>
-
-<div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-
-<div class="card p-4">
-<div class="text-xs text-slate-500">VIEWS</div>
-<div id="anViews" class="text-3xl font-black mt-1">0</div>
-</div>
-
-<div class="card p-4">
-<div class="text-xs text-slate-500">LIKES</div>
-<div id="anLikes" class="text-3xl font-black mt-1">0</div>
-</div>
-
-<div class="card p-4">
-<div class="text-xs text-slate-500">RATING</div>
-<div id="anRating" class="text-3xl font-black mt-1">0.0</div>
-</div>
-
-<div class="card p-4">
-<div class="text-xs text-slate-500">RETENTION</div>
-<div id="anRetention" class="text-3xl font-black mt-1">0%</div>
-</div>
-
-<div class="card p-4">
-<div class="text-xs text-slate-500">PROJECTS</div>
-<div id="anProjects" class="text-3xl font-black mt-1">0</div>
-</div>
-
-</div>
-
-<div class="grid lg:grid-cols-2 gap-4 mt-5">
-
-<div class="card p-5">
-<h2 class="font-bold">Game Quality Matrix</h2>
-<div id="qualityRows" class="mt-4 space-y-4"></div>
-</div>
-
-<div class="card p-5">
-<h2 class="font-bold">Game Share Index</h2>
-<p class="text-sm text-slate-500 mt-2">
-Chỉ số khám phá/chất lượng nội bộ.
-</p>
-
-<div class="mt-5 flex items-end gap-4">
-<div id="bigShare"
-class="text-7xl font-black text-blue-400">0</div>
-<div class="pb-2 text-slate-500">/100</div>
-</div>
-
-<div class="statbar mt-4">
-<div id="shareBar"
-class="statfill bg-blue-500"
-style="width:0%">
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-</section>
-
-<!-- =====================================================
-     RUNTIME
-===================================================== -->
-
-<section id="runtimePage" class="page">
-<div id="runtimeContainer">
-
-<canvas id="gameCanvas"></canvas>
-
-<!-- TOP HUD -->
-
-<div class="overlay top-3 left-3 right-3">
-
-<div class="flex gap-2 flex-wrap">
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">REALM</div>
-<div id="hudRealm" class="font-black text-blue-300">
-Luyện Khí
-</div>
-</div>
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">LEVEL</div>
-<div id="hudLevel" class="font-black">1</div>
-</div>
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">XP</div>
-<div id="hudXP" class="font-black">0/100</div>
-</div>
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">SPIRIT</div>
-<div id="hudStones" class="font-black text-cyan-300">0</div>
-</div>
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">QI</div>
-<div id="hudQi" class="font-black text-violet-300">0</div>
-</div>
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">GOLD</div>
-<div id="hudGold" class="font-black text-yellow-300">100</div>
-</div>
-
-<div class="hudBox px-3 py-2">
-<div class="text-[9px] text-slate-500">TIME</div>
-<div id="hudTime" class="font-black">06:00</div>
-</div>
-
-</div>
-
-</div>
-
-<!-- LEFT -->
-
-<div class="overlay top-24 left-3">
-
-<div class="hudBox p-3 w-56">
-
-<div class="text-xs font-bold">❤️ HP</div>
-<div class="statbar mt-1">
-<div id="hpBar"
-class="statfill bg-red-500"
-style="width:100%">
-</div>
-</div>
-<div id="hpText" class="text-[11px] text-slate-400 mt-1">
-100 / 100
-</div>
-
-<div class="text-xs font-bold mt-3">⚡ STAMINA</div>
-<div class="statbar mt-1">
-<div id="staminaBar"
-class="statfill bg-yellow-400"
-style="width:100%">
-</div>
-</div>
-
-<div class="text-xs font-bold mt-3">✨ QI</div>
-<div class="statbar mt-1">
-<div id="qiBar"
-class="statfill bg-cyan-400"
-style="width:0%">
-</div>
-</div>
-
-<div id="weatherText"
-class="text-[11px] text-slate-400 mt-3">
-☀️ Clear
-</div>
-
-</div>
-
-</div>
-
-<!-- QUEST -->
-
-<div class="overlay top-24 right-3">
-
-<div class="hudBox p-3 w-64">
-
-<div class="text-xs text-slate-500">ACTIVE QUEST</div>
-<div id="activeQuestTitle" class="font-bold mt-1">
-Thu thập linh thạch
-</div>
-
-<div id="activeQuestDescription"
-class="text-xs text-slate-400 mt-1">
-Thu thập 3 linh thạch.
-</div>
-
-<div class="statbar mt-2">
-<div id="questBar"
-class="statfill bg-blue-500"
-style="width:0%">
-</div>
-</div>
-
-<div id="questProgress"
-class="text-xs text-blue-300 mt-1">
-0 / 3
-</div>
-
-</div>
-
-</div>
-
-<!-- MINIMAP -->
-
-<div class="overlay top-52 right-3 hidden md:block">
-<div id="minimap">
-<canvas id="mapCanvas"></canvas>
-</div>
-</div>
-
-<!-- INTERACTION -->
-
-<div id="interactionPrompt" class="hudBox px-4 py-3">
-<div id="interactionText" class="font-bold">
-Nhấn E để tương tác
-</div>
-</div>
-
-<!-- ACTIONS -->
-
-<div class="overlay bottom-5 right-5 flex gap-2">
-
-<button onclick="attack()" class="actionBtn">
-⚔️
-</button>
-
-<button onclick="useSkill()" class="actionBtn skill">
-🔥
-</button>
-
-<button onclick="absorb()" class="actionBtn">
-✨
-</button>
-
-<button onclick="meditate()" id="meditateBtn" class="actionBtn">
-🧘
-</button>
-
-<button onclick="toggleInventory()" class="actionBtn">
-🎒
-</button>
-
-</div>
-
-<!-- MOBILE -->
-
-<div id="mobileControls">
-
-<div class="grid grid-cols-3 gap-2 w-40">
-<div></div>
-<button class="pad" data-key="w">▲</button>
-<div></div>
-
-<button class="pad" data-key="a">◀</button>
-<button class="pad" data-key="s">▼</button>
-<button class="pad" data-key="d">▶</button>
-</div>
-
-</div>
-
-<div class="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] text-white/40">
-WASD • E interact • J attack • K absorb • M meditate • I inventory
-</div>
-
-</div>
-</section>
-
-</div>
-
-<!-- =====================================================
-     CREATOR MODAL
-===================================================== -->
-
-<div id="creatorModal" class="modal">
-<div class="card w-full max-w-md p-6">
-
-<div class="flex justify-between">
-<h2 class="text-xl font-black">Creator Profile</h2>
-<button onclick="closeCreator()">✕</button>
-</div>
-
-<div class="flex items-center gap-4 mt-5">
-
-<div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-2xl">
-👨‍💻
-</div>
-
-<div>
-<div class="font-black">Gameverse Creator</div>
-<div class="text-sm text-slate-500">
-Builder Level <span id="creatorLevel">1</span>
-</div>
-</div>
-
-</div>
-
-<div class="grid grid-cols-3 gap-2 mt-5 text-center">
-
-<div class="bg-slate-950 p-3 rounded-xl">
-<b id="creatorGames">0</b>
-<div class="text-[10px] text-slate-500">GAMES</div>
-</div>
-
-<div class="bg-slate-950 p-3 rounded-xl">
-<b id="creatorViews">0</b>
-<div class="text-[10px] text-slate-500">VIEWS</div>
-</div>
-
-<div class="bg-slate-950 p-3 rounded-xl">
-<b id="creatorLikes">0</b>
-<div class="text-[10px] text-slate-500">LIKES</div>
-</div>
-
-</div>
-
-<button onclick="closeCreator()"
-class="btn w-full mt-5 py-3 rounded-xl bg-slate-800">
-Đóng
-</button>
-
-</div>
-</div>
-
-<!-- =====================================================
-     GAME DETAIL
-===================================================== -->
-
-<div id="gameModal" class="modal">
-<div class="card w-full max-w-2xl p-5">
-
-<div id="detailCover" class="cover"></div>
-
-<div class="flex justify-between mt-4 gap-3">
-<div>
-<h2 id="detailTitle" class="text-2xl font-black"></h2>
-<div id="detailCreator" class="text-sm text-slate-500 mt-1"></div>
-</div>
-<button onclick="closeGame()" class="text-xl">✕</button>
-</div>
-
-<p id="detailDescription" class="text-slate-400 mt-4"></p>
-
-<div class="grid grid-cols-4 gap-2 mt-5">
-
-<div class="bg-slate-950 rounded-xl p-3 text-center">
-<b id="detailViews">0</b>
-<div class="text-[10px] text-slate-500">VIEWS</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3 text-center">
-<b id="detailLikes">0</b>
-<div class="text-[10px] text-slate-500">LIKES</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3 text-center">
-<b id="detailRating">0</b>
-<div class="text-[10px] text-slate-500">RATING</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3 text-center">
-<b id="detailIndex">0</b>
-<div class="text-[10px] text-slate-500">INDEX</div>
-</div>
-
-</div>
-
-<div class="flex gap-2 mt-5">
-
-<button onclick="playSelectedGame()"
-class="btn flex-1 py-3 rounded-xl bg-blue-600">
-▶ Play
-</button>
-
-<button onclick="likeSelectedGame()"
-class="btn px-5 rounded-xl bg-pink-500/15 text-pink-300">
-♥ Like
-</button>
-
-</div>
-
-</div>
-</div>
-
-<!-- =====================================================
-     INVENTORY MODAL
-===================================================== -->
-
-<div id="inventoryModal" class="modal">
-
-<div class="card w-full max-w-lg p-5">
-
-<div class="flex justify-between items-center">
-<div>
-<h2 class="text-xl font-black">🎒 Inventory</h2>
-<div class="text-xs text-slate-500">
-Items thu thập trong runtime
-</div>
-</div>
-
-<button onclick="toggleInventory()">✕</button>
-</div>
-
-<div class="grid grid-cols-3 gap-2 mt-4">
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-xs text-slate-500">SLOTS</div>
-<div id="invSlots" class="font-black">0 / 20</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-xs text-slate-500">GOLD</div>
-<div id="invGold" class="font-black text-yellow-300">100</div>
-</div>
-
-<div class="bg-slate-950 rounded-xl p-3">
-<div class="text-xs text-slate-500">ITEMS</div>
-<div id="invItems" class="font-black">0</div>
-</div>
-
-</div>
-
-<div id="inventoryGrid" class="inventoryGrid mt-5"></div>
-
-</div>
-</div>
-
-<!-- =====================================================
-     NPC MODAL
-===================================================== -->
-
-<div id="npcModal" class="modal">
-
-<div class="card w-full max-w-md p-5">
-
-<div class="flex justify-between">
-<div>
-<div class="text-xs text-violet-400">NPC</div>
-<h2 id="npcName" class="text-xl font-black">NPC</h2>
-</div>
-<button onclick="closeNPC()">✕</button>
-</div>
-
-<div id="npcDialogue"
-class="bg-slate-950 rounded-xl p-4 mt-5 text-slate-300">
-...
-</div>
-
-<div id="npcActions" class="grid gap-2 mt-4"></div>
-
-</div>
-</div>
-
-<div id="toast" class="toast"></div>
 
 <script>
-/* =========================================================
-   GAMEVERSE BUILDA V3
-   SINGLE FILE
-   LOCAL PROTOTYPE
-========================================================= */
+"use strict";
 
-const SAVE_KEY="GAMEVERSE_BUILDA_V3";
-const RUNTIME_KEY="GAMEVERSE_RUNTIME_V3";
+/* ============================================================
+   GAMEVERSE V3
+   ASTROCADE + ROBLOX + AI BUILDER + VIRTUAL MARKET
+============================================================ */
 
-const REALMS=[
-"Luyện Khí","Trúc Cơ","Kim Đan","Nguyên Anh",
-"Hóa Thần","Luyện Hư","Hợp Thể","Đại Thừa",
-"Độ Kiếp","Chân Tiên","Thiên Tiên","Kim Tiên",
-"Thái Ất","Đại La","Tiên Vương","Tiên Hoàng",
-"Tiên Đế","Thánh Nhân","Hỗn Nguyên","Chí Tôn",
-"Vô Thượng","Đạo Tổ","Siêu Thoát","Vĩnh Hằng"
+const VERSION = "V3";
+
+const DB_KEY = "GAMEVERSE_V3_DATABASE";
+
+const REALMS = [
+    "Luyện Khí",
+    "Trúc Cơ",
+    "Kim Đan",
+    "Nguyên Anh",
+    "Hóa Thần",
+    "Luyện Hư",
+    "Hợp Thể",
+    "Đại Thừa",
+    "Độ Kiếp",
+    "Chân Tiên",
+    "Thiên Tiên",
+    "Kim Tiên",
+    "Thái Ất",
+    "Đại La",
+    "Tiên Vương",
+    "Tiên Hoàng",
+    "Tiên Đế",
+    "Thánh Nhân",
+    "Hỗn Nguyên",
+    "Chí Tôn",
+    "Vô Thượng",
+    "Đạo Tổ",
+    "Siêu Thoát",
+    "Vĩnh Hằng"
 ];
 
-const ITEMS={
-spirit:{
-name:"Linh Thạch",
-icon:"💎",
-rarity:"Common"
-},
-herb:{
-name:"Linh Thảo",
-icon:"🌿",
-rarity:"Common"
-},
-sword:{
-name:"Kiếm Cổ",
-icon:"🗡️",
-rarity:"Rare"
-},
-core:{
-name:"Yêu Đan",
-icon:"🔮",
-rarity:"Epic"
-},
-potion:{
-name:"Hồi Khí Đan",
-icon:"🧪",
-rarity:"Rare"
-},
-crystal:{
-name:"Thiên Tinh",
-icon:"💠",
-rarity:"Legendary"
-}
+
+/* ============================================================
+   DATABASE
+============================================================ */
+
+const DEFAULT_DB = {
+    version: VERSION,
+
+    user:{
+        name:"Player",
+        creatorName:"New Creator",
+        coin:10000,
+        creatorXP:0,
+        creatorLevel:1
+    },
+
+    projects:[],
+
+    games:[
+        {
+            id:"demo-xian",
+            title:"Tiên Đạo Vô Tận",
+            creator:"Gameverse Studio",
+            category:"RPG",
+            players:128420,
+            likes:48200,
+            rating:4.8,
+            index:94,
+            description:"Thế giới tu tiên 3D rộng lớn.",
+            color:"from-purple-700 to-indigo-900",
+            published:true,
+            stock:{
+                symbol:"XIAN",
+                price:125,
+                previous:115,
+                marketCap:125000000,
+                volume:2840000
+            }
+        },
+
+        {
+            id:"demo-sky",
+            title:"Sky Realms",
+            creator:"Nova",
+            category:"Adventure",
+            players:68210,
+            likes:19200,
+            rating:4.6,
+            index:87,
+            description:"Khám phá những hòn đảo trên bầu trời.",
+            color:"from-cyan-700 to-blue-900",
+            published:true,
+            stock:{
+                symbol:"SKY",
+                price:84,
+                previous:88,
+                marketCap:84000000,
+                volume:1250000
+            }
+        },
+
+        {
+            id:"demo-survivor",
+            title:"Pixel Survivor",
+            creator:"PixelLab",
+            category:"Action",
+            players:42100,
+            likes:12100,
+            rating:4.5,
+            index:82,
+            description:"Sinh tồn chống lại hàng đàn quái vật.",
+            color:"from-red-700 to-orange-900",
+            published:true,
+            stock:{
+                symbol:"PXL",
+                price:57,
+                previous:51,
+                marketCap:57000000,
+                volume:890000
+            }
+        }
+    ],
+
+    portfolio:{},
+
+    marketHistory:{
+        XIAN:[110,113,111,116,118,115,121,119,125],
+        SKY:[92,90,88,91,87,86,89,86,84],
+        PXL:[49,51,50,54,53,55,56,55,57]
+    },
+
+    runtime:{
+        level:1,
+        xp:0,
+        realm:REALMS[0],
+        qi:100,
+        hp:100,
+        stones:10,
+        inventory:{
+            "Linh Thạch":10,
+            "Mộc Tâm":0,
+            "Tinh Hoa":0
+        },
+        meditation:false
+    },
+
+    settings:{
+        section:"discover"
+    }
 };
 
-const defaultDB={
-creator:{
-level:1,
-games:0,
-views:0,
-likes:0
-},
 
-wallet:{
-testCoin:1000
-},
+/* ============================================================
+   STORAGE
+============================================================ */
 
-activeProjectId:null,
-
-projects:[],
-
-games:[
-{
-id:"demo-xianxia",
-title:"Tiên Đạo Vô Tận V3",
-creator:"Gameverse Studio",
-category:"Open World",
-type:"3D",
-description:"Thế giới tu tiên 3D với 24 cảnh giới, NPC, quest, combat, loot và thế giới sống.",
-views:15480,
-likes:1940,
-rating:4.9,
-retention:78,
-index:94,
-color:0x2563eb
-},
-{
-id:"sky-realms",
-title:"Sky Realms",
-creator:"Nova Creator",
-category:"RPG",
-type:"3D",
-description:"Khám phá đảo trời, dungeon và chiến đấu với boss.",
-views:8320,
-likes:920,
-rating:4.5,
-retention:65,
-index:82,
-color:0x7c3aed
-},
-{
-id:"pixel-survivor",
-title:"Pixel Survivor",
-creator:"PixelLab",
-category:"Adventure",
-type:"2D",
-description:"Sinh tồn, thu thập tài nguyên và nâng cấp nhân vật.",
-views:5620,
-likes:611,
-rating:4.2,
-retention:58,
-index:74,
-color:0x0891b2
-}
-]
-};
-
-let DB=loadDB();
-
-function clone(x){
-return JSON.parse(JSON.stringify(x));
+function clone(obj){
+    return JSON.parse(JSON.stringify(obj));
 }
 
 function loadDB(){
-try{
-const saved=localStorage.getItem(SAVE_KEY);
-if(saved){
-const x=JSON.parse(saved);
-return {
-...clone(defaultDB),
-...x,
-creator:{...clone(defaultDB.creator),...(x.creator||{})},
-wallet:{...clone(defaultDB.wallet),...(x.wallet||{})},
-projects:Array.isArray(x.projects)?x.projects:[],
-games:Array.isArray(x.games)?x.games:clone(defaultDB.games)
-};
+    try{
+        const raw = localStorage.getItem(DB_KEY);
+
+        if(!raw){
+            return clone(DEFAULT_DB);
+        }
+
+        const parsed = JSON.parse(raw);
+
+        return merge(clone(DEFAULT_DB),parsed);
+    }catch(e){
+        console.warn(e);
+        return clone(DEFAULT_DB);
+    }
 }
-}catch(e){}
-return clone(defaultDB);
+
+function merge(base,extra){
+    if(!extra || typeof extra!=="object"){
+        return base;
+    }
+
+    Object.keys(extra).forEach(key=>{
+        if(
+            extra[key] &&
+            typeof extra[key]==="object" &&
+            !Array.isArray(extra[key]) &&
+            base[key] &&
+            typeof base[key]==="object" &&
+            !Array.isArray(base[key])
+        ){
+            base[key]=merge(base[key],extra[key]);
+        }else{
+            base[key]=extra[key];
+        }
+    });
+
+    return base;
 }
+
+let DB=loadDB();
 
 function saveDB(){
-localStorage.setItem(SAVE_KEY,JSON.stringify(DB));
-updateTop();
+    localStorage.setItem(DB_KEY,JSON.stringify(DB));
 }
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
 
 function uid(prefix="id"){
-return prefix+"_"+Date.now()+"_"+Math.random().toString(36).slice(2,9);
+    return prefix+"_"+Math.random().toString(36).slice(2,10);
 }
 
-function toast(msg){
-const el=document.getElementById("toast");
-el.textContent=msg;
-el.classList.add("show");
-clearTimeout(window.__toastTimer);
-window.__toastTimer=setTimeout(()=>{
-el.classList.remove("show");
-},2300);
+function money(n){
+    return Math.floor(n).toLocaleString("en-US");
 }
 
-function updateTop(){
-document.getElementById("coinTop").textContent=
-Number(DB.wallet.testCoin||0).toLocaleString();
+function toast(message,type="info"){
+    const box=document.getElementById("toastBox");
+
+    const el=document.createElement("div");
+
+    el.className=
+        "toast glass glow rounded-xl px-4 py-3 text-sm min-w-[240px]";
+
+    el.innerHTML=`
+        <div class="font-semibold">${escapeHTML(message)}</div>
+    `;
+
+    box.appendChild(el);
+
+    setTimeout(()=>{
+        el.remove();
+    },2600);
 }
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-document.querySelectorAll(".navbtn").forEach(btn=>{
-btn.addEventListener("click",()=>{
-openPage(btn.dataset.page);
-});
-});
-
-function openPage(page){
-
-document.querySelectorAll(".page").forEach(p=>{
-p.classList.remove("active");
-});
-
-const target=document.getElementById(page);
-if(target)target.classList.add("active");
-
-document.querySelectorAll(".navbtn").forEach(b=>{
-b.classList.toggle("active",b.dataset.page===page);
-});
-
-if(page==="discover")renderGames();
-if(page==="projects")renderProjects();
-if(page==="analytics")renderAnalytics();
-
-if(page==="runtimePage"){
-setTimeout(resizeRenderer,60);
-}
+function escapeHTML(value){
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 }
 
-function usePrompt(text){
-document.getElementById("prompt").value=text;
+function clamp(n,min,max){
+    return Math.max(min,Math.min(max,n));
 }
 
-/* =========================================================
-   AI ARCHITECT V3
-========================================================= */
+
+/* ============================================================
+   AI GAME ARCHITECT V3
+============================================================ */
 
 function analyzePrompt(prompt){
 
-const p=prompt.toLowerCase();
-const systems=[];
+    const p=prompt.toLowerCase();
 
-const detect=(words,name)=>{
-if(words.some(w=>p.includes(w)))systems.push(name);
-};
+    const systems=[];
 
-detect(["3d"],"3D World");
-detect(["open world","thế giới rộng","thế giới mở"],"Open World");
-detect(["tu tiên","tiên hiệp","cultivat"],"Cultivation");
-detect(["npc","nhân vật"],"NPC");
-detect(["nhiệm vụ","quest"],"Quest System");
-detect(["quái","enemy","mob"],"Enemy AI");
-detect(["boss"],"Boss System");
-detect(["24 cảnh giới","cảnh giới","realm"],"Realm Progression");
-detect(["inventory","túi đồ","hành trang"],"Inventory");
-detect(["loot","rơi đồ","drop"],"Loot System");
-detect(["skill","kỹ năng","chiêu"],"Skill System");
-detect(["craft","chế tạo"],"Crafting");
-detect(["shop","cửa hàng"],"Shop");
-detect(["multiplayer","online","nhiều người"],"Multiplayer Architecture");
-detect(["weather","thời tiết","mưa"],"Dynamic Weather");
-detect(["day night","ngày đêm"],"Day / Night");
-detect(["dungeon","hầm ngục"],"Dungeon");
-detect(["map","bản đồ"],"World Map");
-detect(["save","lưu"],"Save System");
+    if(/3d|3d open world|thế giới mở/.test(p))
+        systems.push("3D World");
 
-if(!systems.includes("3D World") &&
-document.getElementById("gameType").value==="3D"){
-systems.push("3D World");
+    if(/rpg|tu tiên|level|cấp độ|cultivation/.test(p))
+        systems.push("RPG Progression");
+
+    if(/combat|đánh|chiến đấu|kiếm|súng/.test(p))
+        systems.push("Combat");
+
+    if(/npc|nhân vật|đối thoại/.test(p))
+        systems.push("NPC & Dialogue");
+
+    if(/quest|nhiệm vụ/.test(p))
+        systems.push("Quest System");
+
+    if(/inventory|túi đồ|item|vật phẩm/.test(p))
+        systems.push("Inventory");
+
+    if(/craft|chế tạo/.test(p))
+        systems.push("Crafting");
+
+    if(/shop|cửa hàng|mua|bán/.test(p))
+        systems.push("Shop");
+
+    if(/weather|thời tiết|mưa|tuyết/.test(p))
+        systems.push("Weather");
+
+    if(/day|night|ngày|đêm/.test(p))
+        systems.push("Day/Night");
+
+    if(/multiplayer|online|nhiều người/.test(p))
+        systems.push("Multiplayer Architecture");
+
+    if(/mobile|điện thoại|android|ios/.test(p))
+        systems.push("Mobile Controls");
+
+    if(/save|lưu|database/.test(p))
+        systems.push("Save System");
+
+    if(!systems.length){
+        systems.push(
+            "Core Gameplay",
+            "Progression",
+            "Save System",
+            "Mobile Support"
+        );
+    }
+
+    let score=70;
+
+    score+=Math.min(18,systems.length*2);
+
+    if(p.length>100) score+=4;
+    if(/3d/.test(p)) score+=3;
+    if(/multiplayer/.test(p)) score+=2;
+
+    score=clamp(score,0,100);
+
+    let tier="C";
+
+    if(score>=95) tier="S+";
+    else if(score>=90) tier="S";
+    else if(score>=82) tier="A";
+    else if(score>=72) tier="B";
+
+    const shareIndex=clamp(
+        Math.round(score*.72 + systems.length*2.2),
+        0,
+        100
+    );
+
+    return {
+        title:generateTitle(prompt),
+        prompt,
+        genre:detectGenre(p),
+        platform:["PC","Android","iOS"],
+        systems,
+        score,
+        tier,
+        shareIndex,
+        world:{
+            type:/3d/.test(p)?"3D":"2D",
+            openWorld:/open world|thế giới mở/.test(p),
+            multiplayer:/multiplayer|online|nhiều người/.test(p)
+        },
+
+        gameplay:{
+            combat:/combat|đánh|chiến đấu|kiếm|súng/.test(p),
+            progression:/rpg|level|cấp độ|tu tiên/.test(p),
+            quests:/quest|nhiệm vụ/.test(p),
+            inventory:/inventory|túi đồ|item|vật phẩm/.test(p),
+            crafting:/craft|chế tạo/.test(p),
+            shop:/shop|cửa hàng/.test(p)
+        }
+    };
 }
 
-const fallback=[
-"Progression",
-"Mobile Controls",
-"Runtime Engine",
-"Autosave"
-];
+function detectGenre(p){
 
-fallback.forEach(x=>{
-if(systems.length<7)systems.push(x);
-});
+    if(/tu tiên|xianxia|cultivation/.test(p))
+        return "Xianxia RPG";
 
-let score=64;
+    if(/rpg/.test(p))
+        return "RPG";
 
-score+=Math.min(systems.length*3,27);
+    if(/survival|sinh tồn/.test(p))
+        return "Survival";
 
-if(p.length>120)score+=3;
-if(p.includes("open world"))score+=2;
-if(p.includes("24 cảnh giới"))score+=3;
-if(p.includes("boss"))score+=2;
-if(p.includes("inventory"))score+=2;
-if(p.includes("npc"))score+=2;
+    if(/racing|đua xe/.test(p))
+        return "Racing";
 
-return{
-systems:[...new Set(systems)],
-score:Math.min(99,score)
-};
+    if(/horror|kinh dị/.test(p))
+        return "Horror";
+
+    if(/strategy|chiến thuật/.test(p))
+        return "Strategy";
+
+    if(/shooter|súng/.test(p))
+        return "Shooter";
+
+    return "Adventure";
 }
 
-function buildSpec(prompt){
+function generateTitle(prompt){
 
-const result=analyzePrompt(prompt);
+    const p=prompt.toLowerCase();
 
-const type=document.getElementById("gameType").value;
-const quality=document.getElementById("quality").value;
-const template=document.getElementById("template").value;
+    if(/tu tiên|xianxia|cultivation/.test(p))
+        return "Tiên Đạo Vô Tận";
 
-const p=prompt.toLowerCase();
+    if(/zombie|xác sống/.test(p))
+        return "Zombie Last Stand";
 
-let title="Gameverse Genesis";
+    if(/racing|đua xe/.test(p))
+        return "Velocity Legends";
 
-if(p.includes("tu tiên")||p.includes("tiên hiệp")){
-title="Tiên Đạo Vô Tận V3";
-}else if(p.includes("survival")){
-title="Survival Genesis V3";
-}else if(p.includes("rpg")){
-title="Realm RPG V3";
-}else if(p.includes("open world")){
-title="Infinite World V3";
+    if(/space|vũ trụ/.test(p))
+        return "Galaxy Frontier";
+
+    return "AI Generated World";
 }
 
-const spec={
 
-schema:"gameverse.gamespec.v3",
+/* ============================================================
+   APP SHELL
+============================================================ */
 
-engine:{
-version:"BUILDA V3",
-renderer:type==="3D"?"Three.js":"Canvas",
-runtime:"web"
-},
+function render(){
 
-title,
-type,
-template,
-quality,
-inputPrompt:prompt,
+    const section=DB.settings.section;
 
-world:{
-mode:template==="sandbox"?"open-world":"zone-based",
-mapScale:type==="3D"?"huge":"medium",
-dayNight:result.systems.includes("Day / Night"),
-weather:result.systems.includes("Dynamic Weather"),
-dungeon:result.systems.includes("Dungeon"),
-worldMap:true,
-dynamicEvents:true
-},
+    document.getElementById("app").innerHTML=`
 
-player:{
-movement:true,
-combat:true,
-skills:result.systems.includes("Skill System"),
-inventory:result.systems.includes("Inventory"),
-progression:true,
-save:true
-},
+    <div class="min-h-screen">
 
-systems:result.systems,
+        <!-- TOPBAR -->
 
-content:{
-realms:result.systems.includes("Realm Progression")?24:10,
-npc:result.systems.includes("NPC"),
-quests:result.systems.includes("Quest System"),
-enemies:result.systems.includes("Enemy AI"),
-boss:result.systems.includes("Boss System"),
-loot:result.systems.includes("Loot System"),
-crafting:result.systems.includes("Crafting"),
-shop:result.systems.includes("Shop")
-},
+        <header class="sticky top-0 z-50 glass border-b border-white/5">
 
-runtime:{
-mobile:true,
-keyboard:true,
-fullscreen:true,
-autosave:true,
-minimap:true,
-touchControls:true
-},
+            <div class="max-w-[1500px] mx-auto px-4">
 
-ai:{
-score:result.score,
-generatedLocally:true,
-architecture:"V3"
+                <div class="h-[66px] flex items-center gap-3">
+
+                    <div class="flex items-center gap-2 mr-4">
+                        <div class="w-9 h-9 rounded-xl
+                                    bg-gradient-to-br from-indigo-500 to-cyan-400
+                                    flex items-center justify-center
+                                    font-black">
+                            G
+                        </div>
+
+                        <div>
+                            <div class="font-black tracking-wide">
+                                GAME<span class="gradient-text">VERSE</span>
+                            </div>
+
+                            <div class="text-[9px] text-slate-500">
+                                V3 • AI GAME PLATFORM
+                            </div>
+                        </div>
+                    </div>
+
+                    <nav class="hidden lg:flex items-center gap-1">
+
+                        ${navButton("discover","🎮","Discover")}
+                        ${navButton("builder","🤖","AI Builder")}
+                        ${navButton("projects","🧑‍💻","Studio")}
+                        ${navButton("market","📈","Market")}
+                        ${navButton("analytics","📊","Analytics")}
+
+                    </nav>
+
+                    <div class="ml-auto flex items-center gap-2">
+
+                        <div class="glass rounded-xl px-3 py-2 text-sm">
+                            🪙 ${money(DB.user.coin)}
+                        </div>
+
+                        <button
+                            onclick="openCreator()"
+                            class="btn px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm font-bold">
+                            Creator
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="lg:hidden flex gap-1 pb-2 overflow-x-auto">
+
+                    ${navButton("discover","🎮","Games")}
+                    ${navButton("builder","🤖","Build")}
+                    ${navButton("projects","🧑‍💻","Studio")}
+                    ${navButton("market","📈","Market")}
+                    ${navButton("analytics","📊","Stats")}
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <main class="max-w-[1500px] mx-auto px-4 py-5">
+
+            ${renderSection(section)}
+
+        </main>
+
+    </div>
+    `;
 }
 
-};
+function navButton(id,icon,label){
 
-return spec;
+    const active=DB.settings.section===id
+        ?"nav-active"
+        :"";
+
+    return `
+    <button
+        onclick="go('${id}')"
+        class="${active} btn whitespace-nowrap px-3 py-2 rounded-xl text-sm">
+        ${icon} ${label}
+    </button>
+    `;
 }
 
-function calculateShareIndex(spec){
-
-let score=48;
-
-score+=spec.systems.length*3;
-
-if(spec.type==="3D")score+=5;
-if(spec.world.mode==="open-world")score+=5;
-if(spec.world.dayNight)score+=2;
-if(spec.world.weather)score+=2;
-if(spec.content.npc)score+=3;
-if(spec.content.quests)score+=3;
-if(spec.content.enemies)score+=3;
-if(spec.content.boss)score+=3;
-if(spec.content.loot)score+=2;
-if(spec.content.crafting)score+=2;
-if(spec.content.realms>=24)score+=5;
-
-return Math.min(100,Math.round(score));
+function go(section){
+    DB.settings.section=section;
+    saveDB();
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function tierFor(score){
-if(score>=90)return"S";
-if(score>=80)return"A";
-if(score>=70)return"B";
-if(score>=60)return"C";
-return"D";
+
+/* ============================================================
+   DISCOVER
+============================================================ */
+
+function renderDiscover(){
+
+    return `
+
+    <section>
+
+        <div class="grid lg:grid-cols-[1.5fr_.8fr] gap-4 mb-5">
+
+            <div class="glass glow rounded-3xl p-7 overflow-hidden relative">
+
+                <div class="absolute -right-20 -top-20
+                            w-64 h-64 rounded-full
+                            bg-indigo-500/10 blur-3xl"></div>
+
+                <div class="text-xs text-indigo-300 font-bold mb-3">
+                    🌐 THE NEXT GAME PLATFORM
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-black leading-tight">
+                    Play.
+                    <span class="gradient-text">Create.</span>
+                    Build.
+                    Trade.
+                </h1>
+
+                <p class="text-slate-400 mt-4 max-w-2xl">
+                    Một nền tảng kết hợp AI Game Creation,
+                    game discovery kiểu Roblox và thị trường tài sản
+                    ảo của Gameverse.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mt-6">
+
+                    <button
+                        onclick="go('builder')"
+                        class="btn px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold">
+                        🤖 Create Game
+                    </button>
+
+                    <button
+                        onclick="go('market')"
+                        class="btn px-5 py-3 rounded-xl glass font-bold">
+                        📈 Open Market
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="glass glow rounded-3xl p-5">
+
+                <div class="text-sm font-bold mb-4">
+                    🔥 GAMEVERSE TRENDING
+                </div>
+
+                ${DB.games.slice(0,3).map((g,i)=>`
+
+                    <div class="flex items-center gap-3
+                                py-3 border-b border-white/5 last:border-0">
+
+                        <div class="text-lg font-black text-slate-500">
+                            #${i+1}
+                        </div>
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-gradient-to-br ${g.color}
+                                    flex items-center justify-center">
+                            🎮
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold truncate">
+                                ${escapeHTML(g.title)}
+                            </div>
+                            <div class="text-xs text-slate-500">
+                                ${money(g.players)} players
+                            </div>
+                        </div>
+
+                        <div class="text-xs font-bold">
+                            ${g.index}/100
+                        </div>
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+
+        </div>
+
+
+        <div class="flex flex-wrap gap-2 mb-4">
+
+            ${["All","RPG","Action","Adventure","Racing","Survival"].map(c=>`
+                <button
+                    class="px-3 py-2 rounded-xl glass text-xs"
+                    onclick="filterGames('${c}')">
+                    ${c}
+                </button>
+            `).join("")}
+
+        </div>
+
+
+        <div id="gameGrid"
+             class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+            ${DB.games.map(renderGameCard).join("")}
+
+        </div>
+
+    </section>
+
+    `;
 }
 
-function generateGame(){
+function renderGameCard(g){
 
-const prompt=document.getElementById("prompt").value.trim();
+    const change=g.stock
+        ?((g.stock.price-g.stock.previous)/g.stock.previous*100)
+        :0;
 
-if(!prompt){
-toast("Nhập ý tưởng game trước bro 😭");
-return;
+    return `
+    <div class="game-card glass glow rounded-2xl overflow-hidden">
+
+        <div class="h-36 bg-gradient-to-br ${g.color}
+                    flex items-center justify-center text-5xl">
+            🎮
+        </div>
+
+        <div class="p-4">
+
+            <div class="flex items-start gap-2">
+
+                <div class="flex-1 min-w-0">
+
+                    <div class="font-black truncate">
+                        ${escapeHTML(g.title)}
+                    </div>
+
+                    <div class="text-xs text-slate-500 mt-1">
+                        by ${escapeHTML(g.creator)}
+                    </div>
+
+                </div>
+
+                <span class="badge">
+                    ${escapeHTML(g.category)}
+                </span>
+
+            </div>
+
+            <p class="text-xs text-slate-400 mt-3 h-8 overflow-hidden">
+                ${escapeHTML(g.description)}
+            </p>
+
+            <div class="grid grid-cols-3 gap-2 mt-4 text-center">
+
+                <div>
+                    <div class="text-sm font-bold">
+                        ${money(g.players)}
+                    </div>
+                    <div class="text-[10px] text-slate-500">
+                        Players
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-sm font-bold">
+                        ${g.rating} ⭐
+                    </div>
+                    <div class="text-[10px] text-slate-500">
+                        Rating
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-sm font-bold">
+                        ${g.index}
+                    </div>
+                    <div class="text-[10px] text-slate-500">
+                        Share Index
+                    </div>
+                </div>
+
+            </div>
+
+            ${
+                g.stock
+                ?`
+                <div class="mt-4 rounded-xl bg-black/20 p-3">
+
+                    <div class="flex justify-between text-xs">
+
+                        <span>
+                            📈 ${g.stock.symbol}
+                        </span>
+
+                        <span class="${change>=0?"market-up":"market-down"}">
+                            ${change>=0?"+":""}${change.toFixed(1)}%
+                        </span>
+
+                    </div>
+
+                    <div class="font-black mt-1">
+                        ${g.stock.price} Coin
+                    </div>
+
+                </div>
+                `
+                :""
+            }
+
+            <button
+                onclick="playGame('${g.id}')"
+                class="btn w-full mt-4 py-2.5 rounded-xl
+                       bg-indigo-600 hover:bg-indigo-500
+                       font-bold text-sm">
+                ▶ Play
+            </button>
+
+        </div>
+
+    </div>
+    `;
 }
 
-const status=document.getElementById("buildStatus");
-const bar=document.getElementById("statusBar");
-const percent=document.getElementById("statusPercent");
-const text=document.getElementById("statusText");
+function filterGames(category){
 
-status.classList.remove("hidden");
+    const grid=document.getElementById("gameGrid");
 
-let progress=0;
+    if(!grid)return;
 
-const steps=[
-"Reading game concept...",
-"Building world architecture...",
-"Designing gameplay systems...",
-"Generating NPC and quest graph...",
-"Generating progression and loot...",
-"Optimizing runtime...",
-"Creating V3 snapshot..."
-];
+    const games=category==="All"
+        ?DB.games
+        :DB.games.filter(g=>g.category===category);
 
-clearInterval(window.__buildTimer);
-
-window.__buildTimer=setInterval(()=>{
-
-progress+=8;
-
-bar.style.width=progress+"%";
-percent.textContent=progress+"%";
-
-text.textContent=
-steps[Math.min(
-steps.length-1,
-Math.floor(progress/100*steps.length)
-)];
-
-if(progress>=100){
-
-clearInterval(window.__buildTimer);
-
-const spec=buildSpec(prompt);
-const index=calculateShareIndex(spec);
-
-const project={
-id:uid("project"),
-title:spec.title,
-description:prompt,
-createdAt:new Date().toISOString(),
-updatedAt:new Date().toISOString(),
-published:false,
-currentVersion:"0.1.0",
-spec,
-shareIndex:index,
-versions:[
-{
-version:"0.1.0",
-createdAt:new Date().toISOString(),
-spec:clone(spec)
-}
-]
-};
-
-DB.projects.unshift(project);
-DB.activeProjectId=project.id;
-DB.creator.games=DB.projects.length;
-
-saveDB();
-
-showSpec(project);
-
-status.classList.add("hidden");
-
-initWorldFromSpec(spec);
-
-toast("🔥 BUILDA V3 đã tạo GameSpec!");
-
-renderProjects();
+    grid.innerHTML=games.map(renderGameCard).join("");
 }
 
-},70);
+
+/* ============================================================
+   AI BUILDER
+============================================================ */
+
+let currentSpec=null;
+
+function renderBuilder(){
+
+    return `
+
+    <section>
+
+        <div class="mb-5">
+
+            <div class="text-xs text-indigo-300 font-bold">
+                🤖 GAMEVERSE AI ARCHITECT
+            </div>
+
+            <h2 class="text-3xl font-black mt-1">
+                Build your game with AI
+            </h2>
+
+            <p class="text-slate-500 mt-2">
+                Mô tả game bằng ngôn ngữ tự nhiên.
+                AI sẽ biến nó thành GameSpec có cấu trúc.
+            </p>
+
+        </div>
+
+
+        <div class="grid lg:grid-cols-[1.2fr_.8fr] gap-4">
+
+            <div class="glass glow rounded-2xl p-5">
+
+                <label class="text-sm font-bold">
+                    Game Prompt
+                </label>
+
+                <textarea
+                    id="aiPrompt"
+                    class="input mt-2"
+                    placeholder="Ví dụ: Tạo game tu tiên 3D open world, có 24 cảnh giới, NPC, nhiệm vụ, chiến đấu, boss, túi đồ, chế tạo, ngày đêm và tối ưu Android..."></textarea>
+
+
+                <div class="grid sm:grid-cols-3 gap-3 mt-4">
+
+                    <select id="gameType" class="input">
+                        <option>RPG</option>
+                        <option>Adventure</option>
+                        <option>Action</option>
+                        <option>Survival</option>
+                        <option>Racing</option>
+                        <option>Strategy</option>
+                    </select>
+
+                    <select id="quality" class="input">
+                        <option>Prototype</option>
+                        <option>High</option>
+                        <option>Ultra</option>
+                    </select>
+
+                    <select id="template" class="input">
+                        <option>AI Sandbox</option>
+                        <option>Open World</option>
+                        <option>RPG</option>
+                        <option>Multiplayer</option>
+                    </select>
+
+                </div>
+
+
+                <div class="flex flex-wrap gap-2 mt-4">
+
+                    <button
+                        onclick="generateAI()"
+                        class="btn px-5 py-3 rounded-xl
+                               bg-indigo-600 hover:bg-indigo-500
+                               font-black">
+                        ⚡ Generate Game
+                    </button>
+
+                    <button
+                        onclick="demoPrompt()"
+                        class="btn px-4 py-3 rounded-xl glass">
+                        ✨ Demo Prompt
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="aiResult"
+                 class="glass glow rounded-2xl p-5">
+
+                <div class="text-slate-500 text-sm">
+                    Chưa có GameSpec.
+                </div>
+
+                <div class="text-slate-600 text-xs mt-2">
+                    Nhập prompt rồi bấm Generate Game.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    `;
 }
 
-function showSpec(project){
+function demoPrompt(){
 
-const spec=project.spec;
+    const el=document.getElementById("aiPrompt");
 
-document.getElementById("specTitle").textContent=spec.title;
-document.getElementById("aiScore").textContent=spec.ai.score;
-document.getElementById("shareIndex").textContent=project.shareIndex;
-document.getElementById("tier").textContent=tierFor(project.shareIndex);
-document.getElementById("systemCount").textContent=spec.systems.length;
+    if(!el)return;
 
-document.getElementById("systems").innerHTML=
-spec.systems.map(x=>
-`<span class="badge text-blue-300">${escapeHTML(x)}</span>`
-).join("");
-
-document.getElementById("specPreview").textContent=
-JSON.stringify(spec,null,2);
-
-document.getElementById("runtimeVersion").textContent=
-"Version "+project.currentVersion;
-
-document.getElementById("miniWorld").textContent=
-spec.world.mode;
-
-document.getElementById("miniNPC").textContent=
-spec.content.npc?"ON":"OFF";
-
-document.getElementById("miniQuest").textContent=
-spec.content.quests?"ON":"OFF";
-
-document.getElementById("miniCombat").textContent=
-spec.content.enemies?"ON":"OFF";
-
-document.getElementById("miniInventory").textContent=
-spec.player.inventory?"ON":"OFF";
-
-document.getElementById("miniDayNight").textContent=
-spec.world.dayNight?"ON":"OFF";
+    el.value=
+`Tạo game tu tiên 3D open world.
+Người chơi bắt đầu từ Luyện Khí,
+có 24 cảnh giới, hấp thụ linh khí,
+thiền định, NPC, nhiệm vụ, quái vật,
+boss, combat, skill, inventory,
+crafting, shop, ngày đêm,
+thời tiết và tối ưu cho Android.`;
 }
 
-/* =========================================================
-   PROJECTS
-========================================================= */
+function generateAI(){
 
-function getActiveProject(){
-return DB.projects.find(p=>p.id===DB.activeProjectId);
+    const prompt=document.getElementById("aiPrompt").value.trim();
+
+    if(!prompt){
+        toast("Nhập mô tả game trước bro 😭");
+        return;
+    }
+
+    currentSpec=analyzePrompt(prompt);
+
+    document.getElementById("aiResult").innerHTML=`
+
+        <div class="flex items-center justify-between">
+
+            <div>
+                <div class="text-xs text-indigo-300">
+                    AI ARCHITECT V3
+                </div>
+
+                <div class="text-xl font-black">
+                    ${escapeHTML(currentSpec.title)}
+                </div>
+            </div>
+
+            <div class="text-right">
+                <div class="text-3xl font-black">
+                    ${currentSpec.score}
+                </div>
+                <div class="text-xs text-slate-500">
+                    AI SCORE
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid grid-cols-2 gap-3 mt-5">
+
+            <div class="glass rounded-xl p-3">
+                <div class="text-xs text-slate-500">
+                    Tier
+                </div>
+                <div class="text-xl font-black">
+                    ${currentSpec.tier}
+                </div>
+            </div>
+
+            <div class="glass rounded-xl p-3">
+                <div class="text-xs text-slate-500">
+                    Game Share
+                </div>
+                <div class="text-xl font-black">
+                    ${currentSpec.shareIndex}/100
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="mt-5">
+
+            <div class="text-sm font-bold mb-2">
+                Detected Systems
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+
+                ${currentSpec.systems.map(s=>`
+                    <span class="badge">
+                        ${escapeHTML(s)}
+                    </span>
+                `).join("")}
+
+            </div>
+
+        </div>
+
+
+        <div class="mt-5 text-xs text-slate-500">
+            Genre: ${escapeHTML(currentSpec.genre)}
+        </div>
+
+
+        <div class="flex gap-2 mt-5">
+
+            <button
+                onclick="createProjectFromAI()"
+                class="btn flex-1 py-2.5 rounded-xl
+                       bg-indigo-600 font-bold">
+                🚀 Create Project
+            </button>
+
+            <button
+                onclick="copySpec()"
+                class="btn px-4 rounded-xl glass">
+                Copy
+            </button>
+
+        </div>
+    `;
 }
+
+function copySpec(){
+
+    if(!currentSpec)return;
+
+    navigator.clipboard?.writeText(
+        JSON.stringify(currentSpec,null,2)
+    );
+
+    toast("Đã copy GameSpec");
+}
+
+function createProjectFromAI(){
+
+    if(!currentSpec)return;
+
+    const project={
+        id:uid("project"),
+        title:currentSpec.title,
+        creator:DB.user.creatorName,
+        category:
+            currentSpec.genre.includes("RPG")
+            ?"RPG"
+            :currentSpec.genre,
+        description:currentSpec.prompt,
+        spec:clone(currentSpec),
+        versions:[],
+        activeVersion:1,
+        createdAt:Date.now(),
+        updatedAt:Date.now()
+    };
+
+    project.versions.push({
+        version:1,
+        createdAt:Date.now(),
+        spec:clone(currentSpec)
+    });
+
+    DB.projects.unshift(project);
+
+    DB.user.creatorXP+=100;
+
+    updateCreatorLevel();
+
+    saveDB();
+
+    toast("Đã tạo project mới 🚀");
+
+    go("projects");
+}
+
+
+/* ============================================================
+   PROJECT STUDIO
+============================================================ */
 
 function renderProjects(){
 
-const box=document.getElementById("projectList");
+    return `
 
-if(!DB.projects.length){
+    <section>
 
-box.innerHTML=`
-<div class="card p-8 text-center md:col-span-2">
-<div class="text-4xl">📁</div>
-<div class="font-bold mt-2">Chưa có project</div>
-<div class="text-sm text-slate-500 mt-1">
-Generate game đầu tiên ở Studio.
-</div>
-</div>`;
+        <div class="flex flex-wrap items-center gap-3 mb-5">
 
-return;
+            <div>
+                <div class="text-xs text-indigo-300 font-bold">
+                    CREATOR STUDIO
+                </div>
+
+                <h2 class="text-3xl font-black">
+                    Your Projects
+                </h2>
+            </div>
+
+            <button
+                onclick="go('builder')"
+                class="ml-auto px-4 py-2.5 rounded-xl
+                       bg-indigo-600 font-bold">
+                + New Game
+            </button>
+
+        </div>
+
+
+        ${
+            DB.projects.length
+            ?
+            `<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+                ${DB.projects.map(renderProjectCard).join("")}
+            </div>`
+            :
+            `
+            <div class="glass rounded-2xl p-10 text-center">
+
+                <div class="text-5xl">
+                    🧑‍💻
+                </div>
+
+                <div class="font-black text-xl mt-3">
+                    Chưa có project
+                </div>
+
+                <p class="text-slate-500 text-sm mt-2">
+                    Dùng AI Builder để tạo game đầu tiên.
+                </p>
+
+                <button
+                    onclick="go('builder')"
+                    class="mt-5 px-5 py-3 rounded-xl bg-indigo-600 font-bold">
+                    🤖 Build Game
+                </button>
+
+            </div>
+            `
+        }
+
+    </section>
+
+    `;
 }
 
-box.innerHTML=DB.projects.map(p=>`
+function renderProjectCard(p){
 
-<div class="card p-5">
+    return `
+    <div class="glass glow rounded-2xl p-5">
 
-<div class="flex justify-between gap-3">
+        <div class="flex justify-between">
 
-<div>
-<div class="text-xs text-blue-400">
-${escapeHTML(p.spec.type)} • ${escapeHTML(p.spec.template)}
-</div>
+            <div>
+                <div class="font-black text-lg">
+                    ${escapeHTML(p.title)}
+                </div>
 
-<h2 class="font-black text-xl mt-1">
-${escapeHTML(p.title)}
-</h2>
-</div>
+                <div class="text-xs text-slate-500">
+                    ${escapeHTML(p.category)}
+                </div>
+            </div>
 
-<span class="badge ${p.published?
-"text-emerald-400":"text-yellow-400"}">
-${p.published?"PUBLISHED":"DRAFT"}
-</span>
+            <span class="badge">
+                v${p.activeVersion}
+            </span>
 
-</div>
+        </div>
 
-<p class="text-sm text-slate-500 mt-3 line-clamp-2">
-${escapeHTML(p.description)}
-</p>
 
-<div class="grid grid-cols-4 gap-2 mt-4">
+        <p class="text-sm text-slate-400 mt-4 h-10 overflow-hidden">
+            ${escapeHTML(p.description)}
+        </p>
 
-<div class="bg-slate-950 rounded-xl p-2 text-center">
-<b>${p.currentVersion}</b>
-<div class="text-[10px] text-slate-600">VERSION</div>
-</div>
 
-<div class="bg-slate-950 rounded-xl p-2 text-center">
-<b>${p.shareIndex}</b>
-<div class="text-[10px] text-slate-600">INDEX</div>
-</div>
+        <div class="grid grid-cols-3 gap-2 mt-4">
 
-<div class="bg-slate-950 rounded-xl p-2 text-center">
-<b>${p.versions.length}</b>
-<div class="text-[10px] text-slate-600">SNAPSHOTS</div>
-</div>
+            <div class="glass rounded-xl p-2 text-center">
+                <div class="font-bold">
+                    ${p.spec?.score ?? 0}
+                </div>
+                <div class="text-[9px] text-slate-500">
+                    AI SCORE
+                </div>
+            </div>
 
-<div class="bg-slate-950 rounded-xl p-2 text-center">
-<b>${p.spec.systems.length}</b>
-<div class="text-[10px] text-slate-600">SYSTEMS</div>
-</div>
+            <div class="glass rounded-xl p-2 text-center">
+                <div class="font-bold">
+                    ${p.spec?.shareIndex ?? 0}
+                </div>
+                <div class="text-[9px] text-slate-500">
+                    INDEX
+                </div>
+            </div>
 
-</div>
+            <div class="glass rounded-xl p-2 text-center">
+                <div class="font-bold">
+                    ${p.versions.length}
+                </div>
+                <div class="text-[9px] text-slate-500">
+                    VERSIONS
+                </div>
+            </div>
 
-<div class="flex gap-2 mt-4">
+        </div>
 
-<button onclick="loadProject('${p.id}')"
-class="btn flex-1 py-2 rounded-xl bg-blue-600/20 text-blue-300">
-Open
-</button>
 
-<button onclick="deleteProject('${p.id}')"
-class="btn px-4 rounded-xl bg-red-500/10 text-red-300">
-Delete
-</button>
+        <div class="flex gap-2 mt-4">
 
-</div>
+            <button
+                onclick="openProject('${p.id}')"
+                class="flex-1 py-2 rounded-xl bg-indigo-600 font-bold text-sm">
+                Open
+            </button>
 
-</div>
+            <button
+                onclick="publishProject('${p.id}')"
+                class="px-3 rounded-xl glass">
+                Publish
+            </button>
 
-`).join("");
+        </div>
+
+    </div>
+    `;
 }
 
-function loadProject(id){
+function openProject(id){
 
-const p=DB.projects.find(x=>x.id===id);
-if(!p)return;
+    const p=DB.projects.find(x=>x.id===id);
 
-DB.activeProjectId=id;
-saveDB();
+    if(!p)return;
 
-document.getElementById("prompt").value=p.description;
-document.getElementById("gameType").value=p.spec.type;
-document.getElementById("template").value=p.spec.template;
-document.getElementById("quality").value=p.spec.quality;
+    const prompt=promptEdit(
+        "AI EDIT — mô tả thay đổi muốn thực hiện:",
+        p.description
+    );
 
-showSpec(p);
+    if(prompt===null)return;
 
-initWorldFromSpec(p.spec);
+    p.description=prompt;
 
-openPage("studio");
+    const spec=analyzePrompt(prompt);
 
-toast("Project loaded.");
+    p.spec=spec;
+
+    p.activeVersion++;
+
+    p.versions.push({
+        version:p.activeVersion,
+        createdAt:Date.now(),
+        spec:clone(spec)
+    });
+
+    p.updatedAt=Date.now();
+
+    saveDB();
+
+    toast("Project đã được AI update");
+
+    render();
 }
 
-function deleteProject(id){
+function promptEdit(title,defaultValue){
 
-DB.projects=DB.projects.filter(p=>p.id!==id);
-
-if(DB.activeProjectId===id){
-DB.activeProjectId=DB.projects[0]?.id||null;
+    return window.prompt(title,defaultValue);
 }
 
-DB.creator.games=DB.projects.length;
+function publishProject(id){
 
-saveDB();
-renderProjects();
+    const p=DB.projects.find(x=>x.id===id);
 
-toast("Project deleted.");
+    if(!p)return;
+
+    let game=DB.games.find(g=>g.projectId===id);
+
+    if(!game){
+
+        game={
+            id:uid("game"),
+            projectId:id,
+            title:p.title,
+            creator:p.creator,
+            category:p.category,
+            players:0,
+            likes:0,
+            rating:5,
+            index:p.spec.shareIndex,
+            description:p.description,
+            color:"from-indigo-700 to-purple-900",
+            published:true,
+            stock:{
+                symbol:p.title
+                    .replace(/[^A-ZÀ-Ỹ]/gi,"")
+                    .slice(0,4)
+                    .toUpperCase() || "GAME",
+                price:50,
+                previous:50,
+                marketCap:50000000,
+                volume:0
+            }
+        };
+
+        DB.games.unshift(game);
+
+    }else{
+
+        game.title=p.title;
+        game.description=p.description;
+        game.index=p.spec.shareIndex;
+        game.published=true;
+
+    }
+
+    saveDB();
+
+    toast("Game đã publish lên GAMEVERSE 🌐");
+
+    go("discover");
 }
 
-function newProject(){
 
-openPage("studio");
+/* ============================================================
+   MARKET
+============================================================ */
 
-document.getElementById("prompt").value="";
-document.getElementById("specTitle").textContent="Chưa generate";
-document.getElementById("aiScore").textContent="--";
-document.getElementById("shareIndex").textContent="--";
-document.getElementById("tier").textContent="--";
-document.getElementById("systemCount").textContent="0";
+function renderMarket(){
 
-toast("New V3 project ready.");
+    return `
+
+    <section>
+
+        <div class="mb-5">
+
+            <div class="text-xs text-emerald-300 font-bold">
+                GAMEVERSE MARKET
+            </div>
+
+            <h2 class="text-3xl font-black">
+                Virtual Stock Market
+            </h2>
+
+            <p class="text-slate-500 mt-2">
+                Thị trường tài sản ảo của Gameverse.
+                Không phải chứng khoán thật.
+            </p>
+
+        </div>
+
+
+        <div class="grid xl:grid-cols-[1.4fr_.6fr] gap-4">
+
+            <div class="glass glow rounded-2xl overflow-hidden">
+
+                <div class="p-4 border-b border-white/5 font-bold">
+                    📈 Market
+                </div>
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full text-sm">
+
+                        <thead class="text-xs text-slate-500">
+
+                            <tr>
+                                <th class="text-left p-4">Asset</th>
+                                <th class="text-right p-4">Price</th>
+                                <th class="text-right p-4">Change</th>
+                                <th class="text-right p-4">Volume</th>
+                                <th class="text-right p-4">Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            ${DB.games
+                                .filter(g=>g.stock)
+                                .map(renderMarketRow)
+                                .join("")}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <div class="glass glow rounded-2xl p-5">
+
+                <div class="font-bold">
+                    💼 Your Portfolio
+                </div>
+
+                <div class="text-3xl font-black mt-4">
+                    ${money(DB.user.coin)} Coin
+                </div>
+
+                <div class="text-xs text-slate-500 mt-1">
+                    Available balance
+                </div>
+
+                <div class="mt-5 space-y-3">
+
+                    ${
+                        Object.keys(DB.portfolio).length
+                        ?
+                        Object.entries(DB.portfolio)
+                            .map(([symbol,amount])=>`
+                                <div class="flex justify-between
+                                            glass rounded-xl p-3">
+                                    <span>${symbol}</span>
+                                    <b>${amount}</b>
+                                </div>
+                            `).join("")
+                        :
+                        `<div class="text-sm text-slate-500">
+                            Chưa sở hữu tài sản nào.
+                        </div>`
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="glass rounded-2xl p-5 mt-4">
+
+            <div class="font-bold mb-3">
+                ⚠️ Market Notice
+            </div>
+
+            <div class="text-sm text-slate-500">
+                Đây là hệ thống kinh tế ảo dùng Coin trong GAMEVERSE.
+                Giá tài sản được mô phỏng dựa trên hoạt động của game,
+                không đại diện cho cổ phiếu hoặc tài sản tài chính thật.
+            </div>
+
+        </div>
+
+    </section>
+
+    `;
 }
 
-/* =========================================================
-   VERSION CONTROL
-========================================================= */
+function renderMarketRow(g){
 
-function newVersion(){
+    const s=g.stock;
 
-const p=getActiveProject();
+    const change=
+        ((s.price-s.previous)/s.previous)*100;
 
-if(!p){
-toast("Chưa có project.");
-return;
+    return `
+    <tr class="border-t border-white/5">
+
+        <td class="p-4">
+
+            <div class="font-bold">
+                ${escapeHTML(g.title)}
+            </div>
+
+            <div class="text-xs text-slate-500">
+                ${s.symbol}
+            </div>
+
+        </td>
+
+        <td class="p-4 text-right font-black">
+            ${s.price} 🪙
+        </td>
+
+        <td class="p-4 text-right
+                   ${change>=0?"market-up":"market-down"}">
+            ${change>=0?"+":""}${change.toFixed(2)}%
+        </td>
+
+        <td class="p-4 text-right text-slate-400">
+            ${money(s.volume)}
+        </td>
+
+        <td class="p-4 text-right">
+
+            <button
+                onclick="trade('${g.id}','buy')"
+                class="px-3 py-1.5 rounded-lg
+                       bg-emerald-600/20 text-emerald-300">
+                Buy
+            </button>
+
+            <button
+                onclick="trade('${g.id}','sell')"
+                class="px-3 py-1.5 rounded-lg
+                       bg-red-600/20 text-red-300 ml-1">
+                Sell
+            </button>
+
+        </td>
+
+    </tr>
+    `;
 }
 
-const parts=p.currentVersion.split(".").map(Number);
+function trade(gameId,type){
 
-parts[1]+=1;
-parts[2]=0;
+    const game=DB.games.find(g=>g.id===gameId);
 
-const version=parts.join(".");
+    if(!game?.stock)return;
 
-p.currentVersion=version;
-p.updatedAt=new Date().toISOString();
+    const amountRaw=prompt(
+        `${type==="buy"?"Mua":"Bán"} ${game.stock.symbol}\nNhập số lượng:`,
+        "1"
+    );
 
-p.versions.push({
-version,
-createdAt:new Date().toISOString(),
-spec:clone(p.spec)
-});
+    if(amountRaw===null)return;
 
-saveDB();
+    const amount=parseInt(amountRaw);
 
-document.getElementById("runtimeVersion").textContent=
-"Version "+version;
+    if(!Number.isFinite(amount)||amount<=0){
+        toast("Số lượng không hợp lệ");
+        return;
+    }
 
-renderProjects();
+    const symbol=game.stock.symbol;
+    const price=game.stock.price*amount;
 
-toast("✓ Created V3 version "+version);
+    DB.portfolio[symbol] ??=0;
+
+    if(type==="buy"){
+
+        if(DB.user.coin<price){
+            toast("Không đủ Coin");
+            return;
+        }
+
+        DB.user.coin-=price;
+        DB.portfolio[symbol]+=amount;
+
+        game.stock.volume+=price;
+
+        toast(`Đã mua ${amount} ${symbol}`);
+
+    }else{
+
+        if(DB.portfolio[symbol]<amount){
+            toast("Không đủ tài sản để bán");
+            return;
+        }
+
+        DB.portfolio[symbol]-=amount;
+        DB.user.coin+=price;
+
+        game.stock.volume+=price;
+
+        toast(`Đã bán ${amount} ${symbol}`);
+    }
+
+    saveDB();
+
+    render();
 }
 
-function rollbackVersion(){
 
-const p=getActiveProject();
-
-if(!p||p.versions.length<2){
-toast("Chưa có version cũ.");
-return;
-}
-
-p.versions.pop();
-
-const latest=p.versions[p.versions.length-1];
-
-p.currentVersion=latest.version;
-p.spec=clone(latest.spec);
-p.shareIndex=calculateShareIndex(p.spec);
-
-saveDB();
-
-loadProject(p.id);
-
-toast("↶ Rollback → "+latest.version);
-}
-
-/* =========================================================
-   PUBLISH
-========================================================= */
-
-function publishGame(){
-
-const p=getActiveProject();
-
-if(!p){
-toast("Generate game trước.");
-return;
-}
-
-p.published=true;
-p.updatedAt=new Date().toISOString();
-
-let existing=DB.games.find(g=>g.projectId===p.id);
-
-if(existing){
-
-existing.title=p.title;
-existing.description=p.description;
-existing.index=p.shareIndex;
-existing.type=p.spec.type;
-
-}else{
-
-DB.games.unshift({
-
-id:uid("game"),
-projectId:p.id,
-title:p.title,
-creator:"Gameverse Creator",
-category:
-p.spec.template==="rpg"?"RPG":
-p.spec.template==="adventure"?"Adventure":
-p.spec.template==="survival"?"Survival":
-"Open World",
-type:p.spec.type,
-description:p.description,
-views:0,
-likes:0,
-rating:0,
-retention:0,
-index:p.shareIndex,
-color:0x2563eb
-
-});
-
-}
-
-DB.creator.games=DB.projects.filter(x=>x.published).length;
-
-saveDB();
-renderProjects();
-
-toast("🚀 Published vào Gameverse Discovery!");
-}
-
-/* =========================================================
-   DISCOVERY
-========================================================= */
-
-let currentCategory="all";
-
-document.querySelectorAll(".filter").forEach(btn=>{
-
-btn.addEventListener("click",()=>{
-
-currentCategory=btn.dataset.cat;
-
-document.querySelectorAll(".filter").forEach(x=>{
-x.classList.remove("bg-blue-500/15");
-});
-
-btn.classList.add("bg-blue-500/15");
-
-renderGames();
-
-});
-
-});
-
-function renderGames(){
-
-const grid=document.getElementById("gameGrid");
-
-const search=
-(document.getElementById("searchGames").value||"")
-.toLowerCase();
-
-const games=DB.games.filter(g=>{
-
-const categoryMatch=
-currentCategory==="all"||
-g.type===currentCategory||
-g.category===currentCategory;
-
-const searchMatch=
-!search||
-g.title.toLowerCase().includes(search)||
-g.creator.toLowerCase().includes(search)||
-g.description.toLowerCase().includes(search);
-
-return categoryMatch&&searchMatch;
-
-});
-
-grid.innerHTML=games.map(g=>`
-
-<div class="card gamecard p-3"
-onclick="openGame('${g.id}')">
-
-<div class="cover">
-
-<div class="absolute top-3 left-3 z-10 badge bg-black/30">
-${escapeHTML(g.type)}
-</div>
-
-<div class="absolute top-3 right-3 z-10 badge bg-black/30">
-IDX ${g.index}
-</div>
-
-<div class="absolute bottom-3 left-3 z-10">
-<div class="font-black text-lg">
-${escapeHTML(g.title)}
-</div>
-<div class="text-xs text-slate-300">
-${escapeHTML(g.creator)}
-</div>
-</div>
-
-</div>
-
-<p class="text-sm text-slate-400 mt-3 line-clamp-2">
-${escapeHTML(g.description)}
-</p>
-
-<div class="flex justify-between text-xs text-slate-500 mt-3">
-<span>▶ ${Number(g.views).toLocaleString()}</span>
-<span>♥ ${Number(g.likes).toLocaleString()}</span>
-<span>★ ${g.rating}</span>
-<span>IDX ${g.index}</span>
-</div>
-
-</div>
-
-`).join("");
-
-if(!games.length){
-
-grid.innerHTML=`
-<div class="card p-8 text-center col-span-full">
-Không tìm thấy game.
-</div>`;
-
-}
-}
-
-let selectedGameId=null;
-
-function openGame(id){
-
-const g=DB.games.find(x=>x.id===id);
-if(!g)return;
-
-selectedGameId=id;
-
-g.views++;
-DB.creator.views++;
-
-document.getElementById("detailTitle").textContent=g.title;
-document.getElementById("detailCreator").textContent="by "+g.creator;
-document.getElementById("detailDescription").textContent=g.description;
-document.getElementById("detailViews").textContent=g.views.toLocaleString();
-document.getElementById("detailLikes").textContent=g.likes.toLocaleString();
-document.getElementById("detailRating").textContent=g.rating;
-document.getElementById("detailIndex").textContent=g.index;
-
-document.getElementById("gameModal").classList.add("show");
-
-saveDB();
-}
-
-function closeGame(){
-document.getElementById("gameModal").classList.remove("show");
-}
-
-function likeSelectedGame(){
-
-const g=DB.games.find(x=>x.id===selectedGameId);
-if(!g)return;
-
-g.likes++;
-DB.creator.likes++;
-
-document.getElementById("detailLikes").textContent=
-g.likes.toLocaleString();
-
-saveDB();
-
-toast("♥ Liked!");
-}
-
-function playSelectedGame(){
-
-const g=DB.games.find(x=>x.id===selectedGameId);
-
-closeGame();
-
-if(g?.projectId){
-
-const p=DB.projects.find(x=>x.id===g.projectId);
-
-if(p){
-loadProject(p.id);
-openPage("runtimePage");
-}
-
-}else{
-
-openPage("runtimePage");
-
-}
-
-}
-
-/* =========================================================
+/* ============================================================
    ANALYTICS
-========================================================= */
+============================================================ */
 
 function renderAnalytics(){
 
-const published=DB.games.filter(g=>g.projectId);
+    const totalPlayers=
+        DB.games.reduce((a,g)=>a+g.players,0);
 
-const views=published.reduce((a,g)=>a+Number(g.views||0),0);
-const likes=published.reduce((a,g)=>a+Number(g.likes||0),0);
+    const avgIndex=
+        DB.games.length
+        ?Math.round(
+            DB.games.reduce((a,g)=>a+g.index,0)/DB.games.length
+        )
+        :0;
 
-const rating=published.length?
-published.reduce((a,g)=>a+Number(g.rating||0),0)/published.length:0;
+    return `
 
-const retention=published.length?
-published.reduce((a,g)=>a+Number(g.retention||0),0)/published.length:0;
+    <section>
 
-const index=published.length?
-published.reduce((a,g)=>a+Number(g.index||0),0)/published.length:0;
+        <div class="mb-5">
 
-document.getElementById("anViews").textContent=
-views.toLocaleString();
+            <div class="text-xs text-indigo-300 font-bold">
+                GAMEVERSE ANALYTICS
+            </div>
 
-document.getElementById("anLikes").textContent=
-likes.toLocaleString();
+            <h2 class="text-3xl font-black">
+                Platform Overview
+            </h2>
 
-document.getElementById("anRating").textContent=
-rating.toFixed(1);
+        </div>
 
-document.getElementById("anRetention").textContent=
-Math.round(retention)+"%";
 
-document.getElementById("anProjects").textContent=
-DB.projects.length;
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-document.getElementById("bigShare").textContent=
-Math.round(index);
+            ${metric("🎮","Total Games",DB.games.length)}
+            ${metric("👥","Players",money(totalPlayers))}
+            ${metric("📈","Avg Share Index",avgIndex)}
+            ${metric("🧑‍💻","Projects",DB.projects.length)}
 
-document.getElementById("shareBar").style.width=
-index+"%";
+        </div>
 
-const rows=[
-["Gameplay",25,Math.min(100,index+5)],
-["Creativity",15,Math.min(100,index+2)],
-["Visual / Audio",15,Math.min(100,index-2)],
-["Performance",15,Math.min(100,index+3)],
-["Players / Retention",15,retention],
-["Player Rating",10,rating*20],
-["Safety / Quality",5,95]
-];
 
-document.getElementById("qualityRows").innerHTML=
-rows.map(r=>`
+        <div class="grid lg:grid-cols-2 gap-4 mt-4">
 
-<div>
+            <div class="glass glow rounded-2xl p-5">
 
-<div class="flex justify-between text-sm">
-<span>${r[0]}</span>
-<span class="text-slate-500">
-${Math.round(r[2])}/100 • ${r[1]}%
-</span>
-</div>
+                <div class="font-bold mb-4">
+                    Game Quality Matrix
+                </div>
 
-<div class="statbar mt-1">
-<div class="statfill bg-blue-500"
-style="width:${Math.max(0,r[2])}%">
-</div>
-</div>
+                ${DB.games.map(g=>`
 
-</div>
+                    <div class="mb-4">
 
-`).join("");
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>${escapeHTML(g.title)}</span>
+                            <b>${g.index}/100</b>
+                        </div>
+
+                        <div class="h-2 bg-black/30 rounded-full overflow-hidden">
+
+                            <div
+                                class="h-full bg-indigo-500"
+                                style="width:${g.index}%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+
+
+            <div class="glass glow rounded-2xl p-5">
+
+                <div class="font-bold">
+                    Creator Progress
+                </div>
+
+                <div class="text-5xl font-black mt-5">
+                    Lv.${DB.user.creatorLevel}
+                </div>
+
+                <div class="text-sm text-slate-500 mt-2">
+                    ${DB.user.creatorXP} Creator XP
+                </div>
+
+                <div class="mt-5 h-3 bg-black/30 rounded-full">
+
+                    <div
+                        class="h-full bg-purple-500 rounded-full"
+                        style="width:${DB.user.creatorXP%100}%">
+                    </div>
+
+                </div>
+
+                <div class="text-xs text-slate-500 mt-2">
+                    XP tới cấp tiếp theo
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    `;
 }
 
-/* =========================================================
+function metric(icon,label,value){
+
+    return `
+    <div class="glass glow rounded-2xl p-5">
+
+        <div class="text-2xl">
+            ${icon}
+        </div>
+
+        <div class="text-xs text-slate-500 mt-3">
+            ${label}
+        </div>
+
+        <div class="text-2xl font-black mt-1">
+            ${value}
+        </div>
+
+    </div>
+    `;
+}
+
+
+/* ============================================================
    CREATOR
-========================================================= */
+============================================================ */
 
 function openCreator(){
 
-document.getElementById("creatorLevel").textContent=
-DB.creator.level;
+    const name=prompt(
+        "Creator name:",
+        DB.user.creatorName
+    );
 
-document.getElementById("creatorGames").textContent=
-DB.creator.games;
+    if(name===null)return;
 
-document.getElementById("creatorViews").textContent=
-Number(DB.creator.views).toLocaleString();
+    if(name.trim()){
 
-document.getElementById("creatorLikes").textContent=
-Number(DB.creator.likes).toLocaleString();
+        DB.user.creatorName=name.trim();
 
-document.getElementById("creatorModal").classList.add("show");
+        saveDB();
+
+        toast("Creator profile updated");
+
+        render();
+    }
 }
 
-function closeCreator(){
-document.getElementById("creatorModal").classList.remove("show");
+function updateCreatorLevel(){
+
+    DB.user.creatorLevel=
+        Math.floor(DB.user.creatorXP/500)+1;
 }
 
-/* =========================================================
-   RUNTIME ENGINE
-========================================================= */
 
-let scene=null;
-let camera=null;
-let renderer=null;
-let clock=null;
-let animationFrame=null;
+/* ============================================================
+   GAME RUNTIME
+============================================================ */
 
-let player=null;
-let playerAura=null;
+let runtime=null;
+let animationID=null;
 
-let stones=[];
-let enemies=[];
-let npcs=[];
-let drops=[];
-let particles=[];
+function playGame(id){
 
-let worldReady=false;
+    const game=DB.games.find(g=>g.id===id);
 
-const keys={
-w:false,
-a:false,
-s:false,
-d:false
-};
+    if(!game)return;
 
-const playerState={
-
-x:0,
-z:0,
-
-hp:100,
-maxHp:100,
-
-stamina:100,
-maxStamina:100,
-
-qi:0,
-maxQi:100,
-
-stones:0,
-gold:100,
-
-xp:0,
-level:1,
-realmIndex:0,
-
-attackCooldown:0,
-skillCooldown:0,
-
-meditating:false,
-
-inventory:{
-spirit:3,
-herb:0,
-sword:0,
-core:0,
-potion:0,
-crystal:0
+    openRuntime(game);
 }
 
-};
+function openRuntime(game){
 
-let quest={
-id:"first_spirit",
-title:"Linh Thạch Đầu Tiên",
-description:"Thu thập 3 linh thạch.",
-target:3,
-progress:0,
-rewardXP:100,
-rewardGold:50,
-completed:false
-};
+    const overlay=document.createElement("div");
 
-let worldConfig={
-dayNight:true,
-weather:true,
-npc:true,
-quest:true,
-loot:true,
-boss:true
-};
+    overlay.id="runtimeOverlay";
 
-let worldTime=6*60;
-let weather="clear";
+    overlay.className=
+        "fixed inset-0 z-[90] bg-black";
 
-let nearbyNPC=null;
+    overlay.innerHTML=`
 
-/* =========================================================
-   WORLD INIT
-========================================================= */
+        <div class="runtime w-full h-full">
 
-function initWorldFromSpec(spec){
+            <canvas id="runtimeCanvas"></canvas>
 
-worldConfig={
-dayNight:spec?.world?.dayNight!==false,
-weather:spec?.world?.weather!==false,
-npc:spec?.content?.npc!==false,
-quest:spec?.content?.quests!==false,
-loot:spec?.content?.loot!==false,
-boss:spec?.content?.boss!==false
-};
 
-initWorld();
-resetPlayer();
-spawnWorldContent(spec);
+            <div class="hud left-4 top-4">
 
-loadRuntimeState();
+                <div class="glass rounded-xl p-3 min-w-[220px]">
 
-updateHUD();
+                    <div class="font-black">
+                        ${escapeHTML(game.title)}
+                    </div>
+
+                    <div class="text-xs text-slate-400">
+                        GAMEVERSE Runtime
+                    </div>
+
+                    <div class="mt-3 text-xs">
+                        ${DB.runtime.realm}
+                    </div>
+
+                    <div class="mt-2 h-2 bg-black/30 rounded">
+                        <div
+                            id="hpBar"
+                            class="h-full bg-red-500 rounded"
+                            style="width:${DB.runtime.hp}%">
+                        </div>
+                    </div>
+
+                    <div class="mt-2 h-2 bg-black/30 rounded">
+                        <div
+                            id="qiBar"
+                            class="h-full bg-cyan-500 rounded"
+                            style="width:${DB.runtime.qi}%">
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 mt-2">
+                        Lv.${DB.runtime.level}
+                        • XP ${DB.runtime.xp}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="hud right-4 top-4">
+
+                <button
+                    onclick="closeRuntime()"
+                    class="glass px-4 py-2 rounded-xl">
+                    ✕ Exit
+                </button>
+
+            </div>
+
+
+            <div class="hud left-1/2 bottom-5 -translate-x-1/2">
+
+                <div class="flex gap-2">
+
+                    <button
+                        onclick="runtimeAttack()"
+                        class="px-4 py-3 rounded-xl
+                               bg-red-600/80 font-bold">
+                        ⚔ Attack
+                    </button>
+
+                    <button
+                        onclick="runtimeAbsorb()"
+                        class="px-4 py-3 rounded-xl
+                               bg-cyan-600/80 font-bold">
+                        ✨ Absorb
+                    </button>
+
+                    <button
+                        onclick="toggleMeditation()"
+                        class="px-4 py-3 rounded-xl
+                               bg-purple-600/80 font-bold">
+                        🧘 Meditate
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="hud left-5 bottom-5 hidden md:flex gap-2">
+
+                <div class="mobile-btn">W</div>
+                <div class="mobile-btn">A</div>
+                <div class="mobile-btn">S</div>
+                <div class="mobile-btn">D</div>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    startRuntime();
 }
 
-function initWorld(){
+function startRuntime(){
 
-if(renderer){
+    const canvas=document.getElementById("runtimeCanvas");
 
-cancelAnimationFrame(animationFrame);
+    if(!canvas)return;
 
-try{
-renderer.dispose();
-}catch(e){}
+    runtime={
+        scene:new THREE.Scene(),
+        camera:new THREE.PerspectiveCamera(
+            65,
+            window.innerWidth/window.innerHeight,
+            .1,
+            1000
+        ),
+        renderer:new THREE.WebGLRenderer({
+            canvas,
+            antialias:true
+        }),
+        player:null,
+        enemies:[],
+        stones:[],
+        keys:{},
+        clock:new THREE.Clock(),
+        meditation:DB.runtime.meditation
+    };
 
+    runtime.renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    runtime.renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio,1.7)
+    );
+
+    runtime.scene.background=new THREE.Color(0x071020);
+
+
+    /* LIGHT */
+
+    const ambient=new THREE.AmbientLight(
+        0xffffff,
+        .65
+    );
+
+    runtime.scene.add(ambient);
+
+    const sun=new THREE.DirectionalLight(
+        0xffffff,
+        1
+    );
+
+    sun.position.set(20,30,10);
+
+    runtime.scene.add(sun);
+
+
+    /* GROUND */
+
+    const ground=new THREE.Mesh(
+        new THREE.PlaneGeometry(300,300),
+        new THREE.MeshStandardMaterial({
+            color:0x17241c
+        })
+    );
+
+    ground.rotation.x=-Math.PI/2;
+
+    runtime.scene.add(ground);
+
+
+    /* GRID */
+
+    const grid=new THREE.GridHelper(
+        300,
+        60,
+        0x2a4260,
+        0x18283c
+    );
+
+    runtime.scene.add(grid);
+
+
+    /* PLAYER */
+
+    const group=new THREE.Group();
+
+    const body=new THREE.Mesh(
+        new THREE.CylinderGeometry(.55,.7,1.7,16),
+        new THREE.MeshStandardMaterial({
+            color:0x5865ff
+        })
+    );
+
+    body.position.y=.9;
+
+    group.add(body);
+
+
+    const head=new THREE.Mesh(
+        new THREE.SphereGeometry(.43,16,16),
+        new THREE.MeshStandardMaterial({
+            color:0xffd0ad
+        })
+    );
+
+    head.position.y=2;
+
+    group.add(head);
+
+    group.position.set(0,0,0);
+
+    runtime.player=group;
+
+    runtime.scene.add(group);
+
+
+    /* STONES */
+
+    for(let i=0;i<18;i++){
+
+        const stone=new THREE.Mesh(
+            new THREE.OctahedronGeometry(.35),
+            new THREE.MeshStandardMaterial({
+                color:0x55dfff,
+                emissive:0x114455
+            })
+        );
+
+        stone.position.set(
+            (Math.random()-.5)*80,
+            .35,
+            (Math.random()-.5)*80
+        );
+
+        runtime.scene.add(stone);
+
+        runtime.stones.push(stone);
+    }
+
+
+    /* ENEMIES */
+
+    for(let i=0;i<8;i++){
+
+        const enemy=new THREE.Mesh(
+            new THREE.BoxGeometry(1.2,1.8,1.2),
+            new THREE.MeshStandardMaterial({
+                color:0xb43f58
+            })
+        );
+
+        enemy.position.set(
+            (Math.random()-.5)*60,
+            .9,
+            (Math.random()-.5)*60
+        );
+
+        runtime.scene.add(enemy);
+
+        runtime.enemies.push(enemy);
+    }
+
+
+    runtime.camera.position.set(
+        0,6,10
+    );
+
+    runtime.camera.lookAt(
+        runtime.player.position
+    );
+
+
+    window.addEventListener(
+        "keydown",
+        runtimeKeyDown
+    );
+
+    window.addEventListener(
+        "keyup",
+        runtimeKeyUp
+    );
+
+    window.addEventListener(
+        "resize",
+        runtimeResize
+    );
+
+    animateRuntime();
 }
 
-worldReady=false;
+function runtimeKeyDown(e){
 
-const canvas=document.getElementById("gameCanvas");
+    if(!runtime)return;
 
-scene=new THREE.Scene();
+    runtime.keys[e.key.toLowerCase()]=true;
 
-scene.background=new THREE.Color(0x07111f);
-
-scene.fog=new THREE.Fog(
-0x07111f,
-35,
-145
-);
-
-camera=new THREE.PerspectiveCamera(
-65,
-Math.max(.1,canvas.clientWidth/canvas.clientHeight),
-.1,
-400
-);
-
-renderer=new THREE.WebGLRenderer({
-canvas,
-antialias:true,
-powerPreference:"high-performance"
-});
-
-renderer.setPixelRatio(
-Math.min(window.devicePixelRatio||1,1.5)
-);
-
-renderer.setSize(
-Math.max(1,canvas.clientWidth),
-Math.max(1,canvas.clientHeight),
-false
-);
-
-clock=new THREE.Clock();
-
-const hemi=new THREE.HemisphereLight(
-0xaad6ff,
-0x162033,
-1.8
-);
-
-scene.add(hemi);
-
-const sun=new THREE.DirectionalLight(
-0xffffff,
-1.5
-);
-
-sun.position.set(30,70,20);
-
-scene.add(sun);
-
-createGround();
-createMountains();
-createTrees();
-createPlayer();
-
-worldReady=true;
-
-animate();
+    if(e.key===" "){
+        runtimeAttack();
+    }
 }
 
-function createGround(){
+function runtimeKeyUp(e){
 
-const geo=new THREE.PlaneGeometry(
-280,
-280
-);
+    if(!runtime)return;
 
-const mat=new THREE.MeshStandardMaterial({
-color:0x142b25,
-roughness:1
-});
-
-const ground=new THREE.Mesh(geo,mat);
-
-ground.rotation.x=-Math.PI/2;
-
-scene.add(ground);
-
-const grid=new THREE.GridHelper(
-280,
-56,
-0x284b44,
-0x17332e
-);
-
-grid.position.y=.02;
-
-scene.add(grid);
+    runtime.keys[e.key.toLowerCase()]=false;
 }
 
-function createMountains(){
+function runtimeResize(){
 
-for(let i=0;i<32;i++){
+    if(!runtime)return;
 
-const angle=Math.random()*Math.PI*2;
-const radius=55+Math.random()*80;
+    runtime.camera.aspect=
+        window.innerWidth/window.innerHeight;
 
-const geo=new THREE.ConeGeometry(
-6+Math.random()*12,
-12+Math.random()*28,
-6
-);
+    runtime.camera.updateProjectionMatrix();
 
-const mat=new THREE.MeshStandardMaterial({
-color:0x182a3d,
-roughness:1
-});
-
-const mountain=new THREE.Mesh(
-geo,
-mat
-);
-
-mountain.position.set(
-Math.cos(angle)*radius,
-6,
-Math.sin(angle)*radius
-);
-
-scene.add(mountain);
-}
+    runtime.renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
 }
 
-function createTrees(){
+function animateRuntime(){
 
-for(let i=0;i<100;i++){
+    if(!runtime)return;
 
-const x=(Math.random()-.5)*210;
-const z=(Math.random()-.5)*210;
+    animationID=requestAnimationFrame(
+        animateRuntime
+    );
 
-if(Math.hypot(x,z)<14)continue;
+    const delta=Math.min(
+        runtime.clock.getDelta(),
+        .05
+    );
 
-const group=new THREE.Group();
+    const player=runtime.player;
 
-const trunk=new THREE.Mesh(
-new THREE.CylinderGeometry(.25,.42,2,6),
-new THREE.MeshStandardMaterial({
-color:0x51351f
-})
-);
+    if(!DB.runtime.meditation){
 
-trunk.position.y=1;
+        const speed=8*delta;
 
-group.add(trunk);
+        if(runtime.keys.w)
+            player.position.z-=speed;
 
-const leaves=new THREE.Mesh(
-new THREE.ConeGeometry(
-1.5+Math.random(),
-4+Math.random()*2,
-7
-),
-new THREE.MeshStandardMaterial({
-color:0x1b5536
-})
-);
+        if(runtime.keys.s)
+            player.position.z+=speed;
 
-leaves.position.y=3.5;
+        if(runtime.keys.a)
+            player.position.x-=speed;
 
-group.add(leaves);
+        if(runtime.keys.d)
+            player.position.x+=speed;
+    }
 
-group.position.set(x,0,z);
 
-scene.add(group);
-}
-}
+    /* ENEMY AI */
 
-function createPlayer(){
+    runtime.enemies.forEach(enemy=>{
 
-player=new THREE.Group();
+        const dx=
+            player.position.x-enemy.position.x;
 
-const body=new THREE.Mesh(
-new THREE.CylinderGeometry(.62,.7,1.6,10),
-new THREE.MeshStandardMaterial({
-color:0x2563eb,
-roughness:.55
-})
-);
+        const dz=
+            player.position.z-enemy.position.z;
 
-body.position.y=1.1;
+        const distance=Math.sqrt(
+            dx*dx+dz*dz
+        );
 
-player.add(body);
+        if(distance>2 && distance<35){
 
-const head=new THREE.Mesh(
-new THREE.SphereGeometry(.5,16,12),
-new THREE.MeshStandardMaterial({
-color:0xf1c7a4
-})
-);
+            enemy.position.x +=
+                dx/distance*delta*1.5;
 
-head.position.y=2.4;
+            enemy.position.z +=
+                dz/distance*delta*1.5;
+        }
 
-player.add(head);
+    });
 
-const robe=new THREE.Mesh(
-new THREE.ConeGeometry(.85,1.6,8),
-new THREE.MeshStandardMaterial({
-color:0x312e81,
-roughness:.7
-})
-);
 
-robe.position.y=.8;
+    /* CAMERA */
 
-player.add(robe);
+    runtime.camera.position.x=
+        player.position.x;
 
-playerAura=new THREE.Mesh(
-new THREE.TorusGeometry(.95,.055,8,32),
-new THREE.MeshBasicMaterial({
-color:0x38bdf8
-})
-);
+    runtime.camera.position.z=
+        player.position.z+10;
 
-playerAura.rotation.x=Math.PI/2;
-playerAura.position.y=.1;
+    runtime.camera.lookAt(
+        player.position.x,
+        1,
+        player.position.z
+    );
 
-player.add(playerAura);
 
-player.position.set(0,0,0);
-
-scene.add(player);
+    runtime.renderer.render(
+        runtime.scene,
+        runtime.camera
+    );
 }
 
-/* =========================================================
-   CONTENT SPAWNING
-========================================================= */
 
-function clearArrayObjects(arr){
+/* ============================================================
+   RUNTIME ACTIONS
+============================================================ */
 
-arr.forEach(x=>{
-if(x.mesh)scene.remove(x.mesh);
-});
+function runtimeAttack(){
 
-arr.length=0;
+    if(!runtime)return;
+
+    if(DB.runtime.meditation){
+        toast("Đang thiền — hãy Đứng dậy trước");
+        return;
+    }
+
+    let closest=null;
+    let distance=999;
+
+    runtime.enemies.forEach(enemy=>{
+
+        const d=enemy.position.distanceTo(
+            runtime.player.position
+        );
+
+        if(d<distance){
+            distance=d;
+            closest=enemy;
+        }
+
+    });
+
+    if(closest && distance<4){
+
+        runtime.scene.remove(closest);
+
+        runtime.enemies=
+            runtime.enemies.filter(x=>x!==closest);
+
+        gainXP(25);
+
+        toast("⚔ Đánh bại quái vật +25 XP");
+
+    }else{
+
+        toast("Không có mục tiêu gần");
+    }
 }
 
-function spawnWorldContent(spec){
+function runtimeAbsorb(){
 
-clearArrayObjects(stones);
-clearArrayObjects(enemies);
-clearArrayObjects(npcs);
-clearArrayObjects(drops);
+    if(!runtime)return;
 
-const quality=spec?.quality||"balanced";
+    if(DB.runtime.meditation){
+        toast("Đang thiền");
+        return;
+    }
 
-const stoneCount=
-quality==="mobile"?24:
-quality==="high"?60:42;
+    let closest=null;
+    let distance=3;
 
-const enemyCount=
-quality==="mobile"?7:
-quality==="high"?18:12;
+    runtime.stones.forEach(stone=>{
 
-for(let i=0;i<stoneCount;i++){
+        const d=stone.position.distanceTo(
+            runtime.player.position
+        );
 
-const mesh=new THREE.Mesh(
-new THREE.OctahedronGeometry(.45),
-new THREE.MeshStandardMaterial({
-color:0x38bdf8,
-emissive:0x075985,
-emissiveIntensity:.9
-})
-);
+        if(d<distance){
+            distance=d;
+            closest=stone;
+        }
 
-mesh.position.set(
-(Math.random()-.5)*150,
-.7,
-(Math.random()-.5)*150
-);
+    });
 
-scene.add(mesh);
+    if(closest){
 
-stones.push({
-mesh,
-active:true,
-value:1
-});
+        runtime.scene.remove(closest);
+
+        runtime.stones=
+            runtime.stones.filter(x=>x!==closest);
+
+        DB.runtime.stones++;
+        DB.runtime.qi=clamp(
+            DB.runtime.qi+12,
+            0,
+            100
+        );
+
+        DB.runtime.inventory["Linh Thạch"]++;
+
+        gainXP(10);
+
+        saveDB();
+
+        updateRuntimeHUD();
+
+        toast("✨ Hấp thụ linh thạch +10 XP");
+
+    }else{
+
+        toast("Không có linh thạch gần đây");
+    }
 }
 
-for(let i=0;i<enemyCount;i++){
+function toggleMeditation(){
 
-spawnEnemy(
-(Math.random()-.5)*110,
-(Math.random()-.5)*110,
-"mob"
-);
+    DB.runtime.meditation=
+        !DB.runtime.meditation;
 
-}
+    if(DB.runtime.meditation){
 
-if(worldConfig.boss){
+        toast("🧘 Đã ngồi thiền — nhân vật sẽ không tự đứng dậy");
 
-spawnEnemy(
-35,
--35,
-"boss"
-);
+    }else{
 
-}
+        toast("🧘 Đứng dậy");
 
-if(worldConfig.npc){
+    }
 
-const names=[
-"Vân Trường Lão",
-"Tiểu Linh",
-"Mộc Đạo Nhân",
-"Thiên Cơ",
-"Thanh Vân"
-];
-
-for(let i=0;i<Math.min(5,quality==="high"?5:4);i++){
-
-createNPC(
-names[i],
-(Math.random()-.5)*70,
-(Math.random()-.5)*70
-);
-
-}
-
-}
-
-resetQuest();
-}
-
-function spawnEnemy(x,z,type="mob"){
-
-const boss=type==="boss";
-
-const mesh=new THREE.Mesh(
-
-boss
-?new THREE.DodecahedronGeometry(1.8)
-:new THREE.DodecahedronGeometry(.75),
-
-new THREE.MeshStandardMaterial({
-color:boss?0x7f1d1d:0x991b1b,
-emissive:boss?0x450a0a:0x300808,
-emissiveIntensity:.6
-})
-
-);
-
-mesh.position.set(
-x,
-boss?1.8:.8,
-z
-);
-
-scene.add(mesh);
-
-enemies.push({
-
-mesh,
-
-type,
-
-hp:boss?220:30,
-maxHp:boss?220:30,
-
-speed:boss?1.3:1.7,
-
-attackTimer:0
-
-});
-
-}
-
-function createNPC(name,x,z){
-
-const group=new THREE.Group();
-
-const body=new THREE.Mesh(
-new THREE.CylinderGeometry(.45,.6,1.5,8),
-new THREE.MeshStandardMaterial({
-color:0xa855f7
-})
-);
-
-body.position.y=1;
-
-group.add(body);
-
-const head=new THREE.Mesh(
-new THREE.SphereGeometry(.4,12,10),
-new THREE.MeshStandardMaterial({
-color:0xf0c7aa
-})
-);
-
-head.position.y=2;
-
-group.add(head);
-
-const ring=new THREE.Mesh(
-new THREE.TorusGeometry(.65,.04,8,24),
-new THREE.MeshBasicMaterial({
-color:0xf59e0b
-})
-);
-
-ring.rotation.x=Math.PI/2;
-ring.position.y=.1;
-
-group.add(ring);
-
-group.position.set(x,0,z);
-
-scene.add(group);
-
-npcs.push({
-mesh:group,
-name
-});
-}
-
-/* =========================================================
-   RESET / SAVE
-========================================================= */
-
-function resetPlayer(){
-
-playerState.x=0;
-playerState.z=0;
-
-playerState.hp=100;
-playerState.stamina=100;
-playerState.qi=0;
-
-playerState.stones=0;
-playerState.gold=100;
-
-playerState.xp=0;
-playerState.level=1;
-playerState.realmIndex=0;
-
-playerState.attackCooldown=0;
-playerState.skillCooldown=0;
-playerState.meditating=false;
-
-playerState.inventory={
-spirit:3,
-herb:0,
-sword:0,
-core:0,
-potion:0,
-crystal:0
-};
-
-worldTime=6*60;
-
-if(player){
-player.position.set(0,0,0);
-}
-
-resetQuest();
-}
-
-function resetQuest(){
-
-quest={
-id:"first_spirit",
-title:"Linh Thạch Đầu Tiên",
-description:"Thu thập 3 linh thạch.",
-target:3,
-progress:0,
-rewardXP:100,
-rewardGold:50,
-completed:false
-};
-
-}
-
-/* =========================================================
-   GAME LOOP
-========================================================= */
-
-function animate(){
-
-animationFrame=requestAnimationFrame(animate);
-
-if(!worldReady)return;
-
-const dt=Math.min(
-clock.getDelta(),
-.05
-);
-
-updateWorldTime(dt);
-updatePlayer(dt);
-updateEnemies(dt);
-updateStones(dt);
-updateDrops(dt);
-updateNPCs(dt);
-updateParticles(dt);
-updateCamera(dt);
-updateMinimap();
-
-renderer.render(
-scene,
-camera
-);
-}
-
-/* =========================================================
-   PLAYER
-========================================================= */
-
-function updatePlayer(dt){
-
-if(!player)return;
-
-playerState.attackCooldown=Math.max(
-0,
-playerState.attackCooldown-dt
-);
-
-playerState.skillCooldown=Math.max(
-0,
-playerState.skillCooldown-dt
-);
-
-if(playerState.meditating){
-
-player.position.y=
-.08+
-Math.sin(performance.now()*.004)*.04;
-
-playerAura.rotation.z+=dt*2;
-
-playerState.qi=Math.min(
-playerState.maxQi,
-playerState.qi+dt*3.5
-);
-
-gainXP(dt*2);
-
-return;
-}
-
-let dx=0;
-let dz=0;
-
-if(keys.w)dz-=1;
-if(keys.s)dz+=1;
-if(keys.a)dx-=1;
-if(keys.d)dx+=1;
-
-if(dx||dz){
-
-const len=Math.hypot(dx,dz);
-
-dx/=len;
-dz/=len;
-
-const speed=
-playerState.stamina>0?8:3;
-
-playerState.x+=dx*speed*dt;
-playerState.z+=dz*speed*dt;
-
-playerState.stamina=
-Math.max(0,playerState.stamina-dt*8);
-
-player.rotation.y=
-Math.atan2(dx,dz);
-
-}else{
-
-playerState.stamina=
-Math.min(
-playerState.maxStamina,
-playerState.stamina+dt*14
-);
-
-}
-
-playerState.x=
-Math.max(-130,Math.min(130,playerState.x));
-
-playerState.z=
-Math.max(-130,Math.min(130,playerState.z));
-
-player.position.x=playerState.x;
-player.position.z=playerState.z;
-player.position.y=0;
-
-playerAura.rotation.z+=dt;
-
-checkStoneCollection();
-checkDrops();
-checkNPCProximity();
-}
-
-/* =========================================================
-   CAMERA
-========================================================= */
-
-function updateCamera(dt){
-
-if(!camera||!player)return;
-
-const desired=new THREE.Vector3(
-player.position.x,
-9,
-player.position.z+14
-);
-
-camera.position.lerp(
-desired,
-.08
-);
-
-camera.lookAt(
-player.position.x,
-2,
-player.position.z
-);
-}
-
-/* =========================================================
-   STONES
-========================================================= */
-
-function updateStones(dt){
-
-stones.forEach(s=>{
-
-if(!s.active)return;
-
-s.mesh.rotation.y+=dt*1.8;
-
-s.mesh.rotation.x+=dt*.7;
-
-s.mesh.position.y=
-.7+
-Math.sin(
-performance.now()*.002+s.mesh.id
-)*.15;
-
-});
-}
-
-function checkStoneCollection(){
-
-stones.forEach(s=>{
-
-if(!s.active)return;
-
-const dx=
-playerState.x-s.mesh.position.x;
-
-const dz=
-playerState.z-s.mesh.position.z;
-
-if(Math.hypot(dx,dz)<2){
-
-s.active=false;
-s.mesh.visible=false;
-
-playerState.stones++;
-
-playerState.inventory.spirit++;
-
-playerState.qi=
-Math.min(
-playerState.maxQi,
-playerState.qi+10
-);
-
-gainXP(20);
-
-if(!quest.completed){
-
-quest.progress++;
-
-if(quest.progress>=quest.target){
-
-completeQuest();
-
-}
-
-}
-
-createPickupParticles(
-s.mesh.position,
-0x38bdf8
-);
-
-toast("💎 +1 Linh Thạch");
-
-updateHUD();
-
-}
-
-});
-}
-
-/* =========================================================
-   ENEMIES
-========================================================= */
-
-function updateEnemies(dt){
-
-enemies.forEach(e=>{
-
-if(e.hp<=0)return;
-
-const dx=
-playerState.x-e.mesh.position.x;
-
-const dz=
-playerState.z-e.mesh.position.z;
-
-const dist=Math.hypot(dx,dz);
-
-e.attackTimer-=dt;
-
-if(dist<22&&dist>2.5){
-
-e.mesh.position.x+=
-(dx/dist)*e.speed*dt;
-
-e.mesh.position.z+=
-(dz/dist)*e.speed*dt;
-
-}
-
-if(dist<2.8&&e.attackTimer<=0){
-
-e.attackTimer=
-e.type==="boss"?0.7:1.2;
-
-const damage=
-e.type==="boss"?12:5;
-
-playerState.hp-=damage;
-
-showDamage("-"+damage);
-
-if(playerState.hp<=0){
-
-playerState.hp=100;
-playerState.x=0;
-playerState.z=0;
-
-toast("💀 Bạn bị đánh bại và hồi sinh.");
-
-}
-
-updateHUD();
-
-}
-
-});
-
-}
-
-/* =========================================================
-   ATTACK
-========================================================= */
-
-function attack(){
-
-if(playerState.attackCooldown>0)return;
-
-playerState.attackCooldown=.38;
-
-let target=null;
-let nearest=4.5;
-
-enemies.forEach(e=>{
-
-if(e.hp<=0)return;
-
-const dx=
-playerState.x-e.mesh.position.x;
-
-const dz=
-playerState.z-e.mesh.position.z;
-
-const d=Math.hypot(dx,dz);
-
-if(d<nearest){
-
-nearest=d;
-target=e;
-
-}
-
-});
-
-if(!target){
-
-toast("⚔️ Không có mục tiêu trong tầm.");
-
-return;
-}
-
-const damage=
-10+
-playerState.level*2+
-Math.floor(playerState.qi/20);
-
-target.hp-=damage;
-
-createPickupParticles(
-target.mesh.position,
-0xef4444
-);
-
-showDamage("-"+damage);
-
-gainXP(8);
-
-if(target.hp<=0){
-
-target.mesh.visible=false;
-
-const reward=
-target.type==="boss"?150:30;
-
-gainXP(reward);
-
-playerState.gold+=
-target.type==="boss"?100:10;
-
-if(worldConfig.loot){
-
-spawnLoot(
-target.mesh.position,
-target.type==="boss"
-);
-
-}
-
-toast(
-target.type==="boss"
-?"👹 BOSS DEFEATED!"
-:"⚔️ Enemy defeated!"
-);
-
-}
-
-updateHUD();
-}
-
-/* =========================================================
-   SKILL
-========================================================= */
-
-function useSkill(){
-
-if(playerState.skillCooldown>0){
-toast("🔥 Skill đang hồi.");
-return;
-}
-
-if(playerState.qi<25){
-toast("Không đủ Qi.");
-return;
-}
-
-playerState.skillCooldown=4;
-playerState.qi-=25;
-
-let hit=0;
-
-enemies.forEach(e=>{
-
-if(e.hp<=0)return;
-
-const dx=
-playerState.x-e.mesh.position.x;
-
-const dz=
-playerState.z-e.mesh.position.z;
-
-const d=Math.hypot(dx,dz);
-
-if(d<8){
-
-const damage=
-35+
-playerState.level*3;
-
-e.hp-=damage;
-
-hit++;
-
-createPickupParticles(
-e.mesh.position,
-0xf97316
-);
-
-if(e.hp<=0){
-
-e.mesh.visible=false;
-
-gainXP(
-e.type==="boss"?150:30
-);
-
-playerState.gold+=
-e.type==="boss"?100:10;
-
-if(worldConfig.loot){
-spawnLoot(
-e.mesh.position,
-e.type==="boss"
-);
-}
-
-}
-
-}
-
-});
-
-toast(
-"🔥 Linh Hỏa bùng nổ! "+hit+" mục tiêu."
-);
-
-updateHUD();
-}
-
-/* =========================================================
-   ABSORB / MEDITATE
-========================================================= */
-
-function absorb(){
-
-if(playerState.stones<=0){
-
-toast("Không có linh thạch.");
-
-return;
-}
-
-const amount=playerState.stones;
-
-playerState.stones=0;
-
-playerState.inventory.spirit=
-Math.max(
-0,
-playerState.inventory.spirit-amount
-);
-
-playerState.qi=Math.min(
-playerState.maxQi,
-playerState.qi+amount*12
-);
-
-gainXP(amount*5);
-
-toast(
-"✨ Hấp thu "+amount+" linh thạch."
-);
-
-updateHUD();
-}
-
-function meditate(){
-
-playerState.meditating=
-!playerState.meditating;
-
-const btn=
-document.getElementById("meditateBtn");
-
-if(playerState.meditating){
-
-btn.textContent="🧍 Đứng dậy";
-
-toast("🧘 Bắt đầu nhập định.");
-
-}else{
-
-btn.textContent="🧘";
-
-toast("🧍 Đã đứng dậy.");
-
-}
-
-updateHUD();
-}
-
-/* =========================================================
-   XP / REALM
-========================================================= */
-
-function xpNeeded(){
-
-return 100+
-(playerState.level-1)*35;
+    saveDB();
 }
 
 function gainXP(amount){
 
-if(amount<=0)return;
+    DB.runtime.xp+=amount;
 
-playerState.xp+=amount;
+    while(DB.runtime.xp>=100){
 
-let needed=xpNeeded();
+        DB.runtime.xp-=100;
 
-while(playerState.xp>=needed){
+        DB.runtime.level++;
 
-playerState.xp-=needed;
+        const realmIndex=
+            clamp(
+                Math.floor(
+                    (DB.runtime.level-1)/10
+                ),
+                0,
+                REALMS.length-1
+            );
 
-playerState.level++;
+        DB.runtime.realm=
+            REALMS[realmIndex];
 
-if(
-playerState.level%10===0
-){
+        DB.runtime.qi=100;
+        DB.runtime.hp=100;
 
-const newRealm=Math.min(
-REALMS.length-1,
-Math.floor(playerState.level/10)
-);
+        toast(
+            `🔥 Level Up! ${DB.runtime.realm}`
+        );
+    }
 
-if(newRealm!==playerState.realmIndex){
+    saveDB();
 
-playerState.realmIndex=newRealm;
-
-toast(
-"⚡ ĐỘT PHÁ: "+
-REALMS[newRealm]
-);
-
-}
-
-}
-
-needed=xpNeeded();
-}
-
-updateHUD();
-}
-
-/* =========================================================
-   QUEST
-========================================================= */
-
-function completeQuest(){
-
-if(quest.completed)return;
-
-quest.completed=true;
-
-gainXP(quest.rewardXP);
-
-playerState.gold+=quest.rewardGold;
-
-toast(
-"🎯 Quest hoàn thành! +"+
-quest.rewardXP+
-" XP • +"+
-quest.rewardGold+
-" Gold"
-);
-
-}
-
-function renderQuest(){
-
-const percent=
-quest.target?
-Math.min(
-100,
-quest.progress/quest.target*100
-):0;
-
-document.getElementById("activeQuestTitle").textContent=
-quest.title;
-
-document.getElementById("activeQuestDescription").textContent=
-quest.description;
-
-document.getElementById("questProgress").textContent=
-quest.completed
-?"✓ Hoàn thành"
-:quest.progress+" / "+quest.target;
-
-document.getElementById("questBar").style.width=
-(quest.completed?100:percent)+"%";
-}
-
-/* =========================================================
-   LOOT
-========================================================= */
-
-function spawnLoot(pos,boss=false){
-
-const roll=Math.random();
-
-let type;
-
-if(boss||roll>.9){
-type="crystal";
-}else if(roll>.72){
-type="core";
-}else if(roll>.45){
-type="herb";
-}else{
-type="potion";
-}
-
-const item=ITEMS[type];
-
-const mesh=new THREE.Mesh(
-new THREE.OctahedronGeometry(.35),
-new THREE.MeshStandardMaterial({
-color:
-type==="crystal"?0xf0abfc:
-type==="core"?0xa855f7:
-type==="herb"?0x22c55e:
-0xf59e0b,
-emissive:0x111111
-})
-);
-
-mesh.position.copy(pos);
-mesh.position.y=.7;
-
-scene.add(mesh);
-
-drops.push({
-mesh,
-type,
-active:true
-});
-
-}
-
-function updateDrops(dt){
-
-drops.forEach(d=>{
-
-if(!d.active)return;
-
-d.mesh.rotation.y+=dt*2;
-
-d.mesh.position.y=
-.7+
-Math.sin(
-performance.now()*.003+d.mesh.id
-)*.15;
-
-});
-}
-
-function checkDrops(){
-
-drops.forEach(d=>{
-
-if(!d.active)return;
-
-const dx=
-playerState.x-d.mesh.position.x;
-
-const dz=
-playerState.z-d.mesh.position.z;
-
-if(Math.hypot(dx,dz)<2){
-
-d.active=false;
-d.mesh.visible=false;
-
-playerState.inventory[d.type]++;
-
-if(d.type==="crystal"){
-playerState.gold+=50;
-}
-
-gainXP(15);
-
-toast(
-ITEMS[d.type].icon+
-" "+ITEMS[d.type].name
-);
-
-updateInventoryUI();
-}
-
-});
-}
-
-/* =========================================================
-   NPC
-========================================================= */
-
-function updateNPCs(dt){
-
-npcs.forEach(n=>{
-
-if(!n.mesh)return;
-
-n.mesh.rotation.y+=
-Math.sin(performance.now()*.001+n.mesh.id)*.0005;
-
-});
-}
-
-function checkNPCProximity(){
-
-nearbyNPC=null;
-
-let closest=3.5;
-
-npcs.forEach(n=>{
-
-const dx=
-playerState.x-n.mesh.position.x;
-
-const dz=
-playerState.z-n.mesh.position.z;
-
-const d=Math.hypot(dx,dz);
-
-if(d<closest){
-
-closest=d;
-nearbyNPC=n;
-
-}
-
-});
-
-const prompt=
-document.getElementById("interactionPrompt");
-
-if(nearbyNPC){
-
-prompt.classList.add("show");
-
-document.getElementById("interactionText").textContent=
-"Nhấn E để nói chuyện với "+
-nearbyNPC.name;
-
-}else{
-
-prompt.classList.remove("show");
-
-}
-
-}
-
-function interact(){
-
-if(!nearbyNPC){
-
-toast("Không có NPC ở gần.");
-
-return;
-}
-
-openNPC(nearbyNPC);
-}
-
-function openNPC(npc){
-
-document.getElementById("npcName").textContent=
-npc.name;
-
-let dialogue=
-"Chào đạo hữu. Thế giới này còn rất nhiều bí mật đang chờ được khám phá.";
-
-if(npc.name==="Vân Trường Lão"){
-dialogue=
-"Muốn mạnh hơn, hãy thu thập linh thạch và không ngừng đột phá cảnh giới.";
-}
-
-if(npc.name==="Tiểu Linh"){
-dialogue=
-"Ta nghe nói phía nam có một con boss rất mạnh. Ngươi nên chuẩn bị kỹ.";
-}
-
-if(npc.name==="Mộc Đạo Nhân"){
-dialogue=
-"Linh thảo có thể được dùng cho nhiều hệ thống chế tạo trong tương lai.";
-}
-
-if(npc.name==="Thiên Cơ"){
-dialogue=
-"Đừng chỉ đánh quái. Hãy khám phá map, tìm NPC và hoàn thành nhiệm vụ.";
-}
-
-document.getElementById("npcDialogue").textContent=
-dialogue;
-
-document.getElementById("npcActions").innerHTML=`
-
-<button onclick="npcReward()"
-class="btn w-full py-3 rounded-xl bg-blue-600/20 text-blue-300">
-🎁 Nhận lời khuyên
-</button>
-
-<button onclick="closeNPC()"
-class="btn w-full py-3 rounded-xl bg-slate-900">
-Rời đi
-</button>
-
-`;
-
-document.getElementById("npcModal").classList.add("show");
-}
-
-function npcReward(){
-
-playerState.inventory.herb++;
-gainXP(25);
-
-toast("🌿 NPC tặng bạn 1 Linh Thảo.");
-
-closeNPC();
-
-updateHUD();
-}
-
-function closeNPC(){
-document.getElementById("npcModal").classList.remove("show");
-}
-
-/* =========================================================
-   WORLD TIME
-========================================================= */
-
-function updateWorldTime(dt){
-
-if(!worldConfig.dayNight)return;
-
-worldTime+=dt*2;
-
-if(worldTime>=1440){
-worldTime=0;
-}
-
-const hour=worldTime/60;
-
-const daylight=
-Math.max(
-0.15,
-Math.sin(
-((hour-6)/24)*Math.PI*2
-)*.5+.5
-);
-
-if(scene){
-
-const r=Math.round(
-7+daylight*12
-);
-
-const g=Math.round(
-12+daylight*16
-);
-
-const b=Math.round(
-25+daylight*20
-);
-
-scene.background=new THREE.Color(
-(r<<16)|(g<<8)|b
-);
-
-if(scene.fog){
-scene.fog.color.copy(scene.background);
-}
-
-}
-
-document.getElementById("hudTime").textContent=
-formatTime(worldTime);
-
-if(
-worldConfig.weather&&
-Math.random()<.0007
-){
-
-changeWeather();
-
-}
-
-}
-
-function formatTime(minutes){
-
-const h=Math.floor(minutes/60)%24;
-const m=Math.floor(minutes%60);
-
-return String(h).padStart(2,"0")+
-":"+
-String(m).padStart(2,"0");
-}
-
-function changeWeather(){
-
-const list=[
-"clear",
-"rain",
-"wind",
-"clear"
-];
-
-weather=
-list[Math.floor(Math.random()*list.length)];
-
-const labels={
-clear:"☀️ Clear",
-rain:"🌧️ Rain",
-wind:"💨 Strong Wind"
-};
-
-document.getElementById("weatherText").textContent=
-labels[weather]||"☀️ Clear";
-
-toast("🌦️ Thời tiết thay đổi: "+labels[weather]);
-}
-
-/* =========================================================
-   HUD
-========================================================= */
-
-function updateHUD(){
-
-const needed=xpNeeded();
-
-document.getElementById("hudRealm").textContent=
-REALMS[playerState.realmIndex];
-
-document.getElementById("hudLevel").textContent=
-playerState.level;
-
-document.getElementById("hudXP").textContent=
-Math.floor(playerState.xp)+"/"+needed;
-
-document.getElementById("hudStones").textContent=
-playerState.stones;
-
-document.getElementById("hudQi").textContent=
-Math.floor(playerState.qi);
-
-document.getElementById("hudGold").textContent=
-playerState.gold;
-
-document.getElementById("hpText").textContent=
-Math.floor(playerState.hp)+
-" / "+
-playerState.maxHp;
-
-document.getElementById("hpBar").style.width=
-(playerState.hp/playerState.maxHp*100)+"%";
-
-document.getElementById("staminaBar").style.width=
-(playerState.stamina/playerState.maxStamina*100)+"%";
-
-document.getElementById("qiBar").style.width=
-(playerState.qi/playerState.maxQi*100)+"%";
-
-renderQuest();
-updateInventoryUI();
-}
-
-/* =========================================================
-   PARTICLES
-========================================================= */
-
-function createPickupParticles(position,color){
-
-for(let i=0;i<7;i++){
-
-const mesh=new THREE.Mesh(
-new THREE.SphereGeometry(.07,6,6),
-new THREE.MeshBasicMaterial({
-color
-})
-);
-
-mesh.position.copy(position);
-
-scene.add(mesh);
-
-particles.push({
-mesh,
-life:.45+Math.random()*.4,
-vx:(Math.random()-.5)*2,
-vz:(Math.random()-.5)*2,
-vy:1+Math.random()*2
-});
-
-}
-}
-
-function updateParticles(dt){
-
-for(let i=particles.length-1;i>=0;i--){
-
-const p=particles[i];
-
-p.life-=dt;
-
-p.mesh.position.x+=p.vx*dt;
-p.mesh.position.z+=p.vz*dt;
-p.mesh.position.y+=p.vy*dt;
-
-p.vy-=dt*3;
-
-if(p.life<=0){
-
-scene.remove(p.mesh);
-particles.splice(i,1);
-
-}
-
-}
-
-}
-
-/* =========================================================
-   DAMAGE TEXT
-========================================================= */
-
-function showDamage(text){
-
-const el=document.getElementById("damageText");
-
-if(!el){
-
-const d=document.createElement("div");
-
-d.id="damageText";
-
-document.getElementById("runtimeContainer")
-.appendChild(d);
-
-}
-
-const x=45+Math.random()*10;
-const y=45+Math.random()*10;
-
-const d=document.getElementById("damageText");
-
-d.textContent=text;
-d.style.left=x+"%";
-d.style.top=y+"%";
-d.style.display="block";
-
-clearTimeout(window.__damageTimer);
-
-window.__damageTimer=setTimeout(()=>{
-d.style.display="none";
-},450);
-}
-
-/* =========================================================
-   MINIMAP
-========================================================= */
-
-function updateMinimap(){
-
-const canvas=document.getElementById("mapCanvas");
-
-if(!canvas)return;
-
-const rect=canvas.getBoundingClientRect();
-
-const w=Math.max(1,rect.width);
-const h=Math.max(1,rect.height);
-
-if(canvas.width!==Math.floor(w*2)){
-canvas.width=Math.floor(w*2);
-canvas.height=Math.floor(h*2);
-}
-
-const ctx=canvas.getContext("2d");
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="#020617";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-const scale=canvas.width/280;
-
-function mapX(x){
-return canvas.width/2+x*scale;
-}
-
-function mapZ(z){
-return canvas.height/2+z*scale;
-}
-
-ctx.strokeStyle="#1e293b";
-ctx.strokeRect(1,1,canvas.width-2,canvas.height-2);
-
-stones.forEach(s=>{
-
-if(!s.active)return;
-
-ctx.fillStyle="#38bdf8";
-ctx.fillRect(
-mapX(s.mesh.position.x)-2,
-mapZ(s.mesh.position.z)-2,
-4,
-4
-);
-
-});
-
-enemies.forEach(e=>{
-
-if(e.hp<=0)return;
-
-ctx.fillStyle=
-e.type==="boss"?"#f43f5e":"#ef4444";
-
-ctx.fillRect(
-mapX(e.mesh.position.x)-2,
-mapZ(e.mesh.position.z)-2,
-5,
-5
-);
-
-});
-
-npcs.forEach(n=>{
-
-ctx.fillStyle="#c084fc";
-
-ctx.fillRect(
-mapX(n.mesh.position.x)-2,
-mapZ(n.mesh.position.z)-2,
-5,
-5
-);
-
-});
-
-ctx.fillStyle="#f8fafc";
-
-ctx.beginPath();
-
-ctx.arc(
-mapX(playerState.x),
-mapZ(playerState.z),
-4,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-/* =========================================================
-   INVENTORY
-========================================================= */
-
-function toggleInventory(){
-
-const modal=
-document.getElementById("inventoryModal");
-
-modal.classList.toggle("show");
-
-updateInventoryUI();
-}
-
-function updateInventoryUI(){
-
-const inv=playerState.inventory;
-
-const values=Object.entries(inv);
-
-const total=values.reduce(
-(a,[k,v])=>a+Number(v||0),
-0
-);
-
-const used=values.filter(
-([k,v])=>Number(v)>0
-).length;
-
-document.getElementById("invSlots").textContent=
-used+" / 20";
-
-document.getElementById("invGold").textContent=
-playerState.gold;
-
-document.getElementById("invItems").textContent=
-total;
-
-document.getElementById("inventoryGrid").innerHTML=
-Object.entries(ITEMS).map(([key,item])=>`
-
-<div class="itemSlot"
-title="${item.name} • ${item.rarity}">
-
-<span>${item.icon}</span>
-
-<div class="count">
-${inv[key]||0}
-</div>
-
-</div>
-
-`).join("");
-}
-
-/* =========================================================
-   KEYBOARD / MOBILE
-========================================================= */
-
-window.addEventListener("keydown",e=>{
-
-const k=e.key.toLowerCase();
-
-if(k==="w"||e.key==="ArrowUp")keys.w=true;
-if(k==="s"||e.key==="ArrowDown")keys.s=true;
-if(k==="a"||e.key==="ArrowLeft")keys.a=true;
-if(k==="d"||e.key==="ArrowRight")keys.d=true;
-
-if(k==="j")attack();
-if(k==="k")absorb();
-if(k==="m")meditate();
-if(k==="e")interact();
-if(k==="i")toggleInventory();
-if(k==="f")useSkill();
-
-});
-
-window.addEventListener("keyup",e=>{
-
-const k=e.key.toLowerCase();
-
-if(k==="w"||e.key==="ArrowUp")keys.w=false;
-if(k==="s"||e.key==="ArrowDown")keys.s=false;
-if(k==="a"||e.key==="ArrowLeft")keys.a=false;
-if(k==="d"||e.key==="ArrowRight")keys.d=false;
-
-});
-
-document.querySelectorAll("[data-key]").forEach(btn=>{
-
-const key=btn.dataset.key;
-
-const down=e=>{
-e.preventDefault();
-keys[key]=true;
-};
-
-const up=e=>{
-e.preventDefault();
-keys[key]=false;
-};
-
-btn.addEventListener(
-"touchstart",
-down,
-{passive:false}
-);
-
-btn.addEventListener(
-"touchend",
-up,
-{passive:false}
-);
-
-btn.addEventListener(
-"mousedown",
-down
-);
-
-btn.addEventListener(
-"mouseup",
-up
-);
-
-btn.addEventListener(
-"mouseleave",
-up
-);
-
-});
-
-/* =========================================================
-   FULLSCREEN
-========================================================= */
-
-function fullscreenRuntime(){
-
-const el=
-document.getElementById("runtimeContainer");
-
-if(el.requestFullscreen){
-el.requestFullscreen();
-}
-
-}
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-window.addEventListener(
-"resize",
-resizeRenderer
-);
-
-function resizeRenderer(){
-
-if(!renderer||!camera)return;
-
-const canvas=
-document.getElementById("gameCanvas");
-
-const width=
-Math.max(1,canvas.clientWidth);
-
-const height=
-Math.max(1,canvas.clientHeight);
-
-camera.aspect=
-width/height;
-
-camera.updateProjectionMatrix();
-
-renderer.setSize(
-width,
-height,
-false
-);
-
-}
-
-/* =========================================================
-   RUNTIME SAVE
-========================================================= */
-
-setInterval(()=>{
-
-if(worldReady){
-saveRuntimeState();
-}
-
-},4000);
-
-function saveRuntimeState(){
-
-try{
-
-localStorage.setItem(
-RUNTIME_KEY,
-JSON.stringify({
-...playerState,
-inventory:{
-...playerState.inventory
-},
-quest:{
-...quest
-},
-worldTime,
-weather
-})
-);
-
-}catch(e){}
-
+    updateRuntimeHUD();
 }
 
-function loadRuntimeState(){
+function updateRuntimeHUD(){
 
-try{
+    const hp=document.getElementById("hpBar");
+    const qi=document.getElementById("qiBar");
 
-const raw=
-localStorage.getItem(RUNTIME_KEY);
+    if(hp)
+        hp.style.width=
+            `${DB.runtime.hp}%`;
 
-if(!raw)return;
-
-const saved=JSON.parse(raw);
-
-if(typeof saved.x==="number"){
-playerState.x=saved.x;
-playerState.z=saved.z;
+    if(qi)
+        qi.style.width=
+            `${DB.runtime.qi}%`;
 }
 
-if(typeof saved.hp==="number"){
-playerState.hp=saved.hp;
-}
-
-if(typeof saved.stamina==="number"){
-playerState.stamina=saved.stamina;
-}
+function closeRuntime(){
 
-if(typeof saved.qi==="number"){
-playerState.qi=saved.qi;
-}
+    cancelAnimationFrame(animationID);
 
-if(typeof saved.stones==="number"){
-playerState.stones=saved.stones;
-}
+    window.removeEventListener(
+        "keydown",
+        runtimeKeyDown
+    );
 
-if(typeof saved.gold==="number"){
-playerState.gold=saved.gold;
-}
+    window.removeEventListener(
+        "keyup",
+        runtimeKeyUp
+    );
 
-if(typeof saved.xp==="number"){
-playerState.xp=saved.xp;
-}
+    window.removeEventListener(
+        "resize",
+        runtimeResize
+    );
 
-if(typeof saved.level==="number"){
-playerState.level=saved.level;
-}
+    runtime=null;
 
-if(typeof saved.realmIndex==="number"){
-playerState.realmIndex=
-Math.max(
-0,
-Math.min(
-REALMS.length-1,
-saved.realmIndex
-)
-);
-}
+    document.getElementById(
+        "runtimeOverlay"
+    )?.remove();
 
-if(saved.inventory){
-playerState.inventory={
-...playerState.inventory,
-...saved.inventory
-};
+    saveDB();
 }
 
-if(saved.quest){
-quest={
-...quest,
-...saved.quest
-};
-}
 
-if(typeof saved.worldTime==="number"){
-worldTime=saved.worldTime;
-}
+/* ============================================================
+   SECTION ROUTER
+============================================================ */
 
-if(saved.weather){
-weather=saved.weather;
-}
+function renderSection(section){
 
-if(player){
+    switch(section){
 
-player.position.x=
-playerState.x;
+        case "builder":
+            return renderBuilder();
 
-player.position.z=
-playerState.z;
+        case "projects":
+            return renderProjects();
 
-}
+        case "market":
+            return renderMarket();
 
-}catch(e){}
+        case "analytics":
+            return renderAnalytics();
 
+        case "discover":
+        default:
+            return renderDiscover();
+    }
 }
 
-/* =========================================================
-   HELPERS
-========================================================= */
 
-function escapeHTML(str){
+/* ============================================================
+   BOOT
+============================================================ */
 
-return String(str)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+updateCreatorLevel();
 
-}
+saveDB();
 
-/* =========================================================
-   STARTUP
-========================================================= */
-
-updateTop();
-
-renderGames();
-renderProjects();
-renderAnalytics();
-
-document.querySelector('[data-page="studio"]')
-.classList.add("active");
-
-const defaultSpec={
-
-type:"3D",
-quality:"balanced",
-template:"sandbox",
-
-world:{
-dayNight:true,
-weather:true
-},
-
-content:{
-realms:24,
-npc:true,
-quests:true,
-enemies:true,
-boss:true,
-loot:true
-},
-
-player:{
-inventory:true
-},
-
-systems:[
-"3D World",
-"Open World",
-"NPC",
-"Quest System",
-"Enemy AI",
-"Boss System",
-"Inventory",
-"Loot System",
-"Skill System",
-"Day / Night",
-"Dynamic Weather"
-]
-
-};
-
-initWorldFromSpec(defaultSpec);
+render();
 
 </script>
+
 </body>
- </html>
+  </html>
