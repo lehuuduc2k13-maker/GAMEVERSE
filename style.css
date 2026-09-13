@@ -1,229 +1,692 @@
-/* ==========================================================================
-   THIẾT LẬP THUỘC TÍNH SIÊU LƯỢNG TỬ (CSS HOUDINI V2 - TYPE SAFETY TỐI ĐA)
-   ========================================================================== */
-@property --subatomic-string-vibration {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: true;
+*{
+    box-sizing:border-box;
 }
 
-@property --hyper-chromatic-shift {
-  syntax: '<number>';
-  initial-value: 0;
-  inherits: true;
+:root{
+    --bg:#050711;
+    --panel:#0c1020;
+    --panel2:#11172a;
+    --line:#202b49;
+    --text:#edf2ff;
+    --muted:#7e89a8;
+    --primary:#6575ff;
+    --cyan:#3bdcff;
+    --green:#46e59a;
+    --red:#ff5f7a;
 }
 
-@property --omni-quantum-state {
-  syntax: '<percentage>';
-  initial-value: 100%;
-  inherits: true;
+html,body{
+    margin:0;
+    min-height:100%;
+    background:
+        radial-gradient(circle at 20% 0%,#151b42 0,#050711 38%),
+        var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,Arial,sans-serif;
 }
 
-@property --schwarzschild-singularity-radius {
-  syntax: '<length>';
-  initial-value: 0px;
-  inherits: true;
+body{
+    overflow-x:hidden;
 }
 
-@property --gravitational-time-dilation {
-  syntax: '<number>';
-  initial-value: 1.0;
-  inherits: true;
+button,
+input,
+textarea,
+select{
+    font:inherit;
 }
 
-@property --string-dimension-dimension-11 {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: true;
+button{
+    cursor:pointer;
 }
 
-/* Hệ thống màu sắc bức xạ nhiệt độ Planck & Không gian màu OKLCH phẳng */
-:root {
-  --vacuum-radiation-violet: color-mix(in oklab, oklch(0.5 0.3 260) 70%, oklch(0.6 0.25 340));
-  --tachyon-super-blue: color-mix(in oklch, oklch(0.7 0.25 210) 80%, white);
-  --planck-energy-plasma: color-mix(in oklch, oklch(0.6 0.35 10) 90%, oklch(0.8 0.3 180));
-  --dark-matter-viscosity: 0.98;
-  --event-horizon-glow: drop-shadow(0 0 calc(var(--hyper-chromatic-shift) * 3px) var(--planck-energy-plasma));
+::-webkit-scrollbar{
+    width:7px;
 }
 
-/* ==========================================================================
-   SIÊU HOẠT ẢNH MULTIVERSE THẬP NHẤT CHIỀU (11D HYPER-ANIMATIONS)
-   ========================================================================== */
-@keyframes cosmic-singularity-collapse {
-  0% {
-    --subatomic-string-vibration: 0deg;
-    --hyper-chromatic-shift: 0;
-    --gravitational-time-dilation: 1.0;
-    --string-dimension-dimension-11: 0deg;
-    transform: translate3d(0, 0, -10000px) rotateX(90deg) rotateY(0deg) rotateZ(0deg) scale3d(5, 5, 5);
-    filter: hue-rotate(0deg) blur(0px) contrast(100%);
-  }
-  33% {
-    --hyper-chromatic-shift: 25;
-    --gravitational-time-dilation: 0.05;
-    filter: hue-rotate(120deg) blur(4px) contrast(300%);
-  }
-  66% {
-    --hyper-chromatic-shift: 50;
-    --gravitational-time-dilation: 0.01;
-    transform: translate3d(0, 0, -1000px) rotateX(89.9deg) rotateY(90deg) rotateZ(540deg) scale3d(15, 1, 15);
-    filter: hue-rotate(240deg) blur(8px) contrast(800%);
-  }
-  100% {
-    --subatomic-string-vibration: 720deg;
-    --hyper-chromatic-shift: 0;
-    --gravitational-time-dilation: 1.0;
-    --string-dimension-dimension-11: 360deg;
-    transform: translate3d(0, 0, -10000px) rotateX(90deg) rotateY(0deg) rotateZ(720deg) scale3d(5, 5, 5);
-    filter: hue-rotate(360deg) blur(0px) contrast(100%);
-  }
+::-webkit-scrollbar-thumb{
+    background:#293554;
+    border-radius:20px;
 }
 
-@keyframes subatomic-vibration-vInfinity {
-  0%, 100% {
-    --omni-quantum-state: 100%;
-    filter: contrast(600%) saturate(400%) brightness(90%) var(--event-horizon-glow);
-  }
-  50% {
-    --omni-quantum-state: 0%;
-    filter: contrast(1200%) saturate(1000%) brightness(250%) drop-shadow(0 0 calc(var(--hyper-chromatic-shift) * 5px) var(--tachyon-super-blue));
-  }
+.app-shell{
+    min-height:100vh;
 }
 
-@keyframes event-horizon-pulse {
-  0% {
-    --schwarzschild-singularity-radius: 0px;
-    backdrop-filter: blur(10px) saturate(100%);
-    box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.3), 0 0 20px var(--vacuum-radiation-violet);
-  }
-  50% {
-    --schwarzschild-singularity-radius: 80px;
-    backdrop-filter: blur(40px) saturate(400%) matrix3d(2,0,0,0.002,0,2,0,0,0,0,1,0,0,0,0,1);
-    box-shadow: inset 0 0 200px rgba(0, 0, 0, 1), 0 0 120px var(--planck-energy-plasma);
-  }
-  100% {
-    --schwarzschild-singularity-radius: 120px;
-    backdrop-filter: blur(20px) saturate(200%);
-    box-shadow: inset 0 0 100px rgba(255, 0, 85, 0.7), 0 0 80px var(--tachyon-super-blue);
-  }
+.topbar{
+    height:68px;
+    position:sticky;
+    top:0;
+    z-index:50;
+
+    display:flex;
+    align-items:center;
+    gap:22px;
+
+    padding:0 22px;
+
+    background:rgba(5,7,17,.84);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid rgba(120,140,255,.12);
 }
 
-/* ==========================================================================
-   THE EVENT HORIZON CONTAINER (CHÂN TRỜI SỰ KIỆN NATIVE CUSTOM ELEMENT)
-   ========================================================================== */
-quantum-ai-widget {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 2147483647;
-  container-type: size;
-  container-name: quantum-core;
+.logo{
+    font-size:19px;
+    font-weight:950;
+    letter-spacing:-.5px;
+    white-space:nowrap;
 }
 
-.quantum-panel {
-  perspective: 2000px;
-  perspective-origin: center center;
-  contain: layout style size;
-  border: 2px solid color-mix(in oklch, var(--tachyon-super-blue) 50%, transparent);
-  background: color-mix(in oklch, oklch(0.1 0.05 260) 90%, transparent);
-  border-radius: 2rem;
-  width: clamp(320px, 30cqi + 10rem, 500px);
-  position: absolute;
-  bottom: 5rem;
-  right: 0;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 1rem;
-  padding: 1.5rem;
-  transform-style: preserve-3d;
-  will-change: transform, opacity, filter;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.logo span{
+    background:linear-gradient(90deg,#7684ff,#48e0ff);
+    color:transparent;
+    background-clip:text;
 }
 
-.quantum-panel.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale3d(0.8, 0.8, 0.8) translate3d(0, 50px, -200px);
+.version{
+    display:block;
+    font-size:8px;
+    color:#68718d;
+    letter-spacing:1px;
 }
 
-.quantum-panel::before {
-  content: "";
-  position: absolute;
-  inset: -150px;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at center,
-    transparent calc(10% + var(--schwarzschild-singularity-radius)),
-    rgba(0, 0, 0, calc(var(--dark-matter-viscosity) * 0.95)) 50%,
-    color-mix(in oklch, var(--planck-energy-plasma) calc(var(--omni-quantum-state) * 0.6), transparent) 100%
-  );
-  z-index: -2;
-  pointer-events: none;
-  animation: event-horizon-pulse calc(1.5s * var(--gravitational-time-dilation)) cubic-bezier(0.33, 1, 0.68, 1) infinite alternate;
-  mix-blend-mode: screen;
+.nav{
+    display:flex;
+    gap:5px;
 }
 
-.quantum-panel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: conic-gradient(
-    from var(--subatomic-string-vibration) at center,
-    var(--vacuum-radiation-violet),
-    var(--tachyon-super-blue),
-    var(--planck-energy-plasma),
-    var(--vacuum-radiation-violet)
-  );
-  mix-blend-mode: overlay;
-  opacity: calc(var(--hyper-chromatic-shift) / 50);
-  pointer-events: none;
+.nav button{
+    border:0;
+    color:#8993b1;
+    background:transparent;
+    padding:10px 13px;
+    border-radius:10px;
 }
 
-.quantum-panel *, 
-.quantum-panel *::before, 
-.quantum-panel *::after {
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  outline: 1px solid transparent;
-  will-change: transform, opacity;
-  font-size: clamp(13px, 0.8cqi + 0.4rem, 20px);
+.nav button:hover,
+.nav button.active{
+    color:white;
+    background:#171e38;
 }
 
-.quantum-trigger {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, var(--tachyon-super-blue), var(--vacuum-radiation-violet), var(--planck-energy-plasma));
-  background-size: 300% 300%;
-  animation: string-flux 4s ease infinite, pulse-god-mode 2s infinite ease-in-out;
-  cursor: pointer;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  display: grid;
-  place-items: center;
-  color: white;
-  font-size: 1.75rem;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+.top-actions{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:9px;
 }
 
-.quantum-trigger:hover {
-  transform: scale3d(1.15, 1.15, 1.15) rotate(45deg);
+.coin{
+    padding:9px 12px;
+    border-radius:10px;
+    background:#11172a;
+    border:1px solid #202b49;
+    font-weight:800;
+    font-size:13px;
 }
 
-@keyframes string-flux {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.creator-btn,
+.primary-btn{
+    border:0;
+    color:white;
+    background:linear-gradient(135deg,#5b6cff,#744cff);
+    padding:10px 15px;
+    border-radius:10px;
+    font-weight:850;
 }
 
-@keyframes pulse-god-mode {
-  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--tachyon-super-blue) 80%, transparent); }
-  70% { shadow: 0 0 0 25px rgba(0, 0, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+.secondary-btn{
+    border:1px solid var(--line);
+    color:#c7d0ea;
+    background:#0b1020;
+    padding:10px 15px;
+    border-radius:10px;
+    font-weight:750;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .quantum-panel::before { animation-duration: 30s !important; --gravitational-time-dilation: 5.0; }
-  .quantum-trigger { animation: none !important; }
+.danger-btn{
+    border:1px solid rgba(255,95,122,.25);
+    color:#ff8095;
+    background:#26101a;
+    padding:9px 13px;
+    border-radius:10px;
 }
+
+.page{
+    max-width:1500px;
+    margin:auto;
+    padding:25px;
+}
+
+.hero{
+    display:grid;
+    grid-template-columns:1.4fr .6fr;
+    gap:16px;
+}
+
+.panel{
+    background:rgba(11,16,31,.78);
+    border:1px solid rgba(105,125,190,.15);
+    border-radius:18px;
+    box-shadow:0 15px 50px rgba(0,0,0,.18);
+}
+
+.hero-main{
+    padding:42px;
+    min-height:350px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:
+        radial-gradient(circle at 80% 20%,rgba(93,108,255,.2),transparent 35%),
+        rgba(11,16,31,.78);
+}
+
+.kicker{
+    color:#8290ff;
+    font-weight:850;
+    font-size:12px;
+    letter-spacing:1.2px;
+}
+
+.hero h1{
+    font-size:clamp(38px,6vw,72px);
+    line-height:.96;
+    margin:12px 0;
+    letter-spacing:-3px;
+}
+
+.gradient{
+    background:linear-gradient(90deg,#7d89ff,#b46dff,#4bdcff);
+    background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    color:var(--muted);
+    max-width:720px;
+    line-height:1.7;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:9px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.trending{
+    padding:20px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:28px 0 14px;
+}
+
+.section-title h2{
+    margin:0;
+    font-size:23px;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+.games-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.game-card{
+    overflow:hidden;
+    transition:.2s;
+}
+
+.game-card:hover{
+    transform:translateY(-4px);
+    border-color:#46558a;
+}
+
+.game-cover{
+    height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:48px;
+    background:
+        radial-gradient(circle at 30% 30%,rgba(255,255,255,.18),transparent 25%),
+        linear-gradient(135deg,#202d67,#11152b);
+}
+
+.game-info{
+    padding:15px;
+}
+
+.game-title{
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.game-creator{
+    color:#65708d;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.game-description{
+    color:#8c96af;
+    font-size:12px;
+    line-height:1.5;
+    margin:12px 0;
+    min-height:36px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+}
+
+.stat{
+    background:#080c18;
+    border-radius:8px;
+    padding:8px 4px;
+    text-align:center;
+}
+
+.stat b{
+    display:block;
+    font-size:12px;
+}
+
+.stat span{
+    color:#626d89;
+    font-size:9px;
+}
+
+.game-play{
+    width:100%;
+    margin-top:12px;
+}
+
+.builder-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:16px;
+}
+
+.panel-padding{
+    padding:22px;
+}
+
+textarea,
+input,
+select{
+    width:100%;
+    color:white;
+    background:#070b17;
+    border:1px solid #202b49;
+    border-radius:10px;
+    padding:12px;
+    outline:none;
+}
+
+textarea{
+    min-height:220px;
+    resize:vertical;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+    border-color:#6575ff;
+}
+
+label{
+    display:block;
+    color:#aab4cf;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:12px;
+}
+
+.ai-result{
+    min-height:450px;
+}
+
+.score{
+    font-size:54px;
+    font-weight:950;
+}
+
+.systems{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:12px;
+}
+
+.tag{
+    background:#171e35;
+    border:1px solid #273353;
+    padding:6px 9px;
+    border-radius:999px;
+    color:#aeb8d4;
+    font-size:11px;
+}
+
+.project-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.project-card{
+    padding:18px;
+}
+
+.project-meta{
+    display:flex;
+    justify-content:space-between;
+    color:#65708c;
+    font-size:11px;
+}
+
+.project-actions{
+    display:flex;
+    gap:7px;
+    margin-top:15px;
+}
+
+.project-actions button{
+    flex:1;
+}
+
+.market-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.market-table th,
+.market-table td{
+    padding:14px;
+    border-bottom:1px solid rgba(100,120,170,.1);
+    text-align:right;
+}
+
+.market-table th:first-child,
+.market-table td:first-child{
+    text-align:left;
+}
+
+.up{
+    color:var(--green);
+}
+
+.down{
+    color:var(--red);
+}
+
+.analytics-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.metric{
+    padding:20px;
+}
+
+.metric-value{
+    font-size:27px;
+    font-weight:950;
+    margin-top:7px;
+}
+
+.empty{
+    padding:50px;
+    text-align:center;
+    color:#68728e;
+}
+
+#toast-container{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    z-index:200;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.toast{
+    padding:12px 15px;
+    background:#11172a;
+    border:1px solid #293554;
+    border-radius:10px;
+    box-shadow:0 15px 40px #0008;
+    animation:toast .2s ease;
+}
+
+@keyframes toast{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* RUNTIME */
+
+.runtime{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:#02040a;
+}
+
+#gameCanvas{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+.runtime-top{
+    position:absolute;
+    top:16px;
+    left:16px;
+    right:16px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.runtime-title{
+    display:flex;
+    gap:10px;
+    align-items:center;
+
+    padding:10px 13px;
+    border-radius:11px;
+
+    background:#080d1bdd;
+    border:1px solid #283452;
+}
+
+.runtime-title span{
+    color:#4be49a;
+    font-size:10px;
+}
+
+.runtime-hud{
+    position:absolute;
+    left:16px;
+    top:72px;
+}
+
+.hud-card{
+    width:240px;
+    padding:13px;
+    border-radius:13px;
+    background:#080d1ddd;
+    border:1px solid #293554;
+}
+
+.bar{
+    height:7px;
+    background:#161c2b;
+    margin-top:9px;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar i{
+    display:block;
+    height:100%;
+    width:100%;
+    background:#ff526d;
+}
+
+.bar.qi i{
+    background:#39d8ff;
+}
+
+.hud-card small{
+    color:#77819d;
+    display:block;
+    margin-top:8px;
+}
+
+.runtime-actions{
+    position:absolute;
+    bottom:30px;
+    right:30px;
+    display:flex;
+    gap:10px;
+}
+
+.runtime-actions button{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    border:1px solid #39486c;
+    background:#10182cdd;
+    color:white;
+    font-size:22px;
+}
+
+.mobile-controls{
+    position:absolute;
+    bottom:25px;
+    left:25px;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+}
+
+.mobile-controls div{
+    display:flex;
+}
+
+.mobile-controls button{
+    width:48px;
+    height:48px;
+    margin:3px;
+    border-radius:10px;
+    border:1px solid #39486c;
+    background:#10182cdd;
+    color:white;
+}
+
+@media(max-width:1050px){
+
+    .games-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .hero,
+    .builder-grid{
+        grid-template-columns:1fr;
+    }
+
+    .project-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .analytics-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px){
+
+    .topbar{
+        height:auto;
+        min-height:64px;
+        flex-wrap:wrap;
+        padding:10px;
+    }
+
+    .nav{
+        order:3;
+        width:100%;
+        overflow-x:auto;
+    }
+
+    .top-actions{
+        margin-left:auto;
+    }
+
+    .page{
+        padding:14px;
+    }
+
+    .hero-main{
+        padding:25px;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .games-grid,
+    .project-grid{
+        grid-template-columns:1fr;
+    }
+
+    .analytics-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+
+    .mobile-controls{
+        display:flex;
+    }
+
+    .runtime-actions{
+        bottom:35px;
+        right:18px;
+    }
+   }
